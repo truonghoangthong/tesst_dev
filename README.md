@@ -67,7 +67,7 @@ http://8.215.20.85/api/v1
 ### 2. **Get Humidity and Temperature Records**
 - **Endpoint:** `/get-tem-hum`
 - **Method:** `GET`
-- **Description:** Get Humidity and Temperature Data. Replace `<real-value>` with real-values.
+- **Description:** Get Humidity and Temperature Data.
 - **Code Example:**  
      ```bash
      curl http://8.215.20.85/api/v1/get-tem-hum
@@ -114,7 +114,7 @@ http://8.215.20.85/api/v1
 ### 4. **Get Frequency Records**
 - **Endpoint:** `/get-frequency`
 - **Method:** `GET`
-- **Description:** Recording frequency Data. Replace `<real-value>` with real-values.
+- **Description:** Recording frequency Data.
 - **Code Example:**  
      ```bash
      curl http://8.215.20.85/api/v1/get-frequency
