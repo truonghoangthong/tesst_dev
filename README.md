@@ -55,7 +55,7 @@ http://8.215.20.85/api/v1
 - **Endpoint:** `/embed?temperature=<real-value>&humidity=<real-value>`
 - **Method:** `GET`
 - **Description:** Recording Humidity and Temperature Data at the same time. Replace `<real-value>` with real-values.
-- **Code Example:**  
+- **URL Example:**  
      ```bash
      curl http://8.215.20.85/api/v1/embed?temperature=22.5&humidity=60
      ```
@@ -68,7 +68,7 @@ http://8.215.20.85/api/v1
 - **Endpoint:** `/get-tem-hum`
 - **Method:** `GET`
 - **Description:** Get Humidity and Temperature Data.
-- **Code Example:**  
+- **URL Example:**  
      ```bash
      curl http://8.215.20.85/api/v1/get-tem-hum
      ```
@@ -102,7 +102,7 @@ http://8.215.20.85/api/v1
 - **Endpoint:** `/key?frequency=<real-value>`
 - **Method:** `GET`
 - **Description:** Recording frequency Data. Replace `<real-value>` with real-values.
-- **Code Example:**  
+- **URL Example:**  
      ```bash
      curl http://8.215.20.85/api/v1/key?frequency=54
      ```
@@ -115,7 +115,7 @@ http://8.215.20.85/api/v1
 - **Endpoint:** `/get-frequency`
 - **Method:** `GET`
 - **Description:** Recording frequency Data.
-- **Code Example:**  
+- **URL Example:**  
      ```bash
      curl http://8.215.20.85/api/v1/get-frequency
      ```
