@@ -1,4 +1,4 @@
-# API Documentation: Recording Humidity, Temperature, and Frequency
+# API Documentation: Recording and Fetching Humidity, Temperature, and Frequency
 
 ---
 ## Overview
