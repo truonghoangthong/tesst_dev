@@ -121,8 +121,7 @@ http://8.215.20.85/api/v1
      ```
    - **Response Example:**  
      ```json
-     "[
-      {
+     {
         "result": "_result",
         "table": 0,
         "_start": "2024-12-17T22:47:04.23286677Z",
@@ -132,8 +131,7 @@ http://8.215.20.85/api/v1
         "_field": "frequency",
         "_measurement": "qparams",
         "app": "query-param-app"
-      }
-      ]"
+     }
      ```
 
 ---
