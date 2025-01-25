@@ -17,7 +17,7 @@ const logger = winston.createLogger({
     transports: [
         new winston.transports.Console(),
         new winston.transports.File({
-            filename: 'app.log' // ooutputs logs to the console and a file named app.log
+            filename: 'app.log' 
         })
     ]
 });
@@ -191,6 +191,7 @@ app.get('/api/v1/get-hum', async (req, res) => {
     }
 });
 
+// Endpoint - Get Logs from  app.log file 
 app.get('/api/v1/logs', (req, res) => {
     const logEntries = [];
     try {
