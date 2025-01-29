@@ -1,15 +1,16 @@
-import express from 'express'; 
+import express from 'express';
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
 import cors from 'cors';
 import { getEnvs } from './envs.mjs';
 import winston from 'winston';
 import fs from 'fs';
-
+import admin_router from './Admin_route.mjs';
+import user_router from './User_route.mjs';
 // 1. Initialize
 const ENV = getEnvs();
 console.log({ENV});
 const app = express();
-app.use(cors()); 
+app.use(cors());
 
 const logger = winston.createLogger({
     level: 'info',
@@ -26,11 +27,17 @@ const DB_CLIENT = new InfluxDB({
     url: ENV.INFLUX.HOST,
     token: ENV.INFLUX.TOKEN,
 });
-const DB_WRITE_POINT = DB_CLIENT.getWriteApi(ENV.INFLUX.ORG, ENV.INFLUX.BUCKET);
-DB_WRITE_POINT.useDefaultTags({ app: "query-param-app" });   
+const DB_WRITE_POINT = DB_CLIENT.getWriteApi(ENV.INFLUX.ORG, ENV.INFLUX.BUCKET);    
+DB_WRITE_POINT.useDefaultTags({ app: "query-param-app" });
+
+// admin route
+app.use('/admin',admin_router);
+
+// user route
+app.use('/user',user_router);
 
 // Endpoint - Record temperature to InfluxDB
-app.get('/api/v1/embed-temperature', async (req, res) => {   
+app.get('/api/v1/embed-temperature', async (req, res) => {
     const { temperature } = req.query;
 
     if (!temperature) {
@@ -39,23 +46,23 @@ app.get('/api/v1/embed-temperature', async (req, res) => {
         return;
     }
 
-    const numeric_temperature = parseFloat(temperature);     
+    const numeric_temperature = parseFloat(temperature);
 
     if (isNaN(numeric_temperature)) {
         res.status(400).send("Invalid values.");
-        logger.error({ statusCode: 400, message: "Invalid temperature value", timestamp: new Date().toISOString() });     
+        logger.error({ statusCode: 400, message: "Invalid temperature value", timestamp: new Date().toISOString() });
         return;
     }
 
     try {
-        const pointTemperature = new Point("qparams")        
-            .floatField("temperature", numeric_temperature); 
+        const pointTemperature = new Point("qparams")
+            .floatField("temperature", numeric_temperature);
 
         DB_WRITE_POINT.writePoint(pointTemperature);
         await DB_WRITE_POINT.flush();
 
         res.send(`Temperature: ${temperature}`);
-        logger.info({ statusCode: 200, message: "Temperature recorded", timestamp: new Date().toISOString() });
+        logger.info({ statusCode: 200, message: "Temperature recorded and uid recorded", timestamp: new Date().toISOString() });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error writing data to InfluxDB');
@@ -64,8 +71,8 @@ app.get('/api/v1/embed-temperature', async (req, res) => {
 });
 
 // Endpoint - Record humidity to InfluxDB
-app.get('/api/v1/embed-humidity', async (req, res) => {      
-    const { humidity } = req.query;
+app.get('/api/v1/embed-humidity', async (req, res) => {
+    const { humidity} = req.query;
 
     if (!humidity) {
         res.status(400).send("Missing humidity");
@@ -73,22 +80,23 @@ app.get('/api/v1/embed-humidity', async (req, res) => {
         return;
     }
 
+
     const numeric_humidity = parseFloat(humidity);
 
     if (isNaN(numeric_humidity)) {
         res.status(400).send("Invalid values.");
-        logger.error({ statusCode: 400, message: "Invalid humidity value", timestamp: new Date().toISOString() });        
+        logger.error({ statusCode: 400, message: "Invalid humidity value", timestamp: new Date().toISOString() });
         return;
     }
 
     try {
         const pointHumidity = new Point("qparams")
-            .floatField("humidity", numeric_humidity);       
+            .floatField("humidity", numeric_humidity);
 
         DB_WRITE_POINT.writePoint(pointHumidity);
         await DB_WRITE_POINT.flush();
 
-        res.send(`Humidity: ${humidity} written.`);
+        res.send(`Humidity: ${humidity}`);
         logger.info({ statusCode: 200, message: "Humidity recorded", timestamp: new Date().toISOString() });
     } catch (err) {
         console.error(err);
@@ -97,13 +105,15 @@ app.get('/api/v1/embed-humidity', async (req, res) => {
     }
 });
 
-// Endpoint - Get Temperature from InfluxDB   
+// Endpoint - Get Temperature from InfluxDB
 app.get('/api/v1/get-tem', async (req, res) => {
+
+
     const query = `
         from(bucket: "${ENV.INFLUX.BUCKET}")
         |> range(start: -30d)
-        |> filter(fn: (r) => r._measurement == "qparams")    
-        |> filter(fn: (r) => r._field == "temperature")      
+        |> filter(fn: (r) => r._measurement == "qparams")
+        |> filter(fn: (r) => r._field == "temperature")
     `;
 
     try {
@@ -112,24 +122,24 @@ app.get('/api/v1/get-tem', async (req, res) => {
 
         await DB_READ_API.queryRows(query, {
             next(row, tableMeta) {
-                const data = tableMeta.toObject(row);        
+                const data = tableMeta.toObject(row);
                 const time = data._time;
 
                 if (!results[time]) {
                     results[time] = { time };
                 }
 
-                results[time][data._field] = data._value;    
+                results[time][data._field] = data._value;
             },
             error(error) {
-                console.error('Error during query:', error); 
+                console.error('Error during query:', error);
                 res.status(500).send('Error fetching data from InfluxDB');
                 logger.error({ statusCode: 500, message: 'Error fetching data from InfluxDB', timestamp: new Date().toISOString(), error: error.message });
             },
             complete() {
                 const formattedResults = Object.values(results);
                 if (formattedResults.length === 0) {
-                    res.status(404).send('No data found');   
+                    res.status(404).send('No data found');
                     logger.info({ statusCode: 404, message: 'No temperature data found', timestamp: new Date().toISOString() });
                 } else {
                     res.json(formattedResults);
@@ -138,18 +148,18 @@ app.get('/api/v1/get-tem', async (req, res) => {
             },
         });
     } catch (err) {
-        console.error('Error in /get-tem route:', err);      
+        console.error('Error in /get-tem route:', err);
         res.status(500).send('Error fetching data from InfluxDB');
         logger.error({ statusCode: 500, message: 'Error fetching data from InfluxDB', timestamp: new Date().toISOString(), error: err.message });
     }
 });
 
-// Endpoint - Get Humidity from InfluxDB   
+// Endpoint - Get Humidity from InfluxDB
 app.get('/api/v1/get-hum', async (req, res) => {
     const query = `
         from(bucket: "${ENV.INFLUX.BUCKET}")
         |> range(start: -30d)
-        |> filter(fn: (r) => r._measurement == "qparams")    
+        |> filter(fn: (r) => r._measurement == "qparams")
         |> filter(fn: (r) => r._field == "humidity")
     `;
 
@@ -159,24 +169,24 @@ app.get('/api/v1/get-hum', async (req, res) => {
 
         await DB_READ_API.queryRows(query, {
             next(row, tableMeta) {
-                const data = tableMeta.toObject(row);        
+                const data = tableMeta.toObject(row);
                 const time = data._time;
 
                 if (!results[time]) {
                     results[time] = { time };
                 }
 
-                results[time][data._field] = data._value;    
+                results[time][data._field] = data._value;
             },
             error(error) {
-                console.error('Error during query:', error); 
+                console.error('Error during query:', error);
                 res.status(500).send('Error fetching data from InfluxDB');
                 logger.error({ statusCode: 500, message: 'Error fetching data from InfluxDB', timestamp: new Date().toISOString(), error: error.message });
             },
             complete() {
                 const formattedResults = Object.values(results);
                 if (formattedResults.length === 0) {
-                    res.status(404).send('No data found');   
+                    res.status(404).send('No data found');
                     logger.info({ statusCode: 404, message: 'No humidity data found', timestamp: new Date().toISOString() });
                 } else {
                     res.json(formattedResults);
@@ -185,7 +195,7 @@ app.get('/api/v1/get-hum', async (req, res) => {
             },
         });
     } catch (err) {
-        console.error('Error in /get-hum route:', err);      
+        console.error('Error in /get-hum route:', err);
         res.status(500).send('Error fetching data from InfluxDB');
         logger.error({ statusCode: 500, message: 'Error fetching data from InfluxDB', timestamp: new Date().toISOString(), error: err.message });
     }
@@ -194,12 +204,12 @@ app.get('/api/v1/get-hum', async (req, res) => {
 app.get('/api/v1/logs', (req, res) => {
     const logEntries = [];
     try {
-        const data = fs.readFileSync('app.log', 'utf8');     
+        const data = fs.readFileSync('app.log', 'utf8');
         logEntries.push(...data.split('\n'));
         res.send(logEntries);
     } catch (err) {
-        console.error('Error reading log file:', err);       
-        res.status(500).send('Error retrieving logs');       
+        console.error('Error reading log file:', err);
+        res.status(500).send('Error retrieving logs');
         logger.error({ statusCode: 500, message: 'Error retrieving logs', timestamp: new Date().toISOString(), error: err.message });
     }
 });
