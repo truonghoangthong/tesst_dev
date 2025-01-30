@@ -1,4 +1,4 @@
-import express from 'express';
+import express from 'express'; 
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
 import cors from 'cors';
 import { getEnvs } from './envs.mjs';
@@ -18,7 +18,7 @@ const logger = winston.createLogger({
     transports: [
         new winston.transports.Console(),
         new winston.transports.File({
-            filename: 'app.log' // ooutputs logs to the console and a file named app.log
+            filename: 'app.log' // ooutputs logs to the console and a file named app.log  
         })
     ]
 });
@@ -27,7 +27,7 @@ const DB_CLIENT = new InfluxDB({
     url: ENV.INFLUX.HOST,
     token: ENV.INFLUX.TOKEN,
 });
-const DB_WRITE_POINT = DB_CLIENT.getWriteApi(ENV.INFLUX.ORG, ENV.INFLUX.BUCKET);    
+const DB_WRITE_POINT = DB_CLIENT.getWriteApi(ENV.INFLUX.ORG, ENV.INFLUX.BUCKET);
 DB_WRITE_POINT.useDefaultTags({ app: "query-param-app" });
 
 // admin route
@@ -35,6 +35,74 @@ app.use('/admin',admin_router);
 
 // user route
 app.use('/user',user_router);
+
+// Endpoint - Update LED status 
+app.get('/api/v1/update-led-status', async (req, res) => {
+    const { status } = req.query;
+
+    if (status !== 'on' && status !== 'off') {
+        res.status(400).send("Invalid status. Must be 'on' or 'off'.");
+        logger.error({ statusCode: 400, message: "Invalid LED status", timestamp: new Date().toISOString() });
+        return;
+    }
+
+    const numericStatus = status === 'on' ? 1 : 0;        
+
+    try {
+        const pointLEDStatus = new Point('led_status')
+            .intField('status', numericStatus);  
+
+        DB_WRITE_POINT.writePoint(pointLEDStatus);
+        await DB_WRITE_POINT.flush();
+
+        res.send(`LED status ${status}`);
+        logger.info({ statusCode: 200, message: `LED status updated to ${status}`, timestamp: new Date().toISOString() });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error writing data to InfluxDB');
+        logger.error({ statusCode: 500, message: 'Error writing data to InfluxDB', timestamp: new Date().toISOString(), error: err.message });
+    }
+});
+
+// Endpoint - Get LED statusss
+app.get('/api/v1/get-led-status', async (req, res) => {
+    try {
+        const query = `
+            from(bucket: "${ENV.INFLUX.BUCKET}")
+            |> range(start: -30d)
+            |> filter(fn: (r) => r._measurement == "led_status")
+            |> filter(fn: (r) => r._field == "status")
+            |> last()
+        `;
+
+        const results = [];
+        const DB_READ_API = DB_CLIENT.getQueryApi(ENV.INFLUX.ORG);
+
+        await DB_READ_API.queryRows(query, {
+            next(row, tableMeta) {
+                const data = tableMeta.toObject(row);
+                results.push(data);
+            },
+            error(error) {
+                console.error('Query Error:', error);
+                res.status(500).send('Error fetching LED status');
+            },
+            complete() {
+                if (results.length === 0) {
+                    res.status(404).send("LED status not found");
+                } else {
+                    const ledStatus = results[0]._value;
+                    res.json({ status: ledStatus === 1 ? 'on' : 'off' });
+                }
+            },
+        });
+    } catch (err) {
+        console.error('Unexpected Error:', err);
+        res.status(500).send('Error fetching LED status');
+    }
+});
+
+
 
 // Endpoint - Record temperature to InfluxDB
 app.get('/api/v1/embed-temperature', async (req, res) => {
@@ -156,6 +224,7 @@ app.get('/api/v1/get-tem', async (req, res) => {
 
 // Endpoint - Get Humidity from InfluxDB
 app.get('/api/v1/get-hum', async (req, res) => {
+
     const query = `
         from(bucket: "${ENV.INFLUX.BUCKET}")
         |> range(start: -30d)
