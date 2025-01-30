@@ -56,7 +56,7 @@ app.get('/api/v1/update-led-status', async (req, res) => {
         await DB_WRITE_POINT.flush();
 
         res.send(`LED status ${status}`);
-        logger.info({ statusCode: 200, message: `LED status updated to ${status}`, timestamp: new Date().toISOString() });
+        logger.info({ statusCode: 200, message: `LED status ${status}`, timestamp: new Date().toISOString() });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error writing data to InfluxDB');
