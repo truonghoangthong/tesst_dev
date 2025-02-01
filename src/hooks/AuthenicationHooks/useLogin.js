@@ -1,7 +1,7 @@
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { doc, getDoc } from "@firebase/firestore";
-import { useAuthStore } from "../store/authStore";
-import { auth, firestore } from "../firebase/firebase";
+import { useAuthStore } from "../../store/authStore";
+import { auth, firestore } from "../../firebase/firebase";
 
 const useLogin = () => {
   const [signInWithEmailAndPassword, loading, error] =
