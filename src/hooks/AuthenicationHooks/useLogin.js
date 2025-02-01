@@ -15,6 +15,7 @@ const useLogin = () => {
         inputs.password
       );
 
+      //Check if user exists in database by user ID
       if (userCred) {
         const docRef = doc(firestore, "users", userCred.user.uid);
         const docSnap = await getDoc(docRef);
