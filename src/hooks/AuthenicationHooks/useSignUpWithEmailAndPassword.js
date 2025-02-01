@@ -10,11 +10,40 @@ import {
 } from "@firebase/firestore";
 import useAuthStore from "../../store/authStore.js";
 
+/**
+ * A custom hook for handling user signup with provided information.
+ * This hook integrates with useCreateUserWithEmailAndPassword to create new user 
+ * and write user data into Firestore
+ * and update the application's authentication state
+ *
+ * @returns {Object} An object containing the signup function, user object, loading state, and error state
+ * @property {Function} signUp - A function to signup a user with email and password
+ * @property {Object|null} user - The Firebase User object after a successful signup. Null if signup fails or hasn't occurred
+ * @property {boolean} loading - A boolean indicating whether the signup process is in progress
+ * @property {Error} error - An error object if the signup process fails
+ *
+ */
+
 const useSignUpWithEmailAndPassword = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
   const loginUser = useAuthStore((state) => state.login);
+
+  /**
+   * Sign up a user with the provided information and check if the email is already registered or not
+   *
+   * @param {Object} inputs - An object containing the user's credentials
+   * @param {string} inputs.email - The user's email address
+   * @param {string} inputs.password - The user's password
+   * @param {string} inputs.fullName - The user's fullname
+   * @param {string} inputs.phoneNum - The user's phone number
+   * @returns {Object} A response object indicating the result of the signup attempt
+   * @returns {string} return.Title - The title of the response (e.g., "Success" or "Error")
+   * @returns {string} return.Message - A message describing the result of the signup attempt
+   * @returns {string} return.Status - The status of the signup attempt (e.g., "success" or "error")
+   *
+   */
 
   const signUp = async (inputs) => {
     const userRef = collection(firestore, "users");

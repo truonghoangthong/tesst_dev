@@ -6,22 +6,17 @@ import {
 import { auth } from "../../firebase/firebase";
 
 /**
- * // Change user's password hook
+ * A custom hook for handling user change password using email and current password.
+ * This hook use builtin updatePassword function to update users password
+ *  
+ * @param {string} newPassword - User's new password
+ * @param {string} email - User's email address
+ * @param {string} currentPassword - User's current password that user wants to update
+ * @returns {Object} A response object indicating the result of the change password attempt
+ * @returns {string} return.Title - The title of the response (e.g., "Success" or "Error")
+ * @returns {string} return.Message - A message describing the result of the change password attempt
+ * @returns {string} return.Status - The status of the change password attempt (e.g., "success" or "error")
  *
- * @param {string} newPassword - Updated password
- * @param {string} email - User email
- * @param {string} currentPassword - The current password user wants to change
- * @return {Object} -  Response object, if successful, it returns the object with the
- *                     following properties:
- *                     - {string} Title - Success title
- *                     - {string} Message - Message indicates change password successfully
- *                     - {string} Status - Success status
- *                      
- *                     if user is not authenicated or other errors occur, it returns the object with the
- *                     following properties:
- *                     - {string} Title - Error title
- *                     - {string} Message - Error message describes the issue
- *                     - {string} Status - Error status
  */
 
 const useChangePassword = async (newPassword, email, currentPassword) => {
