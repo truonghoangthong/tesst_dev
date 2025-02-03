@@ -6,10 +6,10 @@ import { collection, query, where, getDocs } from "firebase/firestore";
  * A custom hook for reclaiming user password throgh email.
  * This hook integrates with Firebase Authentication and Firestore to check the
  * user exists or not then send email to user to create new password
- *
+ * @param {string} email User's email address
  * @returns {Object} A response object indicating the result of the reclaiming password attempt
  * @returns {string} return.Title - The title of the response (e.g., "Success" or "Error")
- * @returns {string} return.Message - A message describing the result 
+ * @returns {string} return.Message - A message describing the result
  * @returns {string} return.Status - The status of the attempt (e.g., "success" or "error")
  *
  */
