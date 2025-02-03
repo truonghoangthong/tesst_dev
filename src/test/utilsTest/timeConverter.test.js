@@ -1,4 +1,4 @@
-import { timeConverter } from "../../utils/timeConverter";
+import { timeConverter } from "../../utils/TimeUtils/timeConverter";
 
 describe("Should convert date and time to timestamp", () => {
   it("1. Should convert valid date and time to timestamp", () => {
