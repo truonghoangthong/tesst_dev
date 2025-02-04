@@ -1,5 +1,5 @@
 .sidebar {
-  width: 160px;
+  width: 140px;
   left: 0;
   top: 60px;
   position: fixed;
@@ -8,15 +8,14 @@
   box-shadow: 4px 0 6px rgba(0, 0, 0, 0.2);
 }
 .sidebar-icon {
-  width: 40px;
+  width: 4040px;
   height: 40px;
   color: #1c2228;
   transition: transform 0.1s ease;
 }
 .sidebar-text {
-  font-size: 30px;
   color: #1c2228;
-  font-size: 25px;
+  font-size: 20px;
   transition: transform 0.11s ease;
 } 
 .sidebar-gr {

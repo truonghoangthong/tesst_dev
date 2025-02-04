@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import './home.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import MyCalendar from "../home/calendar";
+import { useNavigate } from "react-router-dom";
 //import { getHumidTemp } from "../../services/humid";
 
 const Home = () => {
   const [humid, setHumid] = useState(null);
   const [temp, setTemp] = useState(null);
+  const navigate = useNavigate();
   //useEffect(() => {
   //  const fetchData = async () => {
   //    const {humid, temp} = await getHumidTemp();
@@ -18,12 +22,18 @@ const Home = () => {
   //}, []);
   return (
     <div className="home">
-      <span>Dashboard</span>
+      <div className="db-dir">
+        <span>Dashboard</span>
+        <Icon icon="material-symbols:chevron-right-rounded" width="24" height="24" />
+      </div>
       <div className="db-box-list">
         <div className="db-box db-box-info">
           <span>Guests: 20</span>
           <span>Booking offers: 10</span>
-          <div className="db-box-report">
+          <div 
+            className="db-box-report"
+            onClick={() => navigate('./reports')}
+          >
             <span>Reports</span>
             <Icon icon="material-symbols:content-paste-go" className="db-box-icon" />
           </div>
@@ -105,7 +115,9 @@ const Home = () => {
           </div>
         </div>
       </div>
-      
+      <div className="calendar-container" >
+        <MyCalendar /> 
+      </div>  
     </div>
   )
 }
