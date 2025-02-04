@@ -1,5 +1,78 @@
 .home {
-  position: relative;
+  position: absolute;
   top: 60px;
   left: 160px;
+  width: calc(100% - 160px);
+  height: calc(100% - 60px);
+  box-sizing: border-box;
+  overflow: auto;
+}
+.db-box-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  position: relative;
+  width: 100%;
+  padding-top: 5px;
+}
+.db-box {
+  background-color: #F2F2F2;
+  border-radius:10px;
+  width:220px;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 5px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+.db-box-info {
+  flex-direction: column;
+}
+.db-box-report {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.db-box-left {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 32px;
+  font-weight: bold;
+}
+.db-box-right {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+.db-box-icon {
+  width: 24px;
+  height: 24px;
+}
+.db-box-row {
+  display: flex;
+  align-items: center;
+}
+.db-box-row span {
+  margin-left: 5px;
+  margin-right: 10px;
+}
+.status-available {
+  color: #00A75A;
+}
+.status-occupied {
+  color: #9E1212;
+}
+.status-cleaning {
+  color: #EA8B1E;
+}
+.status-booked {
+  color: #3776D4;
 }

@@ -10,7 +10,6 @@ const App = () => {
     <Router>
       <Header />
       <Sidebar />
-      <Footer />
       <div className="content">
         <Routes>
           <Route path="/admin" element={<Home />} />
