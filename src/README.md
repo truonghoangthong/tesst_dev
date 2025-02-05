@@ -114,7 +114,7 @@ http://8.215.20.85/api/v1
      }
      ```
 
-### 5. **Get logs Records**
+### 7. **Get logs Records**
 - **Endpoint:** `/logs`
 - **Method:** `GET`
 - **Description:** Get logs Records.
