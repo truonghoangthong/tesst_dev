@@ -153,6 +153,7 @@ const Rooms = () => {
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
         content={modalContent}
+        setModalContent={setModalContent}
       />
     </div>
   );
