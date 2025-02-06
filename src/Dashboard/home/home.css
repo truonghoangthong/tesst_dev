@@ -6,6 +6,7 @@
   height: calc(100% - 60px);
   box-sizing: border-box;
   overflow: auto;
+  padding: 0 15px;
 }
 .db-box-list {
   display: flex;
@@ -86,9 +87,4 @@
 }
 .status-booked {
   color: #3776D4;
-}
-.db-dir {
-  display: flex;
-  align-items: center;
-  padding-left: 15px;
 }

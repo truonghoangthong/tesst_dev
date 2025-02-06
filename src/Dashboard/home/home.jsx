@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import './home.css';
+import '../../components/variables.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import MyCalendar from "../home/calendar";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +23,7 @@ const Home = () => {
   //}, []);
   return (
     <div className="home">
-      <div className="db-dir">
+      <div className="dir">
         <span>Dashboard</span>
         <Icon icon="material-symbols:chevron-right-rounded" width="24" height="24" />
       </div>

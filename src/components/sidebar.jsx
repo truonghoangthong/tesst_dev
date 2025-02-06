@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import classNames from "classnames";
+import { Link } from "react-router-dom";
 import './sidebar.css';
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState("Home");
   const menuItems = [
-    { name: "Home", icon: "mdi:monitor-dashboard", path: "./admin" },
+    { name: "Home", icon: "mdi:monitor-dashboard", path: "/admin" },
     { name: "Rooms", icon: "material-symbols:key-vertical-outline", path: "/admin/rooms" },
     { name: "Bookings", icon: "ic:outline-list-alt", path: "/admin/bookings" },
     { name: "Complaints", icon: "material-symbols:person-alert-outline-rounded", path: "/admin/complaints" },
@@ -16,7 +17,7 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       {menuItems.map((item) => (
-        <div
+        <Link
           key={item.name}
           to={item.path}
           className={classNames("sidebar-gr", { active: activeItem === item.name })}
@@ -24,7 +25,7 @@ const Sidebar = () => {
         >
           <Icon icon={item.icon} className="sidebar-icon" />
           <span className="sidebar-text">{item.name}</span>
-        </div>
+        </Link>
       ))}
     </div>
   );

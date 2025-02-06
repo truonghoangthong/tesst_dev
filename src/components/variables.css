@@ -1,0 +1,114 @@
+.status {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 12px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.status:hover {
+  background-color: #e0f7fa; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.status.available {
+  background-color: #E4FFE5;
+}
+.status.booked {
+  background-color: #9EB4FF;
+}
+.status.pending-confirmation {
+  background-color: #FFFFFF;
+}
+.status.triggered-the-trigger {
+  background-color: #FFEBEB;
+}
+.status.cleaning {
+  background-color: #FFF8D4;
+}
+.status.occupied {
+  background-color: #FFC39D;
+}
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+.dropdown {
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1;
+  width: 120px;
+  opacity: 0;
+  transform: scale(0.95);
+  transform-origin: top;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.dropdown-container:hover .dropdown {
+  opacity: 1;
+  transform: scale(1);
+}
+.dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  opacity: 0.9;
+}
+.dropdown-item:hover {
+  background-color: #f1f1f1; 
+  transform: scale(1.05); 
+  opacity: 1; 
+}
+.dir {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+}
+.tab-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: white;
+  font-weight: bold;
+  color: #1c2228;
+}
+
+.tab-item.active {
+  background-color: #f2f2f2;
+}
+
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+.booking-table thead {
+  border-bottom: 3px solid #616161;
+}
+.booking-table th,
+.booking-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.booking-table th {
+  background-color: #f2f2f2;
+}
+
+.booking-table .status {
+  padding: 5px 10px;
+  border-radius: 4px;
+  color: black;
+  font-size: 12px;
+}

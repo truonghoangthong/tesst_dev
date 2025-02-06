@@ -1,0 +1,10 @@
+.rooms {
+  position: absolute;
+  top: 60px;
+  left: 140px;
+  width: calc(100% - 140px);
+  height: calc(100% - 60px);
+  box-sizing: border-box;
+  overflow: auto;
+  padding: 0 15px;
+}
