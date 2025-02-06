@@ -17,33 +17,43 @@ const Card = ({ children }) => {
 };
 
 const CardModel = ({ isOpen, onClose, content, setModalContent, guest }) => {
-  const [editableText, setEditableText] = useState(content);
+  const [editableText, setEditableText] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const { users, setUsers } = userStore(); 
 
   useEffect(() => {
-    setEditableText(content);
-  }, [content, isOpen]); 
+    if (content?.type === 'guest' && guest) {
+      setEditableText(guest.name);  // Set editableText to guest's name
+    } else {
+      setEditableText(content?.content || "");  // For other types, set content directly
+    }
+  }, [content, guest, isOpen]);
 
   if (!isOpen) return null;
 
   const resetEditableText = () => {
-    setEditableText(content); 
+    if (content?.type === 'guest') {
+      setEditableText(guest?.name || "");  // Reset to guest's name
+    } else {
+      setEditableText(content?.content || "");  // Reset to action/note content
+    }
   };
 
-  const handleSave = () => { //error
+  const handleSave = () => {
     if (isEditing) {
-      if (guest) {
+      if (content?.type === 'guest' && guest) {
         const updatedUsers = users.map((user) =>
           user.id === guest.id ? { ...user, name: editableText } : user
         );
-        setUsers(updatedUsers); 
-      } else {
-        setModalContent(editableText); 
+        setUsers(updatedUsers);  // Update the guest name in the userStore
+      } else if (content?.type === 'action') {
+        setModalContent({ ...content, content: editableText });
+      } else if (content?.type === 'note') {
+        setModalContent({ ...content, content: editableText });
       }
     }
-    setIsEditing(false); 
-    onClose(); 
+    setIsEditing(false);
+    onClose();
   };
 
   const handleClose = () => {
