@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Sidebar from "./components/sidebar"; 
 import Header from "./components/header";
-import Home from './Dashboard/Home/home';  
-import Rooms from "./Dashboard/rooms/rooms";
+import Home from './components/dashboard/home/home';  
+import Rooms from "./components/dashboard/rooms/rooms";
 import Footer from "./components/footer";
 
 const App = () => {

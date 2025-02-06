@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import './home.css';
-import '../../components/variables.css'
+import '../../variables.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import MyCalendar from "../home/calendar";
 import { useNavigate } from "react-router-dom";
-import { getHumidTemp } from "../../services/humid";
-import { getTemp } from "../../services/temp";
+import { getHumidTemp } from "../../../services/humid";
+import { getTemp } from "../../../services/temp";
 
 const Home = () => {
   const [humid, setHumid] = useState(null);

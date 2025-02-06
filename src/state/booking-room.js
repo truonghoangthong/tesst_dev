@@ -7,7 +7,7 @@ export const roomStore = create((set) => ({
     { 
       id: "100238", 
       room: "A Lentäjän Poika 1", 
-      guest: "John", 
+      guestId: 1,
       checkIn: "27.05.2025", 
       checkOut: "30.05.2025", 
       status: "Available", 
@@ -17,7 +17,7 @@ export const roomStore = create((set) => ({
     { 
       id: "205332", 
       room: "B Lentäjän Poika 2", 
-      guest: "Anna", 
+      guestId: 2,
       checkIn: "26.05.2025", 
       checkOut: "27.05.2025", 
       status: "Pending confirmation", 
@@ -27,7 +27,7 @@ export const roomStore = create((set) => ({
     { 
       id: "269797", 
       room: "B Lentäjän Poika 2", 
-      guest: "John", 
+      guestId: 3,
       checkIn: "24.05.2025", 
       checkOut: "26.05.2025", 
       status: "Booked", 
@@ -37,7 +37,7 @@ export const roomStore = create((set) => ({
     { 
       id: "387879", 
       room: "C Henry Ford Cabin", 
-      guest: "Hannah", 
+      guestId: 4,
       checkIn: "23.05.2025", 
       checkOut: "--", 
       status: "Triggered the trigger", 
@@ -47,7 +47,7 @@ export const roomStore = create((set) => ({
     { 
       id: "857293", 
       room: "D Beach House", 
-      guest: "Jann", 
+      guestId: 5,
       checkIn: "22.05.2025", 
       checkOut: "23.05.2025", 
       status: "Cleaning", 
