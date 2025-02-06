@@ -5,7 +5,8 @@ import '../../components/variables.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import MyCalendar from "../home/calendar";
 import { useNavigate } from "react-router-dom";
-//import { getHumidTemp } from "../../services/humid";
+import { getHumidTemp } from "../../services/humid";
+import { getTemp } from "../../services/temp";
 
 const Home = () => {
   const [humid, setHumid] = useState(null);
@@ -13,13 +14,14 @@ const Home = () => {
   const navigate = useNavigate();
   //useEffect(() => {
   //  const fetchData = async () => {
-  //    const {humid, temp} = await getHumidTemp();
-  //    setHumid(humid);
-  //    setTemp(temp);
+  //    const { humid } = await getHumidTemp();
+  //      const { temp } = await getTemp();
+  //      setHumid(humid);
+  //      setTemp(temp);
   //  };
   //  fetchData();
-  //  const interval = setInterval(fetchData, 10000) //10s
-  //  return () => clearInterval(intervalId); //cleanup
+  //  const interval = setInterval(fetchData, 30000) //30s
+  //  return () => clearInterval(interval); //cleanup
   //}, []);
   return (
     <div className="home">
@@ -51,9 +53,9 @@ const Home = () => {
             </div>
             <div className="db-box-row">
               <Icon icon="material-symbols:humidity-percentage-rounded" className="db-box-icon" />
-              <span>80%</span>
+              <span>{humid !== null ? `${humid}%` : "--"}</span>
               <Icon icon="material-symbols:thermometer" className="db-box-icon" />
-              <span>23°C</span>
+              <span>{temp !== null ? `${temp}°C` : "--"}</span>
             </div>
             <span>Guest: --</span>
           </div>
@@ -70,9 +72,9 @@ const Home = () => {
             </div>
             <div className="db-box-row">
               <Icon icon="material-symbols:humidity-percentage-rounded" className="db-box-icon" />
-              <span>80%</span>
+              <span>{humid !== null ? `${humid}%` : "--"}</span>
               <Icon icon="material-symbols:thermometer" className="db-box-icon" />
-              <span>23°C</span>
+              <span>{temp !== null ? `${temp}°C` : "--"}</span>
             </div>
             <span>Guest: --</span>
           </div>
@@ -89,9 +91,9 @@ const Home = () => {
             </div>
             <div className="db-box-row">
               <Icon icon="material-symbols:humidity-percentage-rounded" className="db-box-icon" />
-              <span>80%</span>
+              <span>{humid !== null ? `${humid}%` : "--"}</span>
               <Icon icon="material-symbols:thermometer" className="db-box-icon" />
-              <span>23°C</span>
+              <span>{temp !== null ? `${temp}°C` : "--"}</span>
             </div>
             <span>Guest: --</span>
           </div>
@@ -108,9 +110,9 @@ const Home = () => {
             </div>
             <div className="db-box-row">
               <Icon icon="material-symbols:humidity-percentage-rounded" className="db-box-icon" />
-              <span>80%</span>
+              <span>{humid !== null ? `${humid}%` : "--"}</span>
               <Icon icon="material-symbols:thermometer" className="db-box-icon" />
-              <span>23°C</span>
+              <span>{temp !== null ? `${temp}°C` : "--"}</span>
             </div>
             <span>Guest: --</span>
           </div>
