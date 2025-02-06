@@ -103,9 +103,11 @@ http://8.215.20.85/api/v1
 - **Endpoint:** `get-led-status`
 - **Method:** `GET`
 - **Description:** Either turn the LED on or off remotely. Replace `<status>` with either `on` or `off`.
-- **URL Example:**  
+- **Request Example:**  
      ```bash
-          curl http://8.215.20.85/api/v1/get-led-status
+          curl -X POST http://8.215.20.85/api/v1/upload \
+          -F "image=@/path/to/your/image.jpg" \
+          -F "uid=12345"
      ```
    - **Response Example:**  
      ```json
@@ -113,8 +115,34 @@ http://8.215.20.85/api/v1
          "status": "on"
      }
      ```
+     
+### 7. **Upload image**
+- **Endpoint:** `/upload`
+- **Method:** `POST` 
+- **Description:** Upload the image and rename the file using the uid from req.body 
+- **URL Example:**  
+     ```bash
+          curl http://8.215.20.85/api/v1/upload
+     ```
+   - **Response Example:**  
+     ```send
+     File uploaded successfully: File uploaded successfully: https://storage.googleapis.com/${bucketName}/${file_folder_name.name}
+     ```
+     
+### 8. **Get image**
+- **Endpoint:** `/image/<:uid>`
+- **Method:** `GET` 
+- **Description:** Retrieve the uploaded image by replacing <:uid> with the actual uid used during upload.
+- **URL Example:**  
+     ```bash
+          curl http://8.215.20.85/api/v1/image/12345
+     ```
+   - **Response Example:**  
+     ```
+     Success (200): Returns the image file.
+     ```
 
-### 7. **Get logs Records**
+### 9. **Get logs Records**
 - **Endpoint:** `/logs`
 - **Method:** `GET`
 - **Description:** Get logs Records.
