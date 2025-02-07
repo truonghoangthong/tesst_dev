@@ -4,6 +4,8 @@ import Sidebar from "./components/sidebar";
 import Header from "./components/header";
 import Home from './components/dashboard/home/home';  
 import Rooms from "./components/dashboard/rooms/rooms";
+import Reports from "./components/dashboard/home/reports";
+import Info from "./components/dashboard/info/info";
 import Footer from "./components/footer";
 
 const App = () => {
@@ -15,7 +17,8 @@ const App = () => {
         <Routes>
           <Route path="/admin" element={<Home />} />
           <Route path="/admin/rooms" element={<Rooms />} />
-          <Route path="/admin/reports" element={<span>Reports</span>} />
+          <Route path="/admin/reports" element={<Reports />} />
+          <Route path="/admin/info" element={<Info />} />
         </Routes>
       </div>
     </Router>

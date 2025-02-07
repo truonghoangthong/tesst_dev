@@ -2,21 +2,33 @@ import { create } from 'zustand';
 import { getHumid } from './humid'; 
 import { getTemp } from './temp'; 
 
-//error, file return latest value, not array
 export const useDataStore = create((set) => ({
-  data: { humid: [], temp: [] }, 
+  data: { humid: [], temp: [] },  // Default empty arrays
   fetchHumidity: async () => {
     try {
-      const humidityData = await getHumid();
-      set((state) => ({ data: { ...state.data, humid: humidityData } })); 
+      const humidity = await getHumid();  
+      console.log('Sorted Humidity Data:', humidity.humid);
+
+      set((state) => ({ 
+        data: { 
+          ...state.data, 
+          humid: humidity.humid  
+        } 
+      }));
     } catch (error) {
       console.error('Error fetching humidity data:', error);
     }
   },
   fetchTemperature: async () => {
     try {
-      const temperatureData = await getTemp();
-      set((state) => ({ data: { ...state.data, temp: temperatureData } })); 
+      const temperature = await getTemp();  
+      console.log('Sorted Temperature Data:', temperature.temp);
+      set((state) => ({ 
+        data: { 
+          ...state.data, 
+          temp: temperature.temp  
+        } 
+      }));
     } catch (error) {
       console.error('Error fetching temperature data:', error);
     }

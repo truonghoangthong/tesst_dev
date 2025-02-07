@@ -1,0 +1,69 @@
+.info {
+  position: absolute;
+  top: 60px;
+  left: 140px;
+  width: calc(100% - 140px);
+  height: calc(100% - 60px);
+  box-sizing: border-box;
+  overflow: auto;
+}
+.info-details {
+  padding: 0 30px;
+}
+.info-form {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+}
+.gradient-box {
+  height: 122px;
+  width: 100%;
+  background: linear-gradient(to right, #1c2228, #ABDFFF);
+}
+.name-box {
+  display: flex;
+  align-items: center;
+}
+.info-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 10px;
+  margin-right: 180px;
+}
+.info-name {
+  font-size: 30px;
+}
+.info-email {
+  font-size: 25px;
+}
+.info-details button {
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #ABDFFF;
+  color: black;
+  position: absolute;
+  right: 60px;
+  top: 200px;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input {
+  width: 150%;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: white;
+  color: black;
+}

@@ -8,10 +8,10 @@ export const getTemp = async () => {
     console.log('API Response:', response);
     
     const sortedData = response.data.sort((a, b) => new Date(b.time) - new Date(a.time));
-    const latestTemperature = sortedData[0]?.temperature; 
-    console.log(`Latest Temperature: ${latestTemperature}°C`);
+    //const latestTemperature = sortedData[0]?.temperature; 
+    //console.log(`Latest Temperature: ${latestTemperature}°C`);
 
-    return { temp: latestTemperature };
+    return { temp: sortedData };
   } catch (error) {
     console.error('Error fetching humidity and temperature:', error);
     return { temp: null }
