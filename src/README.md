@@ -105,9 +105,7 @@ http://8.215.20.85/api/v1
 - **Description:** Either turn the LED on or off remotely. Replace `<status>` with either `on` or `off`.
 - **Request Example:**  
      ```bash
-          curl -X POST http://8.215.20.85/api/v1/upload \
-          -F "image=@/path/to/your/image.jpg" \
-          -F "uid=12345"
+          curl http://8.215.20.85/api/v1/get-led-status
      ```
    - **Response Example:**  
      ```json
@@ -119,20 +117,32 @@ http://8.215.20.85/api/v1
 ### 7. **Upload image**
 - **Endpoint:** `/upload`
 - **Method:** `POST` 
-- **Description:** Upload the image and rename the file using the uid from req.body 
-- **URL Example:**  
-     ```bash
-          curl http://8.215.20.85/api/v1/upload
-     ```
-   - **Response Example:**  
-     ```send
-     File uploaded successfully: File uploaded successfully: https://storage.googleapis.com/${bucketName}/${file_folder_name.name}
-     ```
-     
+- **Description:** API for uploading images and automatically renaming files using a `uid`. **Automatically deletes old files with the same UID** before uploading a new one. Supported formats: JPEG, PNG, GIF, WEBP.
+## Request Details  
+### **Headers**  
+| Key | Value | Required |  
+|-----|-------|----------|  
+| `Content-Type` | `multipart/form-data` | Yes |  
+
+### **Body (Form Data)**  
+| Field | Type | Description | Required |  
+|-------|------|-------------|----------|  
+| `image` | File | Image file to upload | Yes |  
+| `uid` | String | Unique ID for renaming and managing the file | Yes |  
+
+### **Constraints**  
+- File must be sent via the `image` field
+  
+## Response Examples  
+### **Success (200 OK)**  
+```plaintext  
+File uploaded successfully: https://storage.googleapis.com/your-bucket-name/uid123.jpg  
+```
+
 ### 8. **Get image**
 - **Endpoint:** `/image/<:uid>`
 - **Method:** `GET` 
-- **Description:** Retrieve the uploaded image by replacing <:uid> with the actual uid used during upload.
+- **Description:** Retrieve the uploaded image by replacing <:uid> with the actual UID used during the upload. The file is returned in its original format—JPEG, PNG, GIF, or WEBP—depending on the format you uploaded.
 - **URL Example:**  
      ```bash
           curl http://8.215.20.85/api/v1/image/12345
