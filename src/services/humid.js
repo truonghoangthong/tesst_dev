@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'http://8.215.20.85/api/v1/get-hum'; 
 
-export const getHumidTemp = async () => {
+export const getHumid = async () => {
   try {
     const response = await axios.get(API_URL);
     console.log('API Response:', response);

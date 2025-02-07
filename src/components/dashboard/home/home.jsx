@@ -5,7 +5,7 @@ import '../../variables.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import MyCalendar from "../home/calendar";
 import { useNavigate } from "react-router-dom";
-import { getHumidTemp } from "../../../services/humid";
+import { getHumid } from "../../../services/humid";
 import { getTemp } from "../../../services/temp";
 
 const Home = () => {
@@ -23,6 +23,7 @@ const Home = () => {
   //  const interval = setInterval(fetchData, 30000) //30s
   //  return () => clearInterval(interval); //cleanup
   //}, []);
+  
   return (
     <div className="home">
       <div className="dir">
