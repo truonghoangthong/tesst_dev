@@ -9,7 +9,7 @@ export const getHumid = async () => {
 
     const sortedData = response.data.sort((a, b) => new Date(b.time) - new Date(a.time));
     //const latestHumidity = sortedData[0]?.humidity; 
-    console.log("Sorted data", sortedData);
+    //console.log("Sorted data", sortedData);
     //console.log(`Latest Humidity: ${latestHumidity}%`);
 
     return { humid: sortedData };

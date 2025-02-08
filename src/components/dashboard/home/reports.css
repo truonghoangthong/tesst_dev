@@ -1,0 +1,12 @@
+.reports {
+  position: absolute;
+  top: 60px;
+  left: 140px;
+  width: calc(100% - 140px);
+  height: calc(100% - 60px);
+  box-sizing: border-box; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}

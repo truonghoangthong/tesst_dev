@@ -1,36 +1,32 @@
 import { create } from 'zustand';
-import { getHumid } from './humid'; 
-import { getTemp } from './temp'; 
+import { getHumid } from './humid';
+import { getTemp } from './temp';
 
-export const useDataStore = create((set) => ({
-  data: { humid: [], temp: [] },  // Default empty arrays
-  fetchHumidity: async () => {
+const useDataStore = create((set, get) => ({
+  data: { humid: [], temp: [] },  // Initial state
+  fetchData: async () => {
     try {
-      const humidity = await getHumid();  
-      console.log('Sorted Humidity Data:', humidity.humid);
+      const humidity = await getHumid();
+      const temperature = await getTemp();
 
-      set((state) => ({ 
-        data: { 
-          ...state.data, 
-          humid: humidity.humid  
-        } 
-      }));
+      const sortedHumid = humidity.humid.sort((a, b) => new Date(b.time) - new Date(a.time));
+      const sortedTemp = temperature.temp.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+      set({
+        data: {
+          humid: sortedHumid,  
+          temp: sortedTemp,    
+        },
+      });
     } catch (error) {
-      console.error('Error fetching humidity data:', error);
+      console.error('Error fetching data:', error);
     }
   },
-  fetchTemperature: async () => {
-    try {
-      const temperature = await getTemp();  
-      console.log('Sorted Temperature Data:', temperature.temp);
-      set((state) => ({ 
-        data: { 
-          ...state.data, 
-          temp: temperature.temp  
-        } 
-      }));
-    } catch (error) {
-      console.error('Error fetching temperature data:', error);
-    }
+  startFetching: () => {
+    const { fetchData } = get();
+    fetchData();
+    setInterval(fetchData, 30000);
   },
 }));
+
+export default useDataStore;

@@ -1,32 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Icon } from "@iconify/react";
 import './home.css';
-import '../../variables.css'
+import '../../variables.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import MyCalendar from "../home/calendar";
 import { useNavigate } from "react-router-dom";
-import { getHumid } from "../../../services/humid";
-import { getTemp } from "../../../services/temp";
+import useDataStore from "../../../services/data";
 
 const Home = () => {
-  const [latesthumid, setLatestHumid] = useState(null);
-  const [latesttemp, setLatestTemp] = useState(null);
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchData = async () => {
-      const humidityArray = await getHumid();
-      const temperatureArray = await getTemp();
-      console.log("humidity array",humidityArray)
-      console.log("temperature array",temperatureArray)
+  const { humid, temp } = useDataStore((state) => state.data);
 
-      setLatestHumid(humidityArray.humid[0].humidity);
-      setLatestTemp(temperatureArray.temp[0].temperature);
-    };
-    fetchData();
-    const interval = setInterval(fetchData, 30000); // 30s
-    return () => clearInterval(interval); // cleanup
-  }, []);;
-  
+  const latesthumid = humid.length > 0 ? humid[0].humidity : "--";
+  const latesttemp = temp.length > 0 ? temp[0].temperature : "--";
   return (
     <div className="home">
       <div className="dir">
@@ -122,10 +108,12 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="calendar-container" >
-        <MyCalendar /> 
-      </div>  
+
+      <div className="calendar-container">
+        <MyCalendar />
+      </div>
     </div>
-  )
+  );
 }
+
 export default Home;
