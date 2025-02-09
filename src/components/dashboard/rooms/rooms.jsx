@@ -29,25 +29,40 @@ const Rooms = () => {
 
   const bookingsWithGuests = useMemo(() => {
     return bookings.map((booking) => {
-      const guest = users.find((user) => user.id === booking.guestId);
+      const guest = users.find((user) => user.id === booking.guestId); 
       return { ...booking, guest };
     });
   }, [bookings, users]);
 
   const handleGuestClick = (guest) => {
-    setModalContent({ type: 'guest', content: guest?.name || "No Guest" }); // Pass guest name only
+    setModalContent(
+      <table className="info-table">
+      <tbody>
+        <tr>
+          <th>Name</th>
+          <td>{guest.name}</td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>{guest.email}</td>
+        </tr>
+        <tr>
+          <th>Phone</th>
+          <td>{guest.phone}</td>
+        </tr>
+      </tbody>
+    </table>
+    );
     setModalOpen(true);
   };
 
-  // Handle action modal
   const handleActionClick = (action) => {
-    setModalContent({ type: 'action', content: action || "No Action" }); // Handle action content
+    setModalContent(`Edit Action: ${action}`);
     setModalOpen(true);
   };
 
-  // Handle note modal
   const handleNoteClick = (note) => {
-    setModalContent({ type: 'note', content: note || "No Note" }); // Handle note content
+    setModalContent(`Edit Note: ${note}`);
     setModalOpen(true);
   };
 
@@ -89,9 +104,9 @@ const Rooms = () => {
               <td>
                 <span
                   variant="link"
-                  onClick={() => handleGuestClick(booking.guest)}
+                  onClick={() => handleGuestClick(booking.guest)} 
                 >
-                  {booking.guest ? booking.guest.name : "No Guest"}  {/* Render guest name */}
+                  {booking.guest ? booking.guest.name : "No Guest"}  
                 </span>
               </td>
               <td>{booking.checkIn}</td>
@@ -122,12 +137,12 @@ const Rooms = () => {
               </td>
               <td>
                 <span variant="link" onClick={() => handleActionClick(booking.action)}>
-                  {booking.action || "No Action"} {/* Render action */}
+                  {booking.action}
                 </span>
               </td>
               <td>
                 <span variant="link" onClick={() => handleNoteClick(booking.note)}>
-                  {booking.note || "No Note"} {/* Render note */}
+                  {booking.note}
                 </span>
               </td>
             </tr>

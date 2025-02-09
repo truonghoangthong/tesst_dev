@@ -17,43 +17,33 @@ const Card = ({ children }) => {
 };
 
 const CardModel = ({ isOpen, onClose, content, setModalContent, guest }) => {
-  const [editableText, setEditableText] = useState('');
+  const [editableText, setEditableText] = useState(content);
   const [isEditing, setIsEditing] = useState(false);
   const { users, setUsers } = userStore(); 
 
   useEffect(() => {
-    if (content?.type === 'guest' && guest) {
-      setEditableText(guest.name);  // Set editableText to guest's name
-    } else {
-      setEditableText(content?.content || "");  // For other types, set content directly
-    }
-  }, [content, guest, isOpen]);
+    setEditableText(content);
+  }, [content, isOpen]); 
 
   if (!isOpen) return null;
 
   const resetEditableText = () => {
-    if (content?.type === 'guest') {
-      setEditableText(guest?.name || "");  // Reset to guest's name
-    } else {
-      setEditableText(content?.content || "");  // Reset to action/note content
-    }
+    setEditableText(content); 
   };
 
-  const handleSave = () => {
+  const handleSave = () => { //error
     if (isEditing) {
-      if (content?.type === 'guest' && guest) {
+      if (guest) {
         const updatedUsers = users.map((user) =>
           user.id === guest.id ? { ...user, name: editableText } : user
         );
-        setUsers(updatedUsers);  // Update the guest name in the userStore
-      } else if (content?.type === 'action') {
-        setModalContent({ ...content, content: editableText });
-      } else if (content?.type === 'note') {
-        setModalContent({ ...content, content: editableText });
+        setUsers(updatedUsers); 
+      } else {
+        setModalContent(editableText); 
       }
     }
-    setIsEditing(false);
-    onClose();
+    setIsEditing(false); 
+    onClose(); 
   };
 
   const handleClose = () => {
@@ -76,7 +66,10 @@ const CardModel = ({ isOpen, onClose, content, setModalContent, guest }) => {
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      zIndex: 1000,
+      /* Media query to hide the modal on phone-sized screens */
+      display: window.innerWidth <= 768 ? 'none' : 'flex' 
     }}>
       <Card>
         <div style={{ padding: '16px' }}>
