@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { Link } from "react-router-dom";
 import './sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ visible }) => {
   const [activeItem, setActiveItem] = useState("Home");
   const menuItems = [
     { name: "Home", icon: "mdi:monitor-dashboard", path: "/admin" },
@@ -14,8 +14,9 @@ const Sidebar = () => {
     { name: "Admin", icon: "mdi:person-circle-outline", path: "/admin/info" },
     { name: "Logout", icon: "mdi:logout"},
   ];
+
   return (
-    <div className="sidebar">
+    <div className={classNames("sidebar", { "sidebar-visible": visible })}>
       {menuItems.map((item) => (
         <Link
           key={item.name}
