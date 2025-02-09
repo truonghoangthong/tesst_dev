@@ -97,12 +97,25 @@
     width: 100%;
   }
   .db-box-info {
-    display: hidden;
+    display: none;
+  }
+  .db-box-list {
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+  }
+  .db-box {
+    width: 70%;
+    margin-bottom: 15px;
   }
   .db-box-left {
-    transform: scale(0.7);
+    font-size: 24px;
+    transform: scale(1);
   }
   .db-box-right {
-    transform: scale(0.8);
+    transform: scale(1);
+  }
+  .calendar-container {
+    margin-top: 20px;
   }
 }

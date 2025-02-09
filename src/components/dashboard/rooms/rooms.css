@@ -8,3 +8,9 @@
   overflow: auto;
   padding: 0 15px;
 }
+@media (max-width: 767px) {
+  .rooms {
+    left: 0;
+    width: 100%;
+  }
+}
