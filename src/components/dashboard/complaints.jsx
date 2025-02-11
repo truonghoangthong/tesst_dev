@@ -1,16 +1,16 @@
 import React, { useState, useMemo } from "react";
 import { Icon } from "@iconify/react";
-import "./rooms.css"; // Đổi lại file CSS nếu cần thiết
-import "../../variables.css";
-import { bookingStore } from "../../../state/bookingStore.js";
-import { userStore } from "../../../state/user.js";
-import CardModel from "../../cardModel";
+import "./rooms/rooms.css";
+import "./../variables.css";
+import { complaintsStore } from "../../state/complaintStore.js"; 
+import { userStore } from "../../state/user.js";
+import CardModel from "../cardModel";
 
-const Rooms = () => {
+const Complaints = () => {
   const users = userStore((state) => state.users);
-  const { rooms, bookings, setBookings } = bookingStore(); 
-  const [activeRoom, setActiveRoom] = useState("B Lentäjän Poika 2");
-  const statusOptions = ["Available", "Booked", "Pending confirmation", "Triggered the trigger", "Cleaning", "Occupied"];
+  const { complaints, setComplaints } = complaintsStore(); 
+
+  const statusOptions = ["Resolved", "Pending", "Cleaning"];
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -20,19 +20,19 @@ const Rooms = () => {
   };
 
   const updateStatus = (index, newStatus) => {
-    const updatedBookings = bookings.map((booking, i) =>
-      i === index ? { ...booking, status: newStatus } : booking
+    const updatedComplaints = complaints.map((complaint, i) =>
+      i === index ? { ...complaint, status: newStatus } : complaint
     );
-    setBookings(updatedBookings);
+    setComplaints(updatedComplaints);
     setDropdownOpen(null);
   };
 
-  const bookingsWithGuests = useMemo(() => {
-    return bookings.map((booking) => {
-      const guest = users.find((user) => user.id === booking.guestId);
-      return { ...booking, guest };
+  const complaintsWithGuests = useMemo(() => {
+    return complaints.map((complaint) => {
+      const guest = users.find((user) => user.id === complaint.guestId);
+      return { ...complaint, guest };
     });
-  }, [bookings, users]);
+  }, [complaints, users]);
 
   const handleGuestClick = (guest) => {
     setModalContent(
@@ -56,6 +56,11 @@ const Rooms = () => {
     setModalOpen(true);
   };
 
+  const handleDetailsClick = (details) => {
+    setModalContent(`Details: ${details}`);
+    setModalOpen(true);
+  };
+
   const handleActionClick = (action) => {
     setModalContent(`Edit Action: ${action}`);
     setModalOpen(true);
@@ -66,56 +71,47 @@ const Rooms = () => {
     setModalOpen(true);
   };
 
-  // Cột mặc định cho rooms là Check-in và Check-out
-  const getColumns = () => {
-    return ["Booking No.", "Guest", "Check-in", "Check-out", "Status", "Actions", "Note"];
-  };
-
   return (
     <div className="rooms">
       <div className="dir">
         <span>Dashboard</span>
         <Icon icon="material-symbols:chevron-right-rounded" width="24" height="24" />
-        <span>{activeRoom}</span>
+        <span>Complaints</span>
       </div>
-      <div className="tabs">
-        {rooms.map((room) => (
-          <span
-            key={room}
-            className={`tab-item ${activeRoom === room ? "active" : ""}`}
-            onClick={() => setActiveRoom(room)}
-          >
-            {room}
-          </span>
-        ))}
-      </div>
-
       <table className="booking-table">
         <thead>
           <tr>
-            {getColumns().map((col) => (
-              <th key={col}>{col}</th>
-            ))}
+            <th>Complaint ID</th>
+            <th>Guest</th>
+            <th>Date Submitted</th>
+            <th>Details</th>
+            <th>Status</th>
+            <th>Actions</th>
+            <th>Note</th>
           </tr>
         </thead>
         <tbody>
-          {bookingsWithGuests.map((booking, index) => (
-            <tr key={booking.id}>
-              <td>{booking.id}</td>
+          {complaintsWithGuests.map((complaint, index) => (
+            <tr key={complaint.id}>
+              <td>{complaint.id}</td>
               <td>
-                <span variant="link" onClick={() => handleGuestClick(booking.guest)}>
-                  {booking.guest ? booking.guest.name : "No Guest"}
+                <span variant="link" onClick={() => handleGuestClick(complaint.guest)}>
+                  {complaint.guest ? complaint.guest.name : "No Guest"}
                 </span>
               </td>
-              <td>{booking.checkIn}</td>
-              <td>{booking.checkOut}</td>
+              <td>{complaint.dateSubmitted}</td>
+              <td>
+                <span variant="link" onClick={() => handleDetailsClick(complaint.details)}>
+                  {complaint.details}
+                </span>
+              </td>
               <td>
                 <div className="dropdown-container">
                   <div
-                    className={`status ${booking.status.toLowerCase().replace(/\s+/g, "-")}`}
+                    className={`status ${complaint.status.toLowerCase().replace(/\s+/g, "-")}`}
                     onClick={() => toggleDropdown(index)}
                   >
-                    {booking.status}
+                    {complaint.status}
                     <Icon icon="material-symbols:arrow-drop-down" />
                   </div>
                   {dropdownOpen === index && (
@@ -134,13 +130,13 @@ const Rooms = () => {
                 </div>
               </td>
               <td>
-                <span variant="link" onClick={() => handleActionClick(booking.action)}>
-                  {booking.action}
+                <span variant="link" onClick={() => handleActionClick(complaint.action)}>
+                  {complaint.action}
                 </span>
               </td>
               <td>
-                <span variant="link" onClick={() => handleNoteClick(booking.note)}>
-                  {booking.note}
+                <span variant="link" onClick={() => handleNoteClick(complaint.note)}>
+                  {complaint.note}
                 </span>
               </td>
             </tr>
@@ -148,6 +144,7 @@ const Rooms = () => {
         </tbody>
       </table>
 
+      {/* Modal hiển thị thông tin chi tiết */}
       <CardModel
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
@@ -158,4 +155,4 @@ const Rooms = () => {
   );
 };
 
-export default Rooms;
+export default Complaints;

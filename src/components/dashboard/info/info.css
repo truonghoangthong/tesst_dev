@@ -13,7 +13,9 @@
 .info-form {
   padding-top: 20px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .gradient-box {
   height: 122px;
@@ -31,6 +33,19 @@
   align-items: flex-start;
   margin-left: 10px;
   margin-right: 180px;
+}
+.info-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+  align-items: center;
+  width: 100%; 
+  gap: 20px;
+}
+
+.info-row > * {
+  flex-grow: 1; 
+  margin-right: 10px; 
 }
 .info-name {
   font-size: 30px;
@@ -59,7 +74,8 @@ label {
 }
 
 input {
-  width: 150%;
+  width: 100%;
+  max-width: 400px;
   padding: 20px;
   border: 1px solid black;
   border-radius: 10px;
@@ -68,5 +84,21 @@ input {
   color: black;
 }
 @media (max-width: 767px) {
-  .info {}
+  .info {
+    left: 0;
+    width: 100%;
+  }
+
+  .input {
+    transform: scale(0.5);
+  }
+
+  .info-row {
+    flex-direction: column; /* Stack items vertically for mobile view */
+    align-items: center; /* Center align items in mobile view */
+  }
+
+  .info-row > * {
+    margin-right: 0; /* Remove margin when stacking vertically */
+  }
 }

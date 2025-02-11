@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export const roomStore = create((set) => ({
+export const bookingStore = create((set) => ({
   rooms: ["A Lentäjän Poika 1", "B Lentäjän Poika 2", "C Henry Ford Cabin", "D Beach House"],
   
   bookings: [
@@ -55,5 +55,49 @@ export const roomStore = create((set) => ({
       note: "asdadc" 
     }
   ],
-  setBookings: (newBookings) => set({ bookings: newBookings }),  
+  sauna: [
+    {
+      id: 1,
+      guestId: 103,
+      from: '16:00',
+      to: '17:00',
+      status: 'Booked',
+      action: 'View',
+      note: 'Bring towels',
+    },
+    {
+      id: 2,
+      guestId: 104,
+      from: '17:30',
+      to: '18:30',
+      status: 'Available',
+      action: 'Edit',
+      note: 'Bring water',
+    },
+  ],
+
+  laundry: [
+    {
+      id: 1,
+      guestId: 105,
+      from: '09:00',
+      to: '10:00',
+      status: 'Booked',
+      action: 'View',
+      note: 'Use detergent',
+    },
+    {
+      id: 2,
+      guestId: 106,
+      from: '10:30',
+      to: '11:30',
+      status: 'Cleaning',
+      action: 'Edit',
+      note: 'Dry only',
+    },
+  ],
+
+  setRoomsBookings: (newRooms) => set({ rooms: newRooms }),
+  setSaunaBookings: (newSauna) => set({ sauna: newSauna }),
+  setLaundryBookings: (newLaundry) => set({ laundry: newLaundry }),
 }));

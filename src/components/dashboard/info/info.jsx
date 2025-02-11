@@ -41,7 +41,7 @@ const Info = () => {
         </div>
         <button onClick={handleSave}>Save</button>
         <form className="info-form">
-          <div className="info-column">
+          <div className="info-row">
             <div className="form-group">
               <label htmlFor="firstName">First Name</label>
               <input
@@ -61,7 +61,7 @@ const Info = () => {
               />
             </div>
           </div>
-          <div className="info-column">
+          <div className="info-row">
             <div className="form-group">
               <label htmlFor="phoneNumber">Phone Number</label>
               <input
@@ -80,7 +80,7 @@ const Info = () => {
                 onChange={(e) => handleInputChange(e, setEmailAddress)}
               />
             </div>
-          </div>
+          </div>  
         </form>
       </div>
     </div>

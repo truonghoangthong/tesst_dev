@@ -1,19 +1,31 @@
 import React, { useState, useMemo } from "react";
 import { Icon } from "@iconify/react";
-import "./rooms.css"; // Đổi lại file CSS nếu cần thiết
-import "../../variables.css";
-import { bookingStore } from "../../../state/bookingStore.js";
-import { userStore } from "../../../state/user.js";
-import CardModel from "../../cardModel";
+import "./rooms/rooms.css"; // Đổi lại file CSS nếu cần thiết
+import "./../variables.css";
+import { bookingStore } from "../../state/bookingStore.js"; // Sử dụng store mới
+import { userStore } from "../../state/user.js";
+import CardModel from "../cardModel";
 
-const Rooms = () => {
+const Bookings = ({ type = "sauna" }) => {
   const users = userStore((state) => state.users);
-  const { rooms, bookings, setBookings } = bookingStore(); 
-  const [activeRoom, setActiveRoom] = useState("B Lentäjän Poika 2");
+
+  // Dựa trên type để lấy dữ liệu bookings tương ứng
+  const { rooms, sauna, laundry, setRoomsBookings, setSaunaBookings, setLaundryBookings } = bookingStore();
+
+  // Sử dụng type để xác định bookings nào được hiển thị
+  const bookings = type === "rooms" ? rooms : type === "sauna" ? sauna : laundry;
+  const setBookings =
+    type === "rooms"
+      ? setRoomsBookings
+      : type === "sauna"
+      ? setSaunaBookings
+      : setLaundryBookings;
+
   const statusOptions = ["Available", "Booked", "Pending confirmation", "Triggered the trigger", "Cleaning", "Occupied"];
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [activeType, setActiveType] = useState(type); // Quản lý tab active (mặc định là sauna)
 
   const toggleDropdown = (index) => {
     setDropdownOpen(dropdownOpen === index ? null : index);
@@ -66,9 +78,14 @@ const Rooms = () => {
     setModalOpen(true);
   };
 
-  // Cột mặc định cho rooms là Check-in và Check-out
   const getColumns = () => {
-    return ["Booking No.", "Guest", "Check-in", "Check-out", "Status", "Actions", "Note"];
+    switch (activeType) {
+      case "sauna":
+      case "laundry":
+        return ["Booking No.", "Guest", "From", "To", "Status", "Actions", "Note"];
+      default:
+        return ["Booking No.", "Guest", "Check-in", "Check-out", "Status", "Actions", "Note"];
+    }
   };
 
   return (
@@ -76,20 +93,23 @@ const Rooms = () => {
       <div className="dir">
         <span>Dashboard</span>
         <Icon icon="material-symbols:chevron-right-rounded" width="24" height="24" />
-        <span>{activeRoom}</span>
+        <span>{activeType}</span>
       </div>
+
+      {/* Tabs để chuyển đổi giữa sauna và laundry */}
       <div className="tabs">
-        {rooms.map((room) => (
+        {["sauna", "laundry"].map((tab) => (
           <span
-            key={room}
-            className={`tab-item ${activeRoom === room ? "active" : ""}`}
-            onClick={() => setActiveRoom(room)}
+            key={tab}
+            className={`tab-item ${activeType === tab ? "active" : ""}`}
+            onClick={() => setActiveType(tab)} // Đổi tab khi click
           >
-            {room}
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </span>
         ))}
       </div>
 
+      {/* Bảng bookings */}
       <table className="booking-table">
         <thead>
           <tr>
@@ -107,8 +127,8 @@ const Rooms = () => {
                   {booking.guest ? booking.guest.name : "No Guest"}
                 </span>
               </td>
-              <td>{booking.checkIn}</td>
-              <td>{booking.checkOut}</td>
+              <td>{activeType === "rooms" ? booking.checkIn : booking.from}</td>
+              <td>{activeType === "rooms" ? booking.checkOut : booking.to}</td>
               <td>
                 <div className="dropdown-container">
                   <div
@@ -148,6 +168,7 @@ const Rooms = () => {
         </tbody>
       </table>
 
+      {/* Modal */}
       <CardModel
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
@@ -158,4 +179,4 @@ const Rooms = () => {
   );
 };
 
-export default Rooms;
+export default Bookings;
