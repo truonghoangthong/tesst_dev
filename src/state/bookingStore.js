@@ -58,7 +58,7 @@ export const bookingStore = create((set) => ({
   sauna: [
     {
       id: 1,
-      guestId: 103,
+      guestId: 1,
       from: '16:00',
       to: '17:00',
       status: 'Booked',
@@ -67,7 +67,7 @@ export const bookingStore = create((set) => ({
     },
     {
       id: 2,
-      guestId: 104,
+      guestId: 2,
       from: '17:30',
       to: '18:30',
       status: 'Available',
@@ -79,7 +79,7 @@ export const bookingStore = create((set) => ({
   laundry: [
     {
       id: 1,
-      guestId: 105,
+      guestId: 2,
       from: '09:00',
       to: '10:00',
       status: 'Booked',
@@ -88,7 +88,7 @@ export const bookingStore = create((set) => ({
     },
     {
       id: 2,
-      guestId: 106,
+      guestId: 1,
       from: '10:30',
       to: '11:30',
       status: 'Cleaning',

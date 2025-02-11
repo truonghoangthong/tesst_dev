@@ -127,8 +127,8 @@ const Bookings = ({ type = "sauna" }) => {
                   {booking.guest ? booking.guest.name : "No Guest"}
                 </span>
               </td>
-              <td>{activeType === "rooms" ? booking.checkIn : booking.from}</td>
-              <td>{activeType === "rooms" ? booking.checkOut : booking.to}</td>
+              <td>{booking.from}</td>
+              <td>{booking.to}</td>
               <td>
                 <div className="dropdown-container">
                   <div
