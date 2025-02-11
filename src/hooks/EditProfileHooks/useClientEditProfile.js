@@ -26,9 +26,9 @@ const useClientEditProfile = () => {
    * @param {string} fullName User's full name
    * @param {string} phoneNum User's phone number
    * @returns {Object} An response object indicates the result of editing profile process
-   * @returns {string} return.Title - Result title (e.g. Success, Error)
-   * @returns {string} return.Message - Message describing the result of editing process
-   * @returns {string} return.Title - Result status (e.g. success, error)
+   * @property {string} return.Title - Result title (e.g. Success, Error)
+   * @property {string} return.Message - Message describing the result of editing process
+   * @property {string} return.Title - Result status (e.g. success, error)
    * 
    */
 

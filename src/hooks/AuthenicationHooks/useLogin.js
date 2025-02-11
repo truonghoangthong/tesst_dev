@@ -27,9 +27,9 @@ const useLogin = () => {
    * @param {string} inputs.email - The user's email address
    * @param {string} inputs.password - The user's password
    * @returns {Object} A response object indicating the result of the login attempt
-   * @returns {string} return.Title - The title of the response (e.g., "Success" or "Error")
-   * @returns {string} return.Message - A message describing the result of the login attempt
-   * @returns {string} return.Status - The status of the login attempt (e.g., "success" or "error")
+   * @property {string} return.Title - The title of the response (e.g., "Success" or "Error")
+   * @property {string} return.Message - A message describing the result of the login attempt
+   * @property {string} return.Status - The status of the login attempt (e.g., "success" or "error")
    *
    */
 

@@ -21,9 +21,9 @@ const useLogout = () => {
    * Logs out a user
    *
    * @returns {Object} A response object indicating the result of the logout attempt
-   * @returns {string} return.Title - The title of the response (e.g., "Success" or "Error")
-   * @returns {string} return.Message - A message describing the result of the logout attempt
-   * @returns {string} return.Status - The status of the logout attempt (e.g., "success" or "error")
+   * @property {string} return.Title - The title of the response (e.g., "Success" or "Error")
+   * @property {string} return.Message - A message describing the result of the logout attempt
+   * @property {string} return.Status - The status of the logout attempt (e.g., "success" or "error")
    *
    */
 

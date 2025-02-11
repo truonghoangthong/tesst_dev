@@ -13,9 +13,9 @@ import { auth } from "../../firebase/firebase";
  * @param {string} email - User's email address
  * @param {string} currentPassword - User's current password that user wants to update
  * @returns {Object} A response object indicating the result of the change password attempt
- * @returns {string} return.Title - The title of the response (e.g., "Success" or "Error")
- * @returns {string} return.Message - A message describing the result of the change password attempt
- * @returns {string} return.Status - The status of the change password attempt (e.g., "success" or "error")
+ * @property {string} return.Title - The title of the response (e.g., "Success" or "Error")
+ * @property {string} return.Message - A message describing the result of the change password attempt
+ * @property {string} return.Status - The status of the change password attempt (e.g., "success" or "error")
  *
  */
 

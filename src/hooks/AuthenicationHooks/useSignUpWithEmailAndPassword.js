@@ -12,7 +12,7 @@ import useAuthStore from "../../store/authStore.js";
 
 /**
  * A custom hook for handling user signup with provided information.
- * This hook integrates with useCreateUserWithEmailAndPassword to create new user 
+ * This hook integrates with useCreateUserWithEmailAndPassword to create new user
  * and write user data into Firestore
  * and update the application's authentication state
  *
@@ -39,9 +39,9 @@ const useSignUpWithEmailAndPassword = () => {
    * @param {string} inputs.fullName - The user's fullname
    * @param {string} inputs.phoneNum - The user's phone number
    * @returns {Object} A response object indicating the result of the signup attempt
-   * @returns {string} return.Title - The title of the response (e.g., "Success" or "Error")
-   * @returns {string} return.Message - A message describing the result of the signup attempt
-   * @returns {string} return.Status - The status of the signup attempt (e.g., "success" or "error")
+   * @property {string} return.Title - The title of the response (e.g., "Success" or "Error")
+   * @property {string} return.Message - A message describing the result of the signup attempt
+   * @property {string} return.Status - The status of the signup attempt (e.g., "success" or "error")
    *
    */
 
