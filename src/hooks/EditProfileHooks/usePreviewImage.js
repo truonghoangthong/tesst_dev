@@ -14,26 +14,6 @@ import { useState } from "react";
  * @property {string} error.Message - Error message describing the issue.
  * @property {string} error.Status - Status indicator (e.g., "error").
  * @property {Function} handleImageChange - Function to handle file selection.
- *
- * @example
- * import React from "react";
- * import usePreviewImage from "./usePreviewImage";
- *
- * const ImageUploader = () => {
- *  const { selectedFile, error, handleImageChange, uploadToGoogleCloud } = usePreviewImage();
- *
- *  return (
- *    <div>
- *      <input type="file" accept="image/*" onChange={handleImageChange} />
- *      {error && <p style={{ color: "red" }}>{error.Message}</p>}
- *      {selectedFile && <img src={selectedFile} alt="Preview" style={{ width: "200px" }} />}
- *      <button onClick={uploadToGoogleCloud}>Upload to Google Cloud</button>
- *    </div>
- *  );
- * };
- *
- * export default ImageUploader;
- *
  */
 
 const usePreviewImage = () => {
