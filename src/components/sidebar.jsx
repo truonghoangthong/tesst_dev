@@ -4,7 +4,8 @@ import classNames from "classnames";
 import { Link } from "react-router-dom";
 import './sidebar.css';
 
-const Sidebar = ({ visible }) => {
+const Sidebar = () => {
+  const [isExpanded, setIsExpanded] = useState(false); 
   const [activeItem, setActiveItem] = useState("Home");
   const menuItems = [
     { name: "Home", icon: "mdi:monitor-dashboard", path: "/admin" },
@@ -12,11 +13,18 @@ const Sidebar = ({ visible }) => {
     { name: "Bookings", icon: "ic:outline-list-alt", path: "/admin/bookings" },
     { name: "Complaints", icon: "material-symbols:person-alert-outline-rounded", path: "/admin/complaints" },
     { name: "Admin", icon: "mdi:person-circle-outline", path: "/admin/info" },
-    { name: "Logout", icon: "mdi:logout"},
+    { name: "Logout", icon: "mdi:logout" },
   ];
+  const toggleSidebar = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   return (
-    <div className={classNames("sidebar", { "sidebar-visible": visible })}>
+    <div className={classNames("sidebar", { expanded: isExpanded, collapsed: !isExpanded })}>
+      <div className="sidebar-toggle" onClick={toggleSidebar}>
+        <Icon icon={isExpanded ? "mdi:menu-open" : "mdi:menu"} className="toggle-icon" />
+      </div>
+
       {menuItems.map((item) => (
         <Link
           key={item.name}
@@ -25,7 +33,7 @@ const Sidebar = ({ visible }) => {
           onClick={() => setActiveItem(item.name)}
         >
           <Icon icon={item.icon} className="sidebar-icon" />
-          <span className="sidebar-text">{item.name}</span>
+          {isExpanded && <span className="sidebar-text">{item.name}</span>} 
         </Link>
       ))}
     </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import Sidebar from "./sidebar"; // Make sure you import the Sidebar component
+import Sidebar from "./sidebar"; 
 import './header.css';
 
 const Header = () => {

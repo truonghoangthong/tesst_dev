@@ -1,18 +1,14 @@
 import React, { useState, useMemo } from "react";
 import { Icon } from "@iconify/react";
-import "./rooms/rooms.css"; // Đổi lại file CSS nếu cần thiết
+import "./rooms/rooms.css";
 import "./../variables.css";
-import { bookingStore } from "../../state/bookingStore.js"; // Sử dụng store mới
+import { bookingStore } from "../../state/bookingStore.js"; 
 import { userStore } from "../../state/user.js";
 import CardModel from "../cardModel";
 
 const Bookings = ({ type = "sauna" }) => {
   const users = userStore((state) => state.users);
-
-  // Dựa trên type để lấy dữ liệu bookings tương ứng
   const { rooms, sauna, laundry, setRoomsBookings, setSaunaBookings, setLaundryBookings } = bookingStore();
-
-  // Sử dụng type để xác định bookings nào được hiển thị
   const bookings = type === "rooms" ? rooms : type === "sauna" ? sauna : laundry;
   const setBookings =
     type === "rooms"
@@ -95,21 +91,18 @@ const Bookings = ({ type = "sauna" }) => {
         <Icon icon="material-symbols:chevron-right-rounded" width="24" height="24" />
         <span>{activeType}</span>
       </div>
-
-      {/* Tabs để chuyển đổi giữa sauna và laundry */}
       <div className="tabs">
         {["sauna", "laundry"].map((tab) => (
           <span
             key={tab}
             className={`tab-item ${activeType === tab ? "active" : ""}`}
-            onClick={() => setActiveType(tab)} // Đổi tab khi click
+            onClick={() => setActiveType(tab)} 
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </span>
         ))}
       </div>
 
-      {/* Bảng bookings */}
       <table className="booking-table">
         <thead>
           <tr>
@@ -168,7 +161,6 @@ const Bookings = ({ type = "sauna" }) => {
         </tbody>
       </table>
 
-      {/* Modal */}
       <CardModel
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
