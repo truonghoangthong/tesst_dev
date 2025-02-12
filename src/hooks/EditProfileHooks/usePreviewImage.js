@@ -14,6 +14,8 @@ import { useState } from "react";
  * @property {string} error.Message - Error message describing the issue.
  * @property {string} error.Status - Status indicator (e.g., "error").
  * @property {Function} handleImageChange - Function to handle file selection.
+ *
+ * @example
  */
 
 const usePreviewImage = () => {
@@ -53,7 +55,7 @@ const usePreviewImage = () => {
       setError(null);
     }
   };
-  return { error, selectedFile, setSelectedFile, handleImageChange };
+  return { error, selectedFile, handleImageChange };
 };
 
 export default usePreviewImage;
