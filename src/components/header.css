@@ -45,9 +45,85 @@
   font-size: 30px;
   cursor: pointer;
 }
+.guest .header-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+}
+
+.guest .header-options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 18px;
+  color: white;
+}
+
+.guest .guest-section {
+  display: flex;
+  align-items: center;
+}
+
+.guest .guest-icon {
+  font-size: 25px;
+  color: white;
+}
+
+.guest .guest-label {
+  font-size: 18px;
+  color: white;
+}
+
+.guest .header {
+  background-color: #1c2228; 
+  padding: 0 20px;
+  justify-content: space-between;
+}
+
+.guest .header-text {
+  font-size: 18px;
+  margin-right: 10px;
+  color: white;
+}
+.header-option-link {
+  color: white; 
+  text-decoration: none; 
+  position: relative; 
+  padding-bottom: 2px;
+  transition: color 0.3s ease; 
+}
+.header-option-link:hover {
+  color: white; 
+}
+.header-option-link::after {
+  content: '';
+  position: absolute;
+  left: 50%; 
+  transform: translateX(-50%) scaleX(0); 
+  bottom: 0;
+  height: 2px; 
+  background-color: white; 
+  width: 100%;
+  transform-origin: center; 
+  transition: transform 0.3s ease;
+}
+.header-option-link:hover::after {
+  transform: translateX(-50%) scaleX(1); 
+}
+.header-option-link.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
 
 @media (max-width: 767px) {
   .menu-icon {
-    display: block; /* Show menu icon on mobile */
+    display: block; 
+  }
+  .guest .header-options {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .guest .guest-section {
+    justify-content: center;
   }
 }
