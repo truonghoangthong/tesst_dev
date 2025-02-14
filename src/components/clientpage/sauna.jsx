@@ -9,7 +9,7 @@ const BookingGrid = () => {
     { time: '08:00', monday: 'Available', tuesday: 'Available', wednesday: 'Available', thursday: 'Available', friday: 'Available', saturday: 'Available', sunday: 'Available' },
     { time: '09:00', monday: 'Booked', tuesday: 'Available', wednesday: 'Available', thursday: 'Booked', friday: 'Available', saturday: 'Available', sunday: 'Available' },
     { time: '10:00', monday: 'Available', tuesday: 'Booked', wednesday: 'Available', thursday: 'Available', friday: 'Booked', saturday: 'Available', sunday: 'Available' },
-    // Thêm dữ liệu nếu cần
+    // Add more data as needed
   ]);
 
   useEffect(() => {
@@ -19,13 +19,69 @@ const BookingGrid = () => {
         data: gridData,
         columns: [
           { header: 'Time', name: 'time', width: 100 },
-          { header: 'Monday', name: 'monday', editor: 'text', align: 'center' },
-          { header: 'Tuesday', name: 'tuesday', editor: 'text', align: 'center' },
-          { header: 'Wednesday', name: 'wednesday', editor: 'text', align: 'center' },
-          { header: 'Thursday', name: 'thursday', editor: 'text', align: 'center' },
-          { header: 'Friday', name: 'friday', editor: 'text', align: 'center' },
-          { header: 'Saturday', name: 'saturday', editor: 'text', align: 'center' },
-          { header: 'Sunday', name: 'sunday', editor: 'text', align: 'center' },
+          {
+            header: 'Monday',
+            name: 'monday',
+            editor: 'text',
+            align: 'center',
+            formatter: ({ value }) => {
+              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
+            },
+          },
+          {
+            header: 'Tuesday',
+            name: 'tuesday',
+            editor: 'text',
+            align: 'center',
+            formatter: ({ value }) => {
+              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
+            },
+          },
+          {
+            header: 'Wednesday',
+            name: 'wednesday',
+            editor: 'text',
+            align: 'center',
+            formatter: ({ value }) => {
+              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
+            },
+          },
+          {
+            header: 'Thursday',
+            name: 'thursday',
+            editor: 'text',
+            align: 'center',
+            formatter: ({ value }) => {
+              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
+            },
+          },
+          {
+            header: 'Friday',
+            name: 'friday',
+            editor: 'text',
+            align: 'center',
+            formatter: ({ value }) => {
+              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
+            },
+          },
+          {
+            header: 'Saturday',
+            name: 'saturday',
+            editor: 'text',
+            align: 'center',
+            formatter: ({ value }) => {
+              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
+            },
+          },
+          {
+            header: 'Sunday',
+            name: 'sunday',
+            editor: 'text',
+            align: 'center',
+            formatter: ({ value }) => {
+              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
+            },
+          },
         ],
         rowHeaders: ['rowNum'],
         bodyHeight: 400,

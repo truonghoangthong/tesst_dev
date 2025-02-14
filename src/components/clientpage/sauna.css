@@ -1,46 +1,74 @@
 .sauna-container {
   display: flex;
   flex-direction: column;
-  width: 100vw;  
-  height: calc(100vh - 40px);  
+  width: 100vw;
+  height: calc(100vh - 40px);
   box-sizing: border-box;
   padding: 15px;
 }
 
-
 .sauna-header {
-  flex-shrink: 0; 
+  flex-shrink: 0;
   padding: 10px;
-  height: 40px; 
+  height: 40px;
 }
-
 
 #grid {
-  flex-grow: 1; 
+  flex-grow: 1;
   width: 100%;
-  margin: 0 auto;  
-  height: 500px;  
+  margin: 0 auto;
+  height: 500px;
 }
 
+/* General grid styling */
 .tui-grid-cell {
-  text-align: center; 
+  text-align: center;
+  border: none; /* Removes the vertical lines */
+  background-color: transparent;
 }
 
+/* Header styling */
 .tui-grid-header {
-  background-color: #f1f1f1; 
+  background-color: #f1f1f1;
+  border-bottom: none; /* Removes the border between header and cells */
 }
 
+/* Cell hover effect */
 .tui-grid-cell:hover {
-  background-color: #e0e0e0;  
-  cursor: pointer;  
+  background-color: #e0e0e0;
+  cursor: pointer;
 }
 
+/* Custom styles for available and booked slots */
 .available {
   background-color: green;
   color: white;
+  border-radius: 10px; /* Rounded corners for the available slots */
+  padding: 5px;
+  display: inline-block;
+  margin: 5px;
 }
 
 .booked {
   background-color: red;
   color: white;
+  border-radius: 10px; /* Rounded corners for the booked slots */
+  padding: 5px;
+  display: inline-block;
+  margin: 5px;
+}
+
+/* Remove vertical grid lines */
+.tui-grid-table,
+.tui-grid-row {
+  border-collapse: collapse;
+}
+
+.tui-grid-table .tui-grid-cell {
+  border: none; /* Hides the vertical lines between cells */
+}
+
+/* Ensures there are no vertical separators between the columns */
+.tui-grid-table .tui-grid-cell:after {
+  border-left: none !important;
 }
