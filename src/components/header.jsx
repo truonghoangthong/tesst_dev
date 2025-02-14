@@ -14,6 +14,7 @@ const Header = ({ privilege = 'guest' }) => {  //default: if no prop passed
     { name: "Sauna", path: "sauna" },
     { name: "Laundry", path: "laundry" },
   ];
+
   return (
     <>
       <div className={`header ${privilege === 'guest' ? 'guest' : ''}`}>
@@ -23,9 +24,8 @@ const Header = ({ privilege = 'guest' }) => {  //default: if no prop passed
           {privilege === 'guest' && guestOptions.map(option => (
             <NavLink
               key={option.path}
-              to={`/guest/${option.path}`}
-              className="header-option-link"
-              activeClassName="active" 
+              to={`/client/${option.path}`}
+              className={({ isActive }) => (isActive ? 'header-option-link active' : 'header-option-link')}  
             >
               <span>{option.name}</span>
             </NavLink>

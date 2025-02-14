@@ -1,0 +1,46 @@
+.sauna-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;  
+  height: calc(100vh - 40px);  
+  box-sizing: border-box;
+  padding: 15px;
+}
+
+
+.sauna-header {
+  flex-shrink: 0; 
+  padding: 10px;
+  height: 40px; 
+}
+
+
+#grid {
+  flex-grow: 1; 
+  width: 100%;
+  margin: 0 auto;  
+  height: 500px;  
+}
+
+.tui-grid-cell {
+  text-align: center; 
+}
+
+.tui-grid-header {
+  background-color: #f1f1f1; 
+}
+
+.tui-grid-cell:hover {
+  background-color: #e0e0e0;  
+  cursor: pointer;  
+}
+
+.available {
+  background-color: green;
+  color: white;
+}
+
+.booked {
+  background-color: red;
+  color: white;
+}

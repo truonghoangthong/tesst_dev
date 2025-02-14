@@ -4,10 +4,10 @@ import classNames from "classnames";
 import { Link } from "react-router-dom";
 import './sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ privilege = 'guest' }) => {
   const [isExpanded, setIsExpanded] = useState(false); 
   const [activeItem, setActiveItem] = useState("Home");
-  const menuItems = [
+  const adminMenuItems = [
     { name: "Home", icon: "mdi:monitor-dashboard", path: "/admin" },
     { name: "Rooms", icon: "material-symbols:key-vertical-outline", path: "/admin/rooms" },
     { name: "Bookings", icon: "ic:outline-list-alt", path: "/admin/bookings" },
@@ -18,14 +18,16 @@ const Sidebar = () => {
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
   };
-
+  if (privilege === 'guest') {
+    return null;  
+  }
   return (
     <div className={classNames("sidebar", { expanded: isExpanded, collapsed: !isExpanded })}>
       <div className="sidebar-toggle" onClick={toggleSidebar}>
         <Icon icon={isExpanded ? "mdi:menu-open" : "mdi:menu"} className="toggle-icon" />
       </div>
 
-      {menuItems.map((item) => (
+      {adminMenuItems.map((item) => (
         <Link
           key={item.name}
           to={item.path}

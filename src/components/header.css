@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0px 10px;
-  z-index: 10; /* Ensure header is always on top */
+  z-index: 10; 
 }
 
 .resortlogo {
@@ -63,6 +63,7 @@
 .guest .guest-section {
   display: flex;
   align-items: center;
+  padding: 0 10px;
 }
 
 .guest .guest-icon {
@@ -71,6 +72,7 @@
 }
 
 .guest .guest-label {
+  margin-left: 10px;
   font-size: 18px;
   color: white;
 }
