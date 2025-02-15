@@ -4,7 +4,7 @@ import Sidebar from "./sidebar";
 import { NavLink } from "react-router-dom"; 
 import './header.css';
 
-const Header = ({ privilege = 'guest' }) => {  //default: if no prop passed
+const Header = ({ privilege = 'admin' }) => {  //default: if no prop passed
   const [isSidebarVisible, setSidebarVisible] = useState(false); 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
