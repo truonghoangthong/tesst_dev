@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Grid from 'tui-grid';
 import 'tui-grid/dist/tui-grid.css';
-import './sauna.css'; 
+import './sauna.css';
+import { extractBookings } from './extractBooking';  
 
 const BookingGrid = () => {
   const gridRef = useRef(null);  
@@ -9,7 +10,7 @@ const BookingGrid = () => {
     { time: '08:00', monday: 'Available', tuesday: 'Available', wednesday: 'Available', thursday: 'Available', friday: 'Available', saturday: 'Available', sunday: 'Available' },
     { time: '09:00', monday: 'Booked', tuesday: 'Available', wednesday: 'Available', thursday: 'Booked', friday: 'Available', saturday: 'Available', sunday: 'Available' },
     { time: '10:00', monday: 'Available', tuesday: 'Booked', wednesday: 'Available', thursday: 'Available', friday: 'Booked', saturday: 'Available', sunday: 'Available' },
-    // Add more data as needed
+    // Thêm dữ liệu nếu cần
   ]);
 
   useEffect(() => {
@@ -83,7 +84,6 @@ const BookingGrid = () => {
             },
           },
         ],
-        rowHeaders: ['rowNum'],
         bodyHeight: 400,
       });
 
@@ -121,6 +121,12 @@ const BookingGrid = () => {
         gridRef.current.off('click', handleClick);
       }
     };
+  }, [gridData]);  
+
+  useEffect(() => {
+    const bookings = extractBookings(gridData);
+    console.log('Automatically extracted bookings:', bookings);
+    //process
   }, [gridData]);  
 
   return (

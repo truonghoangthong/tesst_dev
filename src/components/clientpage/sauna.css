@@ -20,30 +20,27 @@
   height: 500px;
 }
 
-/* General grid styling */
 .tui-grid-cell {
   text-align: center;
-  border: none; /* Removes the vertical lines */
+  border: none; 
   background-color: transparent;
 }
 
-/* Header styling */
+
 .tui-grid-header {
   background-color: #f1f1f1;
-  border-bottom: none; /* Removes the border between header and cells */
+  border-bottom: none; 
 }
 
-/* Cell hover effect */
 .tui-grid-cell:hover {
   background-color: #e0e0e0;
   cursor: pointer;
 }
 
-/* Custom styles for available and booked slots */
 .available {
-  background-color: green;
-  color: white;
-  border-radius: 10px; /* Rounded corners for the available slots */
+  background-color: #f2f2f2;
+  color: black;
+  border-radius: 10px; 
   padding: 5px;
   display: inline-block;
   margin: 5px;
@@ -52,23 +49,21 @@
 .booked {
   background-color: red;
   color: white;
-  border-radius: 10px; /* Rounded corners for the booked slots */
+  border-radius: 10px; 
   padding: 5px;
   display: inline-block;
   margin: 5px;
 }
 
-/* Remove vertical grid lines */
 .tui-grid-table,
 .tui-grid-row {
   border-collapse: collapse;
 }
 
 .tui-grid-table .tui-grid-cell {
-  border: none; /* Hides the vertical lines between cells */
+  border: none; 
 }
 
-/* Ensures there are no vertical separators between the columns */
 .tui-grid-table .tui-grid-cell:after {
   border-left: none !important;
 }
