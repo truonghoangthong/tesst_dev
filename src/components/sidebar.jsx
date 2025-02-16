@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { Link } from "react-router-dom";
 import './sidebar.css';
 
-const Sidebar = ({ privilege = 'guest', visible, onClose}) => {
+const Sidebar = ({ privilege = 'admin', visible, onClose}) => {
   const [isExpanded, setIsExpanded] = useState(false); 
   const [activeItem, setActiveItem] = useState("Home");
   const adminMenuItems = [

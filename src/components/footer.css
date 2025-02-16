@@ -6,9 +6,9 @@
   justify-content: space-evenly;
   display: flex;
   flex-direction: row;
-  position: absolute;
+  position: relative;
   bottom: 0;
-  width: calc(100vw);
+  width: calc(100vw - 80px);
   box-sizing: border-box;
 }
 

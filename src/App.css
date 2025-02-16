@@ -11,25 +11,6 @@
   will-change: filter;
   transition: filter 300ms;
 }
-.content {
-  margin-top: 60px;  
-  margin-left: 140px;  
-  min-height: calc(100vh - 60px - 100px); 
-  box-sizing: border-box;
-  padding-bottom: 100px; 
-  overflow-y: auto; 
-}
-
-.footer {
-  position: relative;
-  bottom: 0;
-  width: calc(100% - 140px); 
-  margin-left: 140px;  
-  background-color: #2c3e50;
-  color: white;
-  padding: 20px;
-  box-sizing: border-box;
-}
 
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);

@@ -1,7 +1,7 @@
 .sidebar {
   width: 250px;
   position: fixed;
-  top: 40px; 
+  top: 40px;
   background-color: white;
   height: 100%;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -10,6 +10,8 @@
   z-index: 100;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start; /* Thêm dòng này để đảm bảo các mục bắt đầu từ trên xuống */
+  flex-grow: 1; /* Đảm bảo sidebar chiếm toàn bộ chiều cao */
 }
 
 .sidebar.collapsed {
@@ -27,7 +29,7 @@
 }
 
 .sidebar.visible {
-  transform: translateX(0); 
+  transform: translateX(0);
 }
 
 .toggle-icon {
@@ -89,22 +91,21 @@
 
 @media (max-width: 767px) {
   .sidebar {
-    width: 250px; 
+    width: 250px;
     height: 100%;
     position: fixed;
     top: 40px;
-    right: -250px; 
-    transition: transform 0.3s ease; 
+    right: -250px;
+    transition: transform 0.3s ease;
   }
 
-
   .sidebar.visible {
-    right: 0; 
+    right: 0;
   }
 
   .sidebar-toggle {
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
   }
 
   .sidebar-text {
@@ -114,12 +115,14 @@
   .sidebar.collapsed .sidebar-toggle {
     display: none;
   }
+
   .sidebar-gr {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 10px 15px;
   }
+
   .sidebar-icon {
     display: flex;
     justify-content: center;
@@ -128,14 +131,16 @@
     height: 20px;
   }
 }
+
 @media (min-width: 768px) {
   .sidebar {
-    left: 0; 
-    right: auto; 
-    transform: translateX(0); 
-    justify-content: center;
-    align-items: center;
+    left: 0;
+    right: auto;
+    transform: translateX(0);
+    justify-content: flex-start; /* Đảm bảo các mục bắt đầu từ trên */
+    align-items: flex-start;
   }
+
   .sidebar-toggle {
     display: none;
   }
