@@ -1,9 +1,12 @@
 /* Container của lịch */
 .booking-calendar-container {
+  position: absolute;
   width: 100vw;
-  height: calc(100vh - 60px);
+  top: 60px;
+  height: calc(100% - 60px);
   padding: 10px;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 /* Ẩn tên bảng (nếu có) */

@@ -6,7 +6,7 @@
   justify-content: space-evenly;
   display: flex;
   flex-direction: row;
-  position: relative;
+  position: absolute;
   bottom: 0;
   width: calc(100vw);
   box-sizing: border-box;
@@ -85,7 +85,8 @@
     align-items: flex-start;
     justify-content: space-between;
     text-align: left;
-    padding: 10px;
+    padding: 20px;
+    box-sizing: border-box;
   }
 
   .footer-left {
@@ -102,5 +103,8 @@
 
   .footer-column a {
     font-size: 12px;
+  }
+  .footer-column:nth-child(2) {
+    display: none;
   }
 }
