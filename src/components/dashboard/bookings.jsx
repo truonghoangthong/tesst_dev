@@ -89,7 +89,7 @@ const Bookings = ({ type = "sauna" }) => {
       <div className="dir">
         <span>Dashboard</span>
         <Icon icon="material-symbols:chevron-right-rounded" width="24" height="24" />
-        <span>{activeType}</span>
+        <span>{activeType.charAt(0).toUpperCase() + activeType.slice(1)}</span>  
       </div>
       <div className="tabs">
         {["sauna", "laundry"].map((tab) => (

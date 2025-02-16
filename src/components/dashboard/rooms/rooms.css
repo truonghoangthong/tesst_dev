@@ -1,12 +1,10 @@
 .rooms {
-  position: absolute;
-  top: 60px;
-  left: 140px;
-  width: calc(100% - 140px);
-  height: calc(100% - 60px);
+  position: relative;
+  width: 100%;
+  height: auto;
+  padding: 0 20px;
   box-sizing: border-box;
   overflow: auto;
-  padding: 0 15px;
 }
 @media (max-width: 767px) {
   .rooms {

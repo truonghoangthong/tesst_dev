@@ -67,7 +67,7 @@
 .dir {
   display: flex;
   align-items: center;
-  padding-top: 5px;
+  padding: 5px;
 }
 
 .tabs {
