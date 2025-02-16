@@ -1,93 +1,32 @@
-/* Container for the grid */
-.sauna-container {
-  display: flex;
-  flex-direction: column;
+/* Container của lịch */
+.booking-calendar-container {
   width: 100vw;
-  height: calc(100vh - 40px);
-  box-sizing: border-box;
-  padding: 15px;
-}
-
-.sauna-header {
-  flex-shrink: 0;
+  height: calc(100vh - 60px);
   padding: 10px;
-  height: 40px;
+  box-sizing: border-box;
 }
 
-/* Grid container */
-#grid {
-  flex-grow: 1;
-  width: 100%;
-  margin: 0 auto;
-  height: 500px;
+/* Ẩn tên bảng (nếu có) */
+.rbc-toolbar {
+  display: none;
 }
 
-/* Center align cells and remove unwanted borders */
-.tui-grid-cell {
-  text-align: center;
-  border: none;
-  background-color: transparent;
-  border: 1px solid transparent;
-  border-radius: 10px;
-}
-
-/* Time column background transparent */
-.tui-grid-cell.time-column {
-  background-color: transparent !important;
-}
-
-/* Header styling */
-.tui-grid-header {
-  background-color: #f1f1f1;
-  border-bottom: none;
-  border-top: none;
-  cursor: none;
-}
-
-.tui-grid-cell-header {
-  border-top: none;
-}
-
-/* Cell hover effect */
-.tui-grid-cell:hover {
-  background-color: #e0e0e0;
-  cursor: default;
-}
-
-/* Ensure content stretches and covers the entire cell */
-.cell-content {
-  display: block; /* Make the content block-level to fill the cell */
-  height: 100%; /* Full height to fill the cell */
-  padding: 5px;
-  border-radius: 10px;
+/* Style cho các slot */
+.rbc-event {
+  background-color: #f2f2f2; /* Màu nền mặc định (available) */
+  border-radius: 10px; /* Border-radius */
+  border: none; /* Xóa border mặc định */
+  color: #333; /* Màu chữ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
 }
 
-/* Background colors for available and booked */
-.available {
-  background-color: lightgreen;
-  color: black;
-}
-
-.booked {
-  background-color: lightcoral;
-  color: white;
-}
-
-/* Prevent interaction with the white background part of the cell */
-.tui-grid-cell .cell-content {
-  pointer-events: auto;
-}
-
-.tui-grid-table,
-.tui-grid-row {
-  border-collapse: collapse;
-}
-
-.tui-grid-table .tui-grid-cell {
-  border: none;
-}
-
-.tui-grid-table .tui-grid-cell:after {
-  border-left: none !important;
+/* Style cho slot booked */
+.rbc-event.booked {
+  background-color: #abdfff; /* Màu nền khi booked */
+  color: #000; /* Màu chữ khi booked */
 }

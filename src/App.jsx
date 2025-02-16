@@ -36,6 +36,7 @@ const App = () => {
           <Route path="/client/complaint" element={<span>Client Complaints</span>} />
         </Routes>
       </div>
+      <Footer/>
     </Router>
   );
 };

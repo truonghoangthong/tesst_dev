@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import React, { useState } from "react";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import "./sauna.css"; // Import file CSS
 
-// Set up moment localizer for react-big-calendar
+// Cấu hình moment localizer cho react-big-calendar
 const localizer = momentLocalizer(moment);
 
-// Function to generate time slots for booking
+// Hàm tạo các slot đặt chỗ
 const generateSlots = () => {
   const slots = [];
-  const startTime = moment().set({ hour: 8, minute: 0, second: 0 });
-  const endTime = moment().set({ hour: 21, minute: 0, second: 0 });
+  const startDate = moment().startOf("week").add(1, "day"); // Bắt đầu từ thứ 2
+  const endDate = moment(startDate).endOf("week"); // Kết thúc vào chủ nhật
 
-  for (let time = startTime; time.isBefore(endTime); time.add(1, 'hour')) {
-    slots.push({
-      time: time.format('HH:mm'),
-      status: 'available',
-      date: time.format('YYYY-MM-DD'),
-    });
+  for (let day = startDate; day.isBefore(endDate); day.add(1, "day")) {
+    for (let hour = 8; hour <= 21; hour++) {
+      const slotTime = moment(day).set({ hour, minute: 0, second: 0 });
+      slots.push({
+        id: `${day.format("YYYY-MM-DD")}-${hour}`,
+        title: "available", // Chỉ hiển thị chữ "available" hoặc "booked"
+        start: slotTime.toDate(),
+        end: moment(slotTime).add(1, "hour").toDate(),
+        status: "available", // Trạng thái ban đầu
+      });
+    }
   }
   return slots;
 };
@@ -25,82 +31,44 @@ const generateSlots = () => {
 const BookingCalendar = () => {
   const [slots, setSlots] = useState(generateSlots());
 
-  // Handle booking slot (toggle status between 'available' and 'booked')
-  const handleSlotClick = (slotIndex) => {
-    const updatedSlots = [...slots];
-    updatedSlots[slotIndex].status = updatedSlots[slotIndex].status === 'available' ? 'booked' : 'available';
+  // Xử lý khi người dùng click vào một slot
+  const handleSlotClick = (event) => {
+    const updatedSlots = slots.map((slot) => {
+      if (slot.id === event.id) {
+        const newStatus = slot.status === "available" ? "booked" : "available";
+        return {
+          ...slot,
+          status: newStatus,
+          title: newStatus, // Cập nhật title thành "available" hoặc "booked"
+        };
+      }
+      return slot;
+    });
     setSlots(updatedSlots);
   };
 
-  // Create events based on slots for react-big-calendar
-  const events = slots
-    .map((slot, index) => {
-      // Skip invalid slots
-      if (!slot.time || !slot.status || !slot.date) {
-        console.warn('Invalid slot skipped:', slot);
-        return null;
-      }
-
-      const startTime = moment(`${slot.date} ${slot.time}`, 'YYYY-MM-DD HH:mm').toDate();
-      const endTime = moment(startTime).add(1, 'hour').toDate();
-
-      return {
-        title: `Slot: ${slot.time} - ${slot.status}`, // Ensure title is always present
-        start: startTime,
-        end: endTime,
-        status: slot.status,
-        resourceId: index,
-      };
-    })
-    .filter(Boolean); // Remove null entries
-
-  console.log('Generated Events:', events); // Check the events array structure
-
-  // Check for invalid events
-  if (events.some(event => !event)) {
-    console.error('Invalid events detected:', events);
-    return <div>Error: Invalid events data.</div>;
-  }
+  // Tùy chỉnh class cho các slot dựa trên trạng thái
+  const eventPropGetter = (event) => {
+    return {
+      className: event.status === "booked" ? "booked" : "", // Thêm class "booked" nếu trạng thái là booked
+    };
+  };
 
   return (
-    <div>
-      <h1>Booking Calendar</h1>
+    <div className="booking-calendar-container">
       <Calendar
         localizer={localizer}
-        events={events}
+        events={slots}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 500 }}
-        views={['week']} // Display calendar in weekly view
-        step={60} // 1 hour per slot
-        timeslots={1} // 1 time slot per hour
-        onSelectSlot={({ start, end }) => {
-          // Match selected slot based on start and end times
-          const selectedSlot = slots.find((slot) => {
-            return (
-              moment(slot.date + " " + slot.time).isSame(start) &&
-              moment(slot.date + " " + slot.time).add(1, 'hour').isSame(end)
-            );
-          });
-
-          if (selectedSlot) {
-            const slotIndex = slots.indexOf(selectedSlot);
-            handleSlotClick(slotIndex); // Toggle status on click
-          } else {
-            console.error("No valid slot found for selection.");
-          }
-        }}
-        eventPropGetter={(event) => {
-          // Style events based on their status (available or booked)
-          const backgroundColor = event.status === 'available' ? 'green' : event.status === 'booked' ? 'red' : 'gray';
-          return {
-            style: {
-              backgroundColor,
-              color: 'white', // Ensure white text on the background
-              borderRadius: '5px', // Rounded corners for better look
-            },
-          };
-        }}
+        defaultView="week"
+        views={["week"]}
+        step={60} // Mỗi slot là 1 tiếng
+        timeslots={1} // Hiển thị 1 slot mỗi giờ
+        min={new Date(0, 0, 0, 8, 0, 0)} // Bắt đầu từ 8h
+        max={new Date(0, 0, 0, 21, 0, 0)} // Kết thúc lúc 21h
+        onSelectEvent={handleSlotClick} // Xử lý khi click vào slot
+        eventPropGetter={eventPropGetter} // Tùy chỉnh class cho slot
       />
     </div>
   );
