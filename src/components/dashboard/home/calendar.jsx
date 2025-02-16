@@ -51,7 +51,7 @@ const MyCalendar = (props) => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '5px' }}>
       <Calendar
         localizer={localizer}
         events={myEventsList}
