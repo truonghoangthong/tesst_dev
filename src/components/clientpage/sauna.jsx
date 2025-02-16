@@ -66,7 +66,7 @@ const BookingCalendar = () => {
         step={60} // Mỗi slot là 1 tiếng
         timeslots={1} // Hiển thị 1 slot mỗi giờ
         min={new Date(0, 0, 0, 8, 0, 0)} // Bắt đầu từ 8h
-        max={new Date(0, 0, 0, 21, 0, 0)} // Kết thúc lúc 21h
+        max={new Date(0, 0, 0, 22, 0, 0)} // Kết thúc lúc 21h
         onSelectEvent={handleSlotClick} // Xử lý khi click vào slot
         eventPropGetter={eventPropGetter} // Tùy chỉnh class cho slot
       />
