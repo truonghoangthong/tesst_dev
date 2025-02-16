@@ -1,142 +1,109 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Grid from 'tui-grid';
-import 'tui-grid/dist/tui-grid.css';
-import './sauna.css';
-import { extractBookings } from './extractBooking';  
+import React, { useState } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-const BookingGrid = () => {
-  const gridRef = useRef(null);  
-  const [gridData, setGridData] = useState([
-    { time: '08:00', monday: 'Available', tuesday: 'Available', wednesday: 'Available', thursday: 'Available', friday: 'Available', saturday: 'Available', sunday: 'Available' },
-    { time: '09:00', monday: 'Booked', tuesday: 'Available', wednesday: 'Available', thursday: 'Booked', friday: 'Available', saturday: 'Available', sunday: 'Available' },
-    { time: '10:00', monday: 'Available', tuesday: 'Booked', wednesday: 'Available', thursday: 'Available', friday: 'Booked', saturday: 'Available', sunday: 'Available' },
-    // Thêm dữ liệu nếu cần
-  ]);
+// Set up moment localizer for react-big-calendar
+const localizer = momentLocalizer(moment);
 
-  useEffect(() => {
-    if (!gridRef.current) {
-      gridRef.current = new Grid({
-        el: document.getElementById('grid'),
-        data: gridData,
-        columns: [
-          { header: 'Time', name: 'time', width: 100 },
-          {
-            header: 'Monday',
-            name: 'monday',
-            editor: 'text',
-            align: 'center',
-            formatter: ({ value }) => {
-              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
-            },
-          },
-          {
-            header: 'Tuesday',
-            name: 'tuesday',
-            editor: 'text',
-            align: 'center',
-            formatter: ({ value }) => {
-              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
-            },
-          },
-          {
-            header: 'Wednesday',
-            name: 'wednesday',
-            editor: 'text',
-            align: 'center',
-            formatter: ({ value }) => {
-              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
-            },
-          },
-          {
-            header: 'Thursday',
-            name: 'thursday',
-            editor: 'text',
-            align: 'center',
-            formatter: ({ value }) => {
-              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
-            },
-          },
-          {
-            header: 'Friday',
-            name: 'friday',
-            editor: 'text',
-            align: 'center',
-            formatter: ({ value }) => {
-              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
-            },
-          },
-          {
-            header: 'Saturday',
-            name: 'saturday',
-            editor: 'text',
-            align: 'center',
-            formatter: ({ value }) => {
-              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
-            },
-          },
-          {
-            header: 'Sunday',
-            name: 'sunday',
-            editor: 'text',
-            align: 'center',
-            formatter: ({ value }) => {
-              return `<div class="${value === 'Available' ? 'available' : 'booked'}">${value}</div>`;
-            },
-          },
-        ],
-        bodyHeight: 400,
-      });
+// Function to generate time slots for booking
+const generateSlots = () => {
+  const slots = [];
+  const startTime = moment().set({ hour: 8, minute: 0, second: 0 });
+  const endTime = moment().set({ hour: 21, minute: 0, second: 0 });
 
-      console.log('Grid initialized', gridRef.current);  
-    } else {
-      console.log('Grid is already initialized:', gridRef.current);
+  for (let time = startTime; time.isBefore(endTime); time.add(1, 'hour')) {
+    slots.push({
+      time: time.format('HH:mm'),
+      status: 'available',
+      date: time.format('YYYY-MM-DD'),
+    });
+  }
+  return slots;
+};
 
-      if (gridRef.current.resetData) {
-        gridRef.current.resetData(gridData); 
-      } else {
-        console.warn('TUI Grid method resetData is not available');
+const BookingCalendar = () => {
+  const [slots, setSlots] = useState(generateSlots());
+
+  // Handle booking slot (toggle status between 'available' and 'booked')
+  const handleSlotClick = (slotIndex) => {
+    const updatedSlots = [...slots];
+    updatedSlots[slotIndex].status = updatedSlots[slotIndex].status === 'available' ? 'booked' : 'available';
+    setSlots(updatedSlots);
+  };
+
+  // Create events based on slots for react-big-calendar
+  const events = slots
+    .map((slot, index) => {
+      // Skip invalid slots
+      if (!slot.time || !slot.status || !slot.date) {
+        console.warn('Invalid slot skipped:', slot);
+        return null;
       }
-    }
 
-    const handleClick = (ev) => {
-      if (ev.columnName !== 'time') {
-        const value = gridRef.current.getValue(ev.rowKey, ev.columnName);
-        const newValue = value === 'Available' ? 'Booked' : 'Available';
-        gridRef.current.setValue(ev.rowKey, ev.columnName, newValue);
+      const startTime = moment(`${slot.date} ${slot.time}`, 'YYYY-MM-DD HH:mm').toDate();
+      const endTime = moment(startTime).add(1, 'hour').toDate();
 
-        const updatedData = [...gridData];
-        updatedData[ev.rowKey][ev.columnName] = newValue;
-        setGridData(updatedData);
+      return {
+        title: `Slot: ${slot.time} - ${slot.status}`, // Ensure title is always present
+        start: startTime,
+        end: endTime,
+        status: slot.status,
+        resourceId: index,
+      };
+    })
+    .filter(Boolean); // Remove null entries
 
-        localStorage.setItem('bookingData', JSON.stringify(updatedData));
-      }
-    };
+  console.log('Generated Events:', events); // Check the events array structure
 
-    if (gridRef.current) {
-      gridRef.current.on('click', handleClick);
-    }
-
-    return () => {
-      if (gridRef.current) {
-        gridRef.current.off('click', handleClick);
-      }
-    };
-  }, [gridData]);  
-
-  useEffect(() => {
-    const bookings = extractBookings(gridData);
-    console.log('Automatically extracted bookings:', bookings);
-    //process
-  }, [gridData]);  
+  // Check for invalid events
+  if (events.some(event => !event)) {
+    console.error('Invalid events detected:', events);
+    return <div>Error: Invalid events data.</div>;
+  }
 
   return (
-    <div className="sauna-container">
-      <div className="sauna-header">
-        <h2>Booking Grid</h2>
-      </div>
-      <div id="grid" style={{ width: '100%', height: '100%' }}></div>
+    <div>
+      <h1>Booking Calendar</h1>
+      <Calendar
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 500 }}
+        views={['week']} // Display calendar in weekly view
+        step={60} // 1 hour per slot
+        timeslots={1} // 1 time slot per hour
+        onSelectSlot={({ start, end }) => {
+          // Match selected slot based on start and end times
+          const selectedSlot = slots.find((slot) => {
+            return (
+              moment(slot.date + " " + slot.time).isSame(start) &&
+              moment(slot.date + " " + slot.time).add(1, 'hour').isSame(end)
+            );
+          });
+
+          if (selectedSlot) {
+            const slotIndex = slots.indexOf(selectedSlot);
+            handleSlotClick(slotIndex); // Toggle status on click
+          } else {
+            console.error("No valid slot found for selection.");
+          }
+        }}
+        eventPropGetter={(event) => {
+          // Style events based on their status (available or booked)
+          const backgroundColor = event.status === 'available' ? 'green' : event.status === 'booked' ? 'red' : 'gray';
+          return {
+            style: {
+              backgroundColor,
+              color: 'white', // Ensure white text on the background
+              borderRadius: '5px', // Rounded corners for better look
+            },
+          };
+        }}
+      />
     </div>
   );
 };
 
-export default BookingGrid;
+export default BookingCalendar;

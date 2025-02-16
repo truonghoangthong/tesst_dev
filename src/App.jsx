@@ -10,7 +10,7 @@ import Info from "./components/dashboard/info/info";
 import useDataStore from "./services/data";
 import Footer from "./components/footer";
 import Complaints from "./components/dashboard/complaints";
-import BookingGrid from "./components/clientpage/sauna";
+import BookingCalendar from "./components/clientpage/sauna";
 
 const App = () => {
   const { data, startFetching } = useDataStore();
@@ -30,7 +30,7 @@ const App = () => {
           <Route path="/admin/bookings" element={<Bookings />} />
           <Route path="/admin/complaints" element={<Complaints />} />
 
-          <Route path="/client/sauna" element={<BookingGrid />} />
+          <Route path="/client/sauna" element={<BookingCalendar/>} />
           <Route path="/client/laundry" element={<span>Laundry</span>} />
           <Route path="/client/info" element={<span>Client Info</span>} />
           <Route path="/client/complaint" element={<span>Client Complaints</span>} />
