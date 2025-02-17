@@ -15,13 +15,11 @@ This API provides endpoints for recording and retrieving environmental data, inc
 ---
 
 ## API Overview
-## **Base URL**
-http://8.215.20.85/api/v1
+
 
 ## **API Endpoints**
 
 ### 1. **Record Temperature Data**
-- **Endpoint:** `/embed-temperature?temperature=<real-value>`
 - **Method:** `GET`
 - **Description:** Recording Temperature Data. Replace `<real-value>` with real-value.
 - **URL Example:**  
@@ -34,14 +32,9 @@ http://8.215.20.85/api/v1
      ```
 
 ### 2. **Get Temperature Records**
-- **Endpoint:** `/get-tem`
 - **Method:** `GET`
 - **Description:** Get Temperature Data.
-- **URL Example:**  
-     ```bash
-     curl http://8.215.20.85/api/v1/get-tem
-     ```
-   - **Response Example:**  
+- **Response Example:**  
      ```json
      [
       {
@@ -52,20 +45,14 @@ http://8.215.20.85/api/v1
      ```
 
 ### 3. **Record Humidity Data**
-- **Endpoint:** `/embed-humidity?humidity=<real-value>`
 - **Method:** `GET`
 - **Description:** Recording Humidity Data. Replace `<real-value>` with real-values.
-- **URL Example:**  
-     ```bash
-     curl http://8.215.20.85/api/v1/embed-humidity?humidity=30
-     ```
-   - **Response Example:**  
+- - **Response Example:**  
      ```send
      "Humidity: 30 written."
      ```
 
 ### 4. **Get Humidity Records**
-- **Endpoint:** `/get-hum`
 - **Method:** `GET`
 - **Description:** Get Humidity Data.
 - **URL Example:**  
@@ -87,27 +74,17 @@ http://8.215.20.85/api/v1
      ```
 
 ### 5. **Update led status**
-- **Endpoint:** `update-led-status?status=<status>`
 - **Method:** `GET`
 - **Description:** Either turn the LED on or off remotely. Replace `<status>` with either `on` or `off`.
-- **URL Example:**  
-     ```bash
-          curl http://8.215.20.85/api/v1/update-led-status?status=on
-     ```
-   - **Response Example:**  
+- **Response Example:**  
      ```send
      LED status on
      ```
 
 ### 6. **Get led status**
-- **Endpoint:** `get-led-status`
 - **Method:** `GET`
 - **Description:** Either turn the LED on or off remotely. Replace `<status>` with either `on` or `off`.
-- **Request Example:**  
-     ```bash
-          curl http://8.215.20.85/api/v1/get-led-status
-     ```
-   - **Response Example:**  
+- **Response Example:**  
      ```json
      {
          "status": "on"
@@ -115,7 +92,6 @@ http://8.215.20.85/api/v1
      ```
      
 ### 7. **Upload image**
-- **Endpoint:** `/upload`
 - **Method:** `POST` 
 - **Description:** API for uploading images and automatically renaming files using a `uid`. **Automatically deletes old files with the same UID** before uploading a new one. Supported formats: JPEG, PNG, GIF, WEBP.
 ## Request Details  
@@ -140,27 +116,17 @@ File uploaded successfully: https://storage.googleapis.com/your-bucket-name/uid1
 ```
 
 ### 8. **Get image**
-- **Endpoint:** `/image/<:uid>`
 - **Method:** `GET` 
 - **Description:** Retrieve the uploaded image by replacing <:uid> with the actual UID used during the upload. The file is returned in its original format—JPEG, PNG, GIF, or WEBP—depending on the format you uploaded.
-- **URL Example:**  
-     ```bash
-          curl http://8.215.20.85/api/v1/image/12345
-     ```
-   - **Response Example:**  
+- **Response Example:**  
      ```
      Success (200): Returns the image file.
      ```
 
 ### 9. **Get logs Records**
-- **Endpoint:** `/logs`
 - **Method:** `GET`
 - **Description:** Get logs Records.
-- **URL Example:**  
-     ```bash
-          curl http://8.215.20.85/api/v1/logs
-     ```
-   - **Response Example:**  
+- **Response Example:**  
      ```json
      [
         "{\"level\":\"info\",\"message\":\"Listening at http://127.0.0.1:5001\"}",
