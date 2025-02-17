@@ -115,7 +115,7 @@ This API provides endpoints for recording and retrieving environmental data, inc
 File uploaded successfully: https://storage.googleapis.com/your-bucket-name/uid123.jpg  
 ```
 
-### 7. **Upload frequency text file**
+### 8. **Upload frequency text file**
 - **Method:** `POST` 
 - **Description:** API for uploading text files, automatically renaming them to `frequency.txt`, and appending new content to the existing file. Supported format: `.txt`.
 ## Request Details  
@@ -138,7 +138,7 @@ File uploaded successfully: https://storage.googleapis.com/your-bucket-name/uid1
 File uploaded successfully: https://storage.cloud.google.com/your-bucket-name/uid123.jpg  
 ```
 
-### 8. **Get image**
+### 9. **Get image**
 - **Method:** `GET` 
 - **Description:** Retrieve the uploaded image by replacing <:uid> with the actual UID used during the upload. The file is returned in its original format—JPEG, PNG, GIF, or WEBP—depending on the format you uploaded.
 - **Response Example:**  
@@ -146,7 +146,7 @@ File uploaded successfully: https://storage.cloud.google.com/your-bucket-name/ui
      Success (200): Returns the image file.
      ```
 
-### 9. **Get logs Records**
+### 10. **Get logs Records**
 - **Method:** `GET`
 - **Description:** Get logs Records.
 - **Response Example:**  
