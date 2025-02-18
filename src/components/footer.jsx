@@ -1,9 +1,9 @@
 import React from "react";
 import './footer.css';
 
-const Footer = () => {
+const Footer = ({ className }) => {  
   return (
-    <div className="footer">
+    <div className={`footer ${className}`}> 
       <div className="footer-left">
         <img src="../image 1.png" alt="Logo" className="footer-logo"/>
         <div className="footer-contact">
@@ -30,6 +30,7 @@ const Footer = () => {
         </div>
       </div>
     </div>
-  )
-} 
+  );
+}
+
 export default Footer;

@@ -1,4 +1,4 @@
-import React , { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Sidebar from "./components/sidebar"; 
 import Header from "./components/header";
@@ -14,29 +14,31 @@ import BookingCalendar from "./components/clientpage/sauna";
 
 const App = () => {
   const { data, startFetching } = useDataStore();
+  const [privilege, setPrivilege] = useState("guest"); 
+
   useEffect(() => {
     startFetching();
   }, [startFetching]);
+
   return (
     <Router>
-      <Header />
-      <Sidebar />
-      <div className="content">
+      <Header privilege={privilege} /> 
+      <Sidebar privilege={privilege} /> 
+      <div className={`content ${privilege === 'guest' ? 'no-left-padding' : ''}`}>
         <Routes>
           <Route path="/admin" element={<Home />} />
           <Route path="/admin/rooms" element={<Rooms />} />
-          <Route path="/admin/reports" element={<Reports/>} />
+          <Route path="/admin/reports" element={<Reports />} />
           <Route path="/admin/info" element={<Info />} />
           <Route path="/admin/bookings" element={<Bookings />} />
           <Route path="/admin/complaints" element={<Complaints />} />
-
-          <Route path="/client/sauna" element={<BookingCalendar/>} />
+          <Route path="/client/sauna" element={<BookingCalendar />} />
           <Route path="/client/laundry" element={<span>Laundry</span>} />
           <Route path="/client/info" element={<span>Client Info</span>} />
           <Route path="/client/complaint" element={<span>Client Complaints</span>} />
         </Routes>
       </div>
-      <Footer/>
+      <Footer className={privilege === 'guest' ? 'no-left-padding' : ''} />
     </Router>
   );
 };
