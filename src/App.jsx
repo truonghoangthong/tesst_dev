@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import Sidebar from "./components/sidebar"; 
 import Header from "./components/header";
 import Home from './components/dashboard/home/home';  
@@ -11,21 +11,48 @@ import useDataStore from "./services/data";
 import Footer from "./components/footer";
 import Complaints from "./components/dashboard/complaints";
 import BookingCalendar from "./components/clientpage/sauna";
+import LoginPage from "./components/loginPage";
 
 const App = () => {
-  const { data, startFetching } = useDataStore();
-  const [privilege, setPrivilege] = useState("guest"); 
+  const { startFetching } = useDataStore();
+  const [privilege, setPrivilege] = useState("admin");  
+  const [isMobileSize, setIsMobileSize] = useState(window.innerWidth <= 767);  
 
   useEffect(() => {
-    startFetching();
+    const handleResize = () => {
+      setIsMobileSize(window.innerWidth <= 767);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    startFetching(); 
   }, [startFetching]);
 
   return (
     <Router>
-      <Header privilege={privilege} /> 
-      <Sidebar privilege={privilege} /> 
-      <div className={`content ${privilege === 'guest' ? 'no-left-padding' : ''}`}>
+      <AppContent privilege={privilege} isMobileSize={isMobileSize} />
+    </Router>
+  );
+};
+
+const AppContent = ({ privilege, isMobileSize }) => {
+  const location = useLocation();  
+  const isLoginPage = location.pathname === '/login';
+
+  return (
+    <div>
+      {!isLoginPage && <Header privilege={privilege} />} 
+      {!isLoginPage && <Sidebar privilege={privilege} />} 
+
+      <div 
+        className={`content ${isMobileSize || isLoginPage ? 'no-left-padding' : ''}`}  
+      >
         <Routes>
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/admin" element={<Home />} />
           <Route path="/admin/rooms" element={<Rooms />} />
           <Route path="/admin/reports" element={<Reports />} />
@@ -38,8 +65,9 @@ const App = () => {
           <Route path="/client/complaint" element={<span>Client Complaints</span>} />
         </Routes>
       </div>
-      <Footer className={privilege === 'guest' ? 'no-left-padding' : ''} />
-    </Router>
+
+      {!isLoginPage && <Footer />}
+    </div>
   );
 };
 
