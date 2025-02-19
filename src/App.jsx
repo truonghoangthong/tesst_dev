@@ -15,18 +15,7 @@ import LoginPage from "./components/loginPage";
 
 const App = () => {
   const { startFetching } = useDataStore();
-  const [privilege, setPrivilege] = useState("admin");  
-  const [isMobileSize, setIsMobileSize] = useState(window.innerWidth <= 767);  
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobileSize(window.innerWidth <= 767);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const [privilege, setPrivilege] = useState("admin");  // Mặc định là admin
 
   useEffect(() => {
     startFetching(); 
@@ -34,23 +23,34 @@ const App = () => {
 
   return (
     <Router>
-      <AppContent privilege={privilege} isMobileSize={isMobileSize} />
+      <AppContent privilege={privilege} setPrivilege={setPrivilege} />
     </Router>
   );
 };
 
-const AppContent = ({ privilege, isMobileSize }) => {
+const AppContent = ({ privilege, setPrivilege }) => {
   const location = useLocation();  
   const isLoginPage = location.pathname === '/login';
 
+  useEffect(() => {
+    if (isLoginPage) {
+      setPrivilege("unknown");
+    } else if (privilege === "unknown") {
+      // Khôi phục quyền admin sau khi login thành công
+      setPrivilege("admin");
+    }
+  }, [isLoginPage, privilege, setPrivilege]);
+
   return (
     <div>
-      {!isLoginPage && <Header privilege={privilege} />} 
-      {!isLoginPage && <Sidebar privilege={privilege} />} 
+      {/* Hiển thị Header cho mọi quyền, nhưng nếu là trang Login, dùng quyền admin */}
+      <Header privilege={isLoginPage ? "admin" : privilege} />
 
-      <div 
-        className={`content ${isMobileSize || isLoginPage ? 'no-left-padding' : ''}`}  
-      >
+      {/* Nếu không phải trang Login và quyền không phải "unknown", hiển thị Sidebar */}
+      {!isLoginPage && privilege !== "unknown" && <Sidebar privilege={privilege} />} 
+
+      {/* Điều chỉnh layout dựa trên việc có Sidebar hay không */}
+      <div className={`content ${isLoginPage || privilege === "unknown" ? 'no-left-padding' : ''}`}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/admin" element={<Home />} />
@@ -66,6 +66,7 @@ const AppContent = ({ privilege, isMobileSize }) => {
         </Routes>
       </div>
 
+      {/* Ẩn Footer cho trang Login */}
       {!isLoginPage && <Footer />}
     </div>
   );

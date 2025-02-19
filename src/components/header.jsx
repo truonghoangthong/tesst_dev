@@ -18,8 +18,7 @@ const Header = ({ privilege = 'guest' }) => {  //default: if no prop passed
   return (
     <>
       <div className={`header ${privilege === 'guest' ? 'guest' : ''}`}>
-        <span className="resortlogo">Rakkaranta</span>
-
+        <img className="resortlogo" src="/public/logo.png" alt="logo" />
         <div className="header-options">
           {privilege === 'guest' && guestOptions.map(option => (
             <NavLink

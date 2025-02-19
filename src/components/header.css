@@ -14,10 +14,9 @@
 }
 
 .resortlogo {
-  font-size: 25px;  
+  size: 10px;  
   display: flex;
   margin-left: 10px;
-  color: white;
 }
 
 .header-info {
