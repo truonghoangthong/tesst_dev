@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
 import useLogin from '../../../Backend/src/hooks/AuthenicationHooks/useLogin';
+import useLogout from '../../../Backend/src/hooks/AuthenicationHooks/useLogout';
+import Popup from './popup';
 
 const images = [
   '/img1.png',
@@ -12,10 +14,16 @@ const images = [
 ];
 
 const LoginPage = () => {
-  const { login, loading, error } = useLogin();
+  const { login, loading: loginLoading, error: loginError } = useLogin(); 
+  const { handleLogout, loading: logoutLoading, error: logoutError } = useLogout(); 
   const [currentImage, setCurrentImage] = useState(0);
   const [formData, setFormData] = useState({ email: '', password: '' });
-
+  const [popup, setPopup] = useState({
+    show: false,
+    title: "",
+    message: "",
+    status: "",
+  });
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prevImage) => (prevImage + 1) % images.length);
@@ -27,10 +35,32 @@ const LoginPage = () => {
     e.preventDefault();
     if (formData.email && formData.password) {
       try {
-        await login(formData);  
-      } catch (err) {
-        console.error('Login failed', err);
+        const result = await login(formData);  
+        console.log("user credential");
+        setPopup({
+          show: true,
+          title: result.Title,
+          message: result.Message,
+          status: result.Status,
+        });
+      } catch (error) {
+        console.error('Login failed', error);
       }
+    }
+  };
+
+  const Logout = async () => {  // Added async keyword
+    try {
+      const response = await handleLogout();  
+      console.log("logout")
+      setPopup({
+        show: true,
+        title: response.Title,
+        message: response.Message,
+        status: response.Status,
+      });
+    } catch (logoutError) {
+      console.error('Logout failed', logoutError);
     }
   };
 
@@ -41,14 +71,9 @@ const LoginPage = () => {
       [name]: value,
     }));
   };
-
-  const simulateLogin = () => {
-    setFormData({
-      email: 'johndoe@gmail.com',
-      password: '123456789as',
-    });
+  const closePopup = () => {
+    setPopup({ show: false, title: "", message: "", status: "" });
   };
-
   return (
     <div className="container login-page">
       <div className="slideshow-container">
@@ -74,14 +99,25 @@ const LoginPage = () => {
               onChange={handleChange}
               required
             />
-            <button type="submit" disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
+            <button type="submit" disabled={loginLoading}>
+              {loginLoading ? 'Logging in...' : 'Login'}
             </button>
           </form>
-          {error && <p className="error">{error}</p>}
-          <button onClick={simulateLogin}>Simulate Login</button> 
+          {loginError && <p className="error">{loginError}</p>}
+          <button onClick={Logout} disabled={logoutLoading}>
+            {logoutLoading ? 'Logging out...' : 'Logout'}
+          </button> {/* Added loading state for logout */}
+          {logoutError && <p className="error">{logoutError}</p>}
         </div>
       </div>
+      {popup.show && (
+        <Popup
+          title={popup.title}
+          message={popup.message}
+          status={popup.status}
+          onClose={closePopup}
+        />
+      )}
     </div>
   );
 };

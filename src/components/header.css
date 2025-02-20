@@ -14,10 +14,12 @@
 }
 
 .resortlogo {
-  size: 10px;  
+  width: 30px;
+  height: auto; 
   display: flex;
   margin-left: 10px;
 }
+
 
 .header-info {
   display: flex;
