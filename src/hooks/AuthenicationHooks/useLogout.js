@@ -1,4 +1,4 @@
-import { useAuthStore } from "../../store/authStore";
+import useAuthStore from "../../store/authStore";
 import { useSignOut } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase/firebase";
 

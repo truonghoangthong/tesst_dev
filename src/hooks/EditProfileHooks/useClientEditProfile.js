@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { firestore } from "../../firebase/firebase";
-import { useAuthStore } from "../../store/authStore";
+import useAuthStore from "../../store/authStore";
 import { doc, updateDoc } from "firebase/firestore";
 
 /**
  * A custom hook to edit Client information (fullName % phone number only).
  * This hook check the user is authenicated or not then updates the user information in Firestore
  * and global state
- * 
+ *
  * @returns {Object} An object contains edit profile function and update state
  * @returns {Function} Function to update user information in database and global state
  * @returns {Boolean} Updating state decide whether the editing process is working or not
@@ -21,7 +21,7 @@ const useClientEditProfile = () => {
   /**
    * Function to edit client profile. It checks if user is authenicated or not
    * then updates the user information and state globally
-   * 
+   *
    * @param {Object} inputs A object contains user updated information
    * @param {string} fullName User's full name
    * @param {string} phoneNum User's phone number
@@ -29,7 +29,7 @@ const useClientEditProfile = () => {
    * @property {string} return.Title - Result title (e.g. Success, Error)
    * @property {string} return.Message - Message describing the result of editing process
    * @property {string} return.Title - Result status (e.g. success, error)
-   * 
+   *
    */
 
   const editProfile = async (inputs) => {
