@@ -2,43 +2,53 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import useAuthStore from "../../../../../Backend/src/store/authStore";
 import useAdminEditProfile from "../../../../../Backend/src/hooks/EditProfileHooks/useAdminEditProfile";
+import usePreviewImage from "../../../../../Backend/src/hooks/EditProfileHooks/usePreviewImage";
+import useChangePassword from "../../../../../Backend/src/hooks/AuthenicationHooks/useChangePassword";
+import Popup from '../../popup';
 import './info.css';
-import Popup from '../../popup'; 
 
 const Info = () => {
-  const user = useAuthStore((state) => state.user);  
-  const { editProfile, isUpdating } = useAdminEditProfile(); 
-
-  const [formData, setFormData] = useState({
-    fullName: user?.fullName || "",
-    phoneNum: user?.phoneNum || "",
-    email: user?.email || ""
-  });
-  const [selectedFile, setSelectedFile] = useState(null);  
+  const user = useAuthStore((state) => state.user);
+  const { editProfile, isUpdating } = useAdminEditProfile();
   const [popup, setPopup] = useState({ show: false, title: "", message: "", status: "" });
+  const { selectedFile, error, setSelectedFile, handleImageChange } = usePreviewImage();
+  const [formData, setFormData] = useState({
+    fullName: user.fullName || "",
+    phoneNum: user.phoneNum || "",
+    email: user.email || "",
+    profileImage: user.profileImage || "",
+  });
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordPopup, setPasswordPopup] = useState({ show: false, title: "", message: "", status: "" });
 
   useEffect(() => {
     if (user) {
-      setFormData({ fullName: user.fullName, phoneNum: user.phoneNum, email: user.email });
+      setFormData({ fullName: user.fullName, phoneNum: user.phoneNum, email: user.email, profileImage: user.profileImage });
     }
   }, [user]);
 
+  useEffect(() => {
+    if (selectedFile) {
+      setFormData((prevProfile) => ({
+        ...prevProfile,
+        profileImage: selectedFile || "",
+      }));
+    }
+  }, [selectedFile]);
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
-
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
   };
 
   const handleSave = async () => {
     setPopup({ show: false, title: "", message: "", status: "" });
 
     const inputs = { fullName, phoneNum };
-    console.log("InputsInputs:", inputs);
-    console.log("File:", selectedFile);
-
+    console.log("Inputs:", inputs);
     const response = await editProfile(inputs, selectedFile);
+    alert(response.Message);
     if (response.Status === "success") {
       setPopup({
         show: true,
@@ -46,6 +56,7 @@ const Info = () => {
         message: "Profile updated successfully!",
         status: "success"
       });
+      setSelectedFile(null);
     } else {
       setFormData({
         fullName: user?.fullName || "",
@@ -58,10 +69,42 @@ const Info = () => {
         message: `Error: ${response.Message}`,
         status: "error"
       });
+      setTimeout(() => {
+        setPopup({ show: false, title: "", message: "", status: "" });
+      }, 10000);
     }
   };
-  
-  
+
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      setPasswordPopup({
+        show: true,
+        title: "Error",
+        message: "New passwords do not match!",
+        status: "error"
+      });
+      return;
+    }
+
+    const response = await useChangePassword(newPassword, user.email, currentPassword);
+
+    setPasswordPopup({
+      show: true,
+      title: response.Title,
+      message: response.Message,
+      status: response.Status
+    });
+
+    if (response.Status === "success") {
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    }
+
+    setTimeout(() => {
+      setPasswordPopup({ show: false, title: "", message: "", status: "" });
+    }, 10000);
+  };
 
   const closePopup = () => setPopup({ show: false, title: "", message: "", status: "" });
 
@@ -78,7 +121,9 @@ const Info = () => {
             <span className="info-email">{email}</span>
           </div>
         </div>
-        <button onClick={handleSave} disabled={isUpdating}>Save</button> 
+
+        <button className="save-profile-button" onClick={handleSave} disabled={isUpdating}>Save</button>
+
         <form className="info-form">
           <div className="form-group">
             <label htmlFor="fullName">Full Name</label>
@@ -113,10 +158,43 @@ const Info = () => {
               type="file"
               id="profileImage"
               accept="image/*"
-              onChange={handleFileChange} 
+              onChange={handleImageChange}
             />
           </div>
         </form>
+
+        <div className="change-password-section">
+          <h3>Change Password</h3>
+          <div className="form-group">
+            <label htmlFor="currentPassword">Current Password</label>
+            <input
+              type="password"
+              id="currentPassword"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="newPassword">New Password</label>
+            <input
+              type="password"
+              id="newPassword"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="confirmPassword">Confirm New Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
+
+          <button className="change-password-button" onClick={handleChangePassword}>Change Password</button>
+        </div>
       </div>
 
       {popup.show && (
@@ -125,6 +203,15 @@ const Info = () => {
           message={popup.message}
           status={popup.status}
           onClose={closePopup}
+        />
+      )}
+
+      {passwordPopup.show && (
+        <Popup
+          title={passwordPopup.title}
+          message={passwordPopup.message}
+          status={passwordPopup.status}
+          onClose={() => setPasswordPopup({ show: false, title: "", message: "", status: "" })}
         />
       )}
     </div>
