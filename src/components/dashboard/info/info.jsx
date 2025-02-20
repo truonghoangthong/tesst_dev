@@ -1,30 +1,71 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import useAuthStore from "../../../../../Backend/src/store/authStore";
+import useAdminEditProfile from "../../../../../Backend/src/hooks/EditProfileHooks/useAdminEditProfile";
 import './info.css';
+import Popup from '../../popup'; 
 
 const Info = () => {
   const user = useAuthStore((state) => state.user);  
+  const { editProfile, isUpdating } = useAdminEditProfile(); 
 
-  const [fullName, setFullName] = useState(user ? user.fullName : "");
-  const [phoneNum, setPhoneNumber] = useState(user ? user.phoneNum : "");
-  const [email, setEmailAddress] = useState(user ? user.email : "");
+  const [formData, setFormData] = useState({
+    fullName: user?.fullName || "",
+    phoneNum: user?.phoneNum || "",
+    email: user?.email || ""
+  });
+  const [selectedFile, setSelectedFile] = useState(null);  
+  const [popup, setPopup] = useState({ show: false, title: "", message: "", status: "" });
 
   useEffect(() => {
     if (user) {
-      setFullName(user.fullName);
-      setPhoneNumber(user.phoneNum);
-      setEmailAddress(user.email);
+      setFormData({ fullName: user.fullName, phoneNum: user.phoneNum, email: user.email });
     }
-  }, [user]); 
+  }, [user]);
 
-  const handleInputChange = (e, setState) => {
-    setState(e.target.value);
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSave = () => {
-    alert("Saved successfully!");
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
   };
+
+  const handleSave = async () => {
+    setPopup({ show: false, title: "", message: "", status: "" });
+
+    const inputs = { fullName, phoneNum };
+    console.log("InputsInputs:", inputs);
+    console.log("File:", selectedFile);
+
+    const response = await editProfile(inputs, selectedFile);
+    if (response.Status === "success") {
+      setPopup({
+        show: true,
+        title: "Success",
+        message: "Profile updated successfully!",
+        status: "success"
+      });
+    } else {
+      setFormData({
+        fullName: user?.fullName || "",
+        phoneNum: user?.phoneNum || "",
+        email: user?.email || ""
+      });
+      setPopup({
+        show: true,
+        title: "Error",
+        message: `Error: ${response.Message}`,
+        status: "error"
+      });
+    }
+  };
+  
+  
+
+  const closePopup = () => setPopup({ show: false, title: "", message: "", status: "" });
+
+  const { fullName, phoneNum, email } = formData;
 
   return (
     <div className="info">
@@ -37,7 +78,7 @@ const Info = () => {
             <span className="info-email">{email}</span>
           </div>
         </div>
-        <button onClick={handleSave}>Save</button>
+        <button onClick={handleSave} disabled={isUpdating}>Save</button> 
         <form className="info-form">
           <div className="form-group">
             <label htmlFor="fullName">Full Name</label>
@@ -45,7 +86,7 @@ const Info = () => {
               type="text"
               id="fullName"
               value={fullName}
-              onChange={(e) => handleInputChange(e, setFullName)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="form-group">
@@ -54,7 +95,7 @@ const Info = () => {
               type="text"
               id="phoneNum"
               value={phoneNum}
-              onChange={(e) => handleInputChange(e, setPhoneNumber)}
+              onChange={handleInputChange}
             />
           </div>
           <div className="form-group">
@@ -63,11 +104,29 @@ const Info = () => {
               type="email"
               id="email"
               value={email}
-              onChange={(e) => handleInputChange(e, setEmailAddress)}
+              disabled
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="profileImage">Profile Image</label>
+            <input
+              type="file"
+              id="profileImage"
+              accept="image/*"
+              onChange={handleFileChange} 
             />
           </div>
         </form>
       </div>
+
+      {popup.show && (
+        <Popup
+          title={popup.title}
+          message={popup.message}
+          status={popup.status}
+          onClose={closePopup}
+        />
+      )}
     </div>
   );
 };

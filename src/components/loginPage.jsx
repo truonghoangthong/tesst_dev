@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
 import useLogin from '../../../Backend/src/hooks/AuthenicationHooks/useLogin';
+import useSignUpWithEmailAndPassword from '../../../Backend/src/hooks/AuthenicationHooks/useSignUpWithEmailAndPassword'; // Import your sign-up hook
 import useAuthStore from '../../../Backend/src/store/authStore';
 import Popup from './popup';
 import { useNavigate } from 'react-router-dom';
@@ -16,10 +17,16 @@ const images = [
 
 const LoginPage = () => {
   const { login, loading: loginLoading, error: loginError } = useLogin();
+  const { signUp, loading: signUpLoading, error: signUpError } = useSignUpWithEmailAndPassword(); // Use sign-up hook
   const user = useAuthStore((state) => state.user);
   const [currentImage, setCurrentImage] = useState(0);
+  
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const [signUpData, setSignUpData] = useState({ email: '', password: '', fullName: '', phoneNum: '' }); // Sign-up form data
+  
+  const [isSignUp, setIsSignUp] = useState(false); // Toggle between login and sign-up
   const navigate = useNavigate();
+  
   const [popup, setPopup] = useState({
     show: false,
     title: "",
@@ -36,8 +43,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (user) {
-      console.log('User data after login:', user);
-      console.log('Is Admin:', user.isAdmin);
+      console.log('User data after login or sign-up:', user);
       if (popup.status === "success") {
         if (user.isAdmin) {
           navigate('/admin');
@@ -50,28 +56,52 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.email && formData.password) {
-      try {
-        const result = await login(formData);
-        setPopup({
-          show: true,
-          title: result.Title,
-          message: result.Message,
-          status: result.Status,
-        });
-
-      } catch (error) {
-        console.error('Login failed', error);
+    if (isSignUp) {
+      // Handle sign-up logic
+      if (signUpData.email && signUpData.password && signUpData.fullName && signUpData.phoneNum) {
+        try {
+          const result = await signUp(signUpData);
+          setPopup({
+            show: true,
+            title: result.Title,
+            message: result.Message,
+            status: result.Status,
+          });
+        } catch (error) {
+          console.error('Sign-up failed', error);
+        }
+      }
+    } else {
+      // Handle login logic
+      if (formData.email && formData.password) {
+        try {
+          const result = await login(formData);
+          setPopup({
+            show: true,
+            title: result.Title,
+            message: result.Message,
+            status: result.Status,
+          });
+        } catch (error) {
+          console.error('Login failed', error);
+        }
       }
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (isSignUp) {
+      setSignUpData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const closePopup = () => {
@@ -85,13 +115,13 @@ const LoginPage = () => {
       </div>
       <div className="login-container">
         <div className="login-box">
-          <h2>Login</h2>
+          <h2>{isSignUp ? "Sign Up" : "Login"}</h2>
           <form onSubmit={handleSubmit}>
             <input
               type="text"
               name="email"
-              placeholder="Username"
-              value={formData.email}
+              placeholder="Email"
+              value={isSignUp ? signUpData.email : formData.email}
               onChange={handleChange}
               required
             />
@@ -99,15 +129,44 @@ const LoginPage = () => {
               type="password"
               name="password"
               placeholder="Password"
-              value={formData.password}
+              value={isSignUp ? signUpData.password : formData.password}
               onChange={handleChange}
               required
             />
-            <button type="submit" disabled={loginLoading}>
-              {loginLoading ? 'Logging in...' : 'Login'}
+            {isSignUp && (
+              <>
+                <input
+                  type="text"
+                  name="fullName"
+                  placeholder="Full Name"
+                  value={signUpData.fullName}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="text"
+                  name="phoneNum"
+                  placeholder="Phone Number"
+                  value={signUpData.phoneNum}
+                  onChange={handleChange}
+                  required
+                />
+              </>
+            )}
+            <button type="submit" disabled={isSignUp ? signUpLoading : loginLoading}>
+              {isSignUp
+                ? signUpLoading
+                  ? 'Signing up...'
+                  : 'Sign Up'
+                : loginLoading
+                ? 'Logging in...'
+                : 'Login'}
             </button>
           </form>
-          {loginError && <p className="error">{loginError}</p>}
+          {isSignUp ? signUpError && <p className="error">{signUpError}</p> : loginError && <p className="error">{loginError}</p>}
+          <p onClick={() => setIsSignUp(!isSignUp)} className="toggle-link">
+            {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up"}
+          </p>
         </div>
       </div>
       {popup.show && (
