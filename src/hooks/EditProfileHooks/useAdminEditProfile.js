@@ -73,7 +73,7 @@ const useAdminEditProfile = () => {
   // Update user information in database & upload image
   const editProfile = async (inputs, selectedFile) => {
     setIsUpdating(true);
-    const userDocRef = doc(firestore, "users", authUser.uid); // Fix here for admin
+    const userDocRef = doc(firestore, "users", authUser.uid);
 
     try {
       let imageURL = authUser.profileImageURL;
