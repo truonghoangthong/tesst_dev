@@ -88,6 +88,7 @@ const useSignUpWithEmailAndPassword = () => {
         fullName: inputs.fullName,
         phoneNum: inputs.phoneNum,
         isAdmin: false,
+        profileImage: "",
         createdAt: new Date().toISOString(),
       };
 
