@@ -4,11 +4,12 @@ import Sidebar from "./sidebar";
 import { NavLink } from "react-router-dom"; 
 import './header.css';
 
-const Header = ({ privilege = 'guest' }) => {  //default: if no prop passed
+const Header = ({ isAdmin }) => { 
   const [isSidebarVisible, setSidebarVisible] = useState(false); 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   };
+  
   const guestOptions = [
     { name: "Complaint", path: "complaint" },
     { name: "Sauna", path: "sauna" },
@@ -17,10 +18,11 @@ const Header = ({ privilege = 'guest' }) => {  //default: if no prop passed
 
   return (
     <>
-      <div className={`header ${privilege === 'guest' ? 'guest' : ''}`}>
+      <div className={`header ${!isAdmin ? 'guest' : ''}`}>
         <img className="resortlogo" src="/public/logo.png" alt="logo" />
+        
         <div className="header-options">
-          {privilege === 'guest' && guestOptions.map(option => (
+          {!isAdmin && guestOptions.map(option => (
             <NavLink
               key={option.path}
               to={`/client/${option.path}`}
@@ -32,7 +34,7 @@ const Header = ({ privilege = 'guest' }) => {  //default: if no prop passed
         </div>
 
         <div className="header-info">
-          {privilege === 'admin' ? (
+          {isAdmin ? (
             <Icon icon="mdi:menu" className="menu-icon" onClick={toggleSidebar} />
           ) : (
             <div className="guest-section">
@@ -43,7 +45,7 @@ const Header = ({ privilege = 'guest' }) => {  //default: if no prop passed
         </div>
       </div>
 
-      {privilege === 'admin' && <Sidebar visible={isSidebarVisible} onClose={toggleSidebar} />}
+      {isAdmin && <Sidebar visible={isSidebarVisible} onClose={toggleSidebar} />}
     </>
   );
 };

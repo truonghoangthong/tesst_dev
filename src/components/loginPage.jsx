@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
 import useLogin from '../../../Backend/src/hooks/AuthenicationHooks/useLogin';
-import useLogout from '../../../Backend/src/hooks/AuthenicationHooks/useLogout';
+import useAuthStore from '../../../Backend/src/store/authStore';
 import Popup from './popup';
+import { useNavigate } from 'react-router-dom';
 
 const images = [
   '/img1.png',
@@ -14,16 +15,18 @@ const images = [
 ];
 
 const LoginPage = () => {
-  const { login, loading: loginLoading, error: loginError } = useLogin(); 
-  const { handleLogout, loading: logoutLoading, error: logoutError } = useLogout(); 
+  const { login, loading: loginLoading, error: loginError } = useLogin();
+  const user = useAuthStore((state) => state.user);
   const [currentImage, setCurrentImage] = useState(0);
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
   const [popup, setPopup] = useState({
     show: false,
     title: "",
     message: "",
     status: "",
   });
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prevImage) => (prevImage + 1) % images.length);
@@ -31,36 +34,35 @@ const LoginPage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      console.log('User data after login:', user);
+      console.log('Is Admin:', user.isAdmin);
+      if (popup.status === "success") {
+        if (user.isAdmin) {
+          navigate('/admin');
+        } else {
+          navigate('/client/sauna');
+        }
+      }
+    }
+  }, [user, popup.status, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.email && formData.password) {
       try {
-        const result = await login(formData);  
-        console.log("user credential");
+        const result = await login(formData);
         setPopup({
           show: true,
           title: result.Title,
           message: result.Message,
           status: result.Status,
         });
+
       } catch (error) {
         console.error('Login failed', error);
       }
-    }
-  };
-
-  const Logout = async () => {  // Added async keyword
-    try {
-      const response = await handleLogout();  
-      console.log("logout")
-      setPopup({
-        show: true,
-        title: response.Title,
-        message: response.Message,
-        status: response.Status,
-      });
-    } catch (logoutError) {
-      console.error('Logout failed', logoutError);
     }
   };
 
@@ -71,9 +73,11 @@ const LoginPage = () => {
       [name]: value,
     }));
   };
+
   const closePopup = () => {
     setPopup({ show: false, title: "", message: "", status: "" });
   };
+
   return (
     <div className="container login-page">
       <div className="slideshow-container">
@@ -104,10 +108,6 @@ const LoginPage = () => {
             </button>
           </form>
           {loginError && <p className="error">{loginError}</p>}
-          <button onClick={Logout} disabled={logoutLoading}>
-            {logoutLoading ? 'Logging out...' : 'Logout'}
-          </button> {/* Added loading state for logout */}
-          {logoutError && <p className="error">{logoutError}</p>}
         </div>
       </div>
       {popup.show && (
