@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import useAuthStore from "../../../../../Backend/src/store/authStore";
 import './info.css';
 
 const Info = () => {
-  const [firstName, setFirstName] = useState("Thong");
-  const [lastName, setLastName] = useState("Truong");
-  const [phoneNumber, setPhoneNumber] = useState("0455789903h");
-  const [emailAddress, setEmailAddress] = useState("thongtruong@mail.com");
+  const user = useAuthStore((state) => state.user);  
+
+  const [fullName, setFullName] = useState(user ? user.fullName : "");
+  const [phoneNum, setPhoneNumber] = useState(user ? user.phoneNum : "");
+  const [email, setEmailAddress] = useState(user ? user.email : "");
 
   useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("userInfo"));
-    if (savedData) {
-      setFirstName(savedData.firstName);
-      setLastName(savedData.lastName);
-      setPhoneNumber(savedData.phoneNumber);
-      setEmailAddress(savedData.emailAddress);
+    if (user) {
+      setFullName(user.fullName);
+      setPhoneNumber(user.phoneNum);
+      setEmailAddress(user.email);
     }
-  }, []);
+  }, [user]); 
 
   const handleInputChange = (e, setState) => {
     setState(e.target.value);
   };
 
   const handleSave = () => {
-    const userInfo = { firstName, lastName, phoneNumber, emailAddress };
-    localStorage.setItem("userInfo", JSON.stringify(userInfo));
     alert("Saved successfully!");
   };
 
@@ -35,52 +33,39 @@ const Info = () => {
         <div className="name-box">
           <Icon icon="mdi:person-circle-outline" width="125" height="125" />
           <div className="info-column">
-            <span className="info-name">{firstName} {lastName}</span>
-            <span className="info-email">{emailAddress}</span>
+            <span className="info-name">{fullName}</span>
+            <span className="info-email">{email}</span>
           </div>
         </div>
         <button onClick={handleSave}>Save</button>
         <form className="info-form">
-          <div className="info-row">
-            <div className="form-group">
-              <label htmlFor="firstName">First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                value={firstName}
-                onChange={(e) => handleInputChange(e, setFirstName)}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="lastName">Last Name</label>
-              <input
-                type="text"
-                id="lastName"
-                value={lastName}
-                onChange={(e) => handleInputChange(e, setLastName)}
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="fullName">Full Name</label>
+            <input
+              type="text"
+              id="fullName"
+              value={fullName}
+              onChange={(e) => handleInputChange(e, setFullName)}
+            />
           </div>
-          <div className="info-row">
-            <div className="form-group">
-              <label htmlFor="phoneNumber">Phone Number</label>
-              <input
-                type="text"
-                id="phoneNumber"
-                value={phoneNumber}
-                onChange={(e) => handleInputChange(e, setPhoneNumber)}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="emailAddress">Email Address</label>
-              <input
-                type="email"
-                id="emailAddress"
-                value={emailAddress}
-                onChange={(e) => handleInputChange(e, setEmailAddress)}
-              />
-            </div>
-          </div>  
+          <div className="form-group">
+            <label htmlFor="phoneNum">Phone Number</label>
+            <input
+              type="text"
+              id="phoneNum"
+              value={phoneNum}
+              onChange={(e) => handleInputChange(e, setPhoneNumber)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => handleInputChange(e, setEmailAddress)}
+            />
+          </div>
         </form>
       </div>
     </div>

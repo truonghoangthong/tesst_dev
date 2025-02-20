@@ -15,8 +15,9 @@
   padding-top: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start; /* Align items to the top */
+  align-items: flex-start; /* Align items to the start (left) */
+  width: 100%; /* Ensure the form takes the full width of the parent */
 }
 
 .gradient-box {
@@ -37,20 +38,6 @@
   align-items: flex-start;
   margin-left: 10px;
   margin-right: 180px;
-}
-
-.info-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between; 
-  align-items: center;
-  width: 100%; 
-  gap: 20px;
-}
-
-.info-row > * {
-  flex-grow: 1; 
-  margin-right: 10px; 
 }
 
 .info-name {
@@ -74,6 +61,8 @@
 
 .form-group {
   margin-bottom: 15px;
+  width: 100%; /* Ensure the form group takes full width */
+  max-width: 500px;
 }
 
 label {
@@ -85,7 +74,6 @@ label {
 /* Input styles */
 .info input {
   width: 100%;
-  max-width: 500px;
   padding: 15px;
   border: 1px solid black;
   border-radius: 10px;
@@ -101,18 +89,13 @@ label {
   }
 
   .info-row {
-    flex-direction: column; /* Stack items vertically for mobile view */
-    align-items: center; /* Center align items in mobile view */
-  }
-
-  .info-row > * {
-    margin-right: 0; /* Remove margin when stacking vertically */
-    max-width: 100%; /* Ensure the input doesn't overflow the container */
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start (left) */
   }
 
   /* Adjust input size and padding for mobile view */
   .info input {
-    padding: 12px; /* Reduce padding for better responsiveness */
+    padding: 12px;
     max-width: 100%;  /* Allow input to take full width on small screens */
   }
 
