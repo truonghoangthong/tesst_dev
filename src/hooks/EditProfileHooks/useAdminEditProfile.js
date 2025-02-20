@@ -87,7 +87,7 @@ const useAdminEditProfile = () => {
         ...authUser,
         fullName: inputs.fullName || authUser.fullName,
         phoneNum: inputs.phoneNum || authUser.phoneNum,
-        profileImage: authUser.profileImage || imageURL,
+        profileImage: imageURL || authUser.profileImage,
       };
 
       await updateDoc(userDocRef, updatedUser);
