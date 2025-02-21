@@ -27,7 +27,10 @@ const Info = () => {
 
   useEffect(() => {
     if (user) {
-      setFormData({ fullName: user.fullName, phoneNum: user.phoneNum, email: user.email, profileImage: user.profileImage });
+      setFormData({ fullName: user.fullName, 
+                    phoneNum: user.phoneNum, 
+                    email: user.email, 
+                    profileImage: user.profileImage });
     }
   }, [user]);
 
@@ -52,7 +55,6 @@ const Info = () => {
     console.log("Inputs:", inputs);
 
     const editResponse = user.isAdmin ? await adminEditProfile(inputs, selectedFile) : await clientEditProfile(inputs);
-
     if (editResponse.Status === "success") {
       setPopup({
         show: true,
@@ -63,9 +65,9 @@ const Info = () => {
       setSelectedFile(null);
     } else {
       setFormData({
-        fullName: user?.fullName || "",
-        phoneNum: user?.phoneNum || "",
-        email: user?.email || ""
+        fullName: user.fullName || "",
+        phoneNum: user.phoneNum || "",
+        email: user.email || ""
       });
       setPopup({
         show: true,
@@ -79,7 +81,9 @@ const Info = () => {
     }
   };
 
-  const handleChangePassword = async () => {
+  const handleChangePassword = async (e) => {
+    e.preventDefault(); 
+
     if (newPassword !== confirmPassword) {
       setPasswordPopup({
         show: true,
@@ -116,91 +120,104 @@ const Info = () => {
 
   return (
     <div className="info">
-      {user.isAdmin && <div className="gradient-box"></div>} {/* Chỉ hiển thị gradient box nếu là admin */}
+      {user.isAdmin && <div className="gradient-box"></div>} 
       <div className="info-details">
         <div className="name-box">
-          <Icon icon="mdi:person-circle-outline" width="125" height="125" />
+          {user.profileImage ? (
+            <img 
+              src={user.profileImage} 
+              alt="Profile" 
+              width="100"  
+              height="100"  
+              style={{ borderRadius: '50%', marginRight: '20px' }}  
+            />
+          ) : (
+            <Icon icon="mdi:person-circle-outline" width="100" height="100" />  // Adjusted size
+          )}
           <div className="info-column">
             <span className="info-name">{fullName}</span>
             <span className="info-email">{email}</span>
           </div>
         </div>
 
+
         <button className="save-profile-button" onClick={handleSave} disabled={isUpdating}>Save</button>
-
-        <form className="info-form">
-          <div className="form-group">
-            <label htmlFor="fullName">Full Name</label>
-            <input
-              type="text"
-              id="fullName"
-              value={fullName}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="phoneNum">Phone Number</label>
-            <input
-              type="text"
-              id="phoneNum"
-              value={phoneNum}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              disabled
-            />
-          </div>
-
-          {user.isAdmin && ( // Chỉ hiển thị upload ảnh nếu là admin
+        <div className="info-row">
+          <form className="info-form">
             <div className="form-group">
-              <label htmlFor="profileImage">Profile Image</label>
+              <label htmlFor="fullName">Full Name</label>
               <input
-                type="file"
-                id="profileImage"
-                accept="image/*"
-                onChange={handleImageChange}
+                type="text"
+                id="fullName"
+                value={fullName}
+                onChange={handleInputChange}
               />
             </div>
-          )}
-        </form>
+            <div className="form-group">
+              <label htmlFor="phoneNum">Phone Number</label>
+              <input
+                type="text"
+                id="phoneNum"
+                value={phoneNum}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="email">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                disabled
+              />
+            </div>
 
-        <div className="change-password-section">
-          <h3>Change Password</h3>
-          <div className="form-group">
-            <label htmlFor="currentPassword">Current Password</label>
-            <input
-              type="password"
-              id="currentPassword"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="newPassword">New Password</label>
-            <input
-              type="password"
-              id="newPassword"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm New Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
+            {user.isAdmin && ( 
+              <div className="form-group">
+                <label htmlFor="profileImage">Profile Image</label>
+                <input
+                  type="file"
+                  id="profileImage"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              </div>
+            )}
+          </form>
 
-          <button className="change-password-button" onClick={handleChangePassword}>Change Password</button>
+          <div className="info-column">
+            <form className="change-password-form" onSubmit={handleChangePassword}>
+              <span>Change Password</span>
+              <div className="form-group">
+                <label htmlFor="currentPassword">Current Password</label>
+                <input
+                  type="password"
+                  id="currentPassword"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="newPassword">New Password</label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="confirmPassword">Confirm New Password</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+              <button type="submit" className="change-password-button">Change Password</button>
+            </form>
+          </div>
         </div>
       </div>
 
