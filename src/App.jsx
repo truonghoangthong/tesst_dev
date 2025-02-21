@@ -54,7 +54,7 @@ const ProtectedRoutes = ({ user }) => {
             <>
               <Route path="/client/sauna" element={<BookingCalendar />} />
               <Route path="/client/laundry" element={<span>Laundry</span>} />
-              <Route path="/client/info" element={<span>Client Info</span>} />
+              <Route path="/client/info" element={<Info />} />
               <Route path="/client/complaint" element={<span>Client Complaints</span>} />
             </>
           )}

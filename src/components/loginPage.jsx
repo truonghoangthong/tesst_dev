@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
 import useLogin from '../../../Backend/src/hooks/AuthenicationHooks/useLogin';
-import useSignUpWithEmailAndPassword from '../../../Backend/src/hooks/AuthenicationHooks/useSignUpWithEmailAndPassword'; // Import your sign-up hook
+import useSignUpWithEmailAndPassword from '../../../Backend/src/hooks/AuthenicationHooks/useSignUpWithEmailAndPassword'; 
 import useAuthStore from '../../../Backend/src/store/authStore';
 import Popup from './popup';
 import { useNavigate } from 'react-router-dom';
+import useReclaimPassword from '../../../Backend/src/hooks/AuthenicationHooks/useReclaimPassword';  
 
 const images = [
   '/img1.png',
@@ -17,16 +18,15 @@ const images = [
 
 const LoginPage = () => {
   const { login, loading: loginLoading, error: loginError } = useLogin();
-  const { signUp, loading: signUpLoading, error: signUpError } = useSignUpWithEmailAndPassword(); // Use sign-up hook
+  const { signUp, loading: signUpLoading, error: signUpError } = useSignUpWithEmailAndPassword(); 
   const user = useAuthStore((state) => state.user);
   const [currentImage, setCurrentImage] = useState(0);
-  
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [signUpData, setSignUpData] = useState({ email: '', password: '', fullName: '', phoneNum: '' }); // Sign-up form data
-  
-  const [isSignUp, setIsSignUp] = useState(false); // Toggle between login and sign-up
+  const [signUpData, setSignUpData] = useState({ email: '', password: '', fullName: '', phoneNum: '' }); 
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState(""); 
+  const [isForgotPassword, setIsForgotPassword] = useState(false); 
   const navigate = useNavigate();
-  
   const [popup, setPopup] = useState({
     show: false,
     title: "",
@@ -57,7 +57,6 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSignUp) {
-      // Handle sign-up logic
       if (signUpData.email && signUpData.password && signUpData.fullName && signUpData.phoneNum) {
         try {
           const result = await signUp(signUpData);
@@ -71,8 +70,21 @@ const LoginPage = () => {
           console.error('Sign-up failed', error);
         }
       }
+    } else if (isForgotPassword) {
+      if (forgotPasswordEmail) {
+        try {
+          const result = await useReclaimPassword(forgotPasswordEmail);
+          setPopup({
+            show: true,
+            title: result.Title,
+            message: result.Message,
+            status: result.Status,
+          });
+        } catch (error) {
+          console.error('Forgot password failed', error);
+        }
+      }
     } else {
-      // Handle login logic
       if (formData.email && formData.password) {
         try {
           const result = await login(formData);
@@ -96,6 +108,8 @@ const LoginPage = () => {
         ...prevData,
         [name]: value,
       }));
+    } else if (isForgotPassword) {
+      setForgotPasswordEmail(value);
     } else {
       setFormData((prevData) => ({
         ...prevData,
@@ -115,53 +129,77 @@ const LoginPage = () => {
       </div>
       <div className="login-container">
         <div className="login-box">
-          <h2>{isSignUp ? "Sign Up" : "Login"}</h2>
+          <h2>{isSignUp ? "Sign Up" : isForgotPassword ? "Forgot Password" : "Login"}</h2>
           <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="email"
-              placeholder="Email"
-              value={isSignUp ? signUpData.email : formData.email}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={isSignUp ? signUpData.password : formData.password}
-              onChange={handleChange}
-              required
-            />
-            {isSignUp && (
+            {isForgotPassword ? (
+              <>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={forgotPasswordEmail}
+                  onChange={handleChange}
+                  required
+                />
+                <button type="submit" disabled={loginLoading}>
+                  {loginLoading ? 'Sending reset email...' : 'Send Reset Email'}
+                </button>
+                <p onClick={() => setIsForgotPassword(false)} className="toggle-link">Back to Login</p>
+              </>
+            ) : (
               <>
                 <input
                   type="text"
-                  name="fullName"
-                  placeholder="Full Name"
-                  value={signUpData.fullName}
+                  name="email"
+                  placeholder="Email"
+                  value={isSignUp ? signUpData.email : formData.email}
                   onChange={handleChange}
                   required
                 />
                 <input
-                  type="text"
-                  name="phoneNum"
-                  placeholder="Phone Number"
-                  value={signUpData.phoneNum}
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={isSignUp ? signUpData.password : formData.password}
                   onChange={handleChange}
                   required
                 />
+                {isSignUp && (
+                  <>
+                    <input
+                      type="text"
+                      name="fullName"
+                      placeholder="Full Name"
+                      value={signUpData.fullName}
+                      onChange={handleChange}
+                      required
+                    />
+                    <input
+                      type="text"
+                      name="phoneNum"
+                      placeholder="Phone Number"
+                      value={signUpData.phoneNum}
+                      onChange={handleChange}
+                      required
+                    />
+                  </>
+                )}
+                <button type="submit" disabled={isSignUp ? signUpLoading : loginLoading}>
+                  {isSignUp
+                    ? signUpLoading
+                      ? 'Signing up...'
+                      : 'Sign Up'
+                    : loginLoading
+                    ? 'Logging in...'
+                    : 'Login'}
+                </button>
+                {!isSignUp && (
+                  <p onClick={() => setIsForgotPassword(true)} className="toggle-link">
+                    Forgot Password?
+                  </p>
+                )}
               </>
             )}
-            <button type="submit" disabled={isSignUp ? signUpLoading : loginLoading}>
-              {isSignUp
-                ? signUpLoading
-                  ? 'Signing up...'
-                  : 'Sign Up'
-                : loginLoading
-                ? 'Logging in...'
-                : 'Login'}
-            </button>
           </form>
           {isSignUp ? signUpError && <p className="error">{signUpError}</p> : loginError && <p className="error">{loginError}</p>}
           <p onClick={() => setIsSignUp(!isSignUp)} className="toggle-link">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import useAuthStore from "../../../../../Backend/src/store/authStore";
 import useAdminEditProfile from "../../../../../Backend/src/hooks/EditProfileHooks/useAdminEditProfile";
+import useClientEditProfile from "../../../../../Backend/src/hooks/EditProfileHooks/useClientEditProfile"; // Thêm hook cho user
 import usePreviewImage from "../../../../../Backend/src/hooks/EditProfileHooks/usePreviewImage";
 import useChangePassword from "../../../../../Backend/src/hooks/AuthenicationHooks/useChangePassword";
 import Popup from '../../popup';
@@ -9,7 +10,8 @@ import './info.css';
 
 const Info = () => {
   const user = useAuthStore((state) => state.user);
-  const { editProfile, isUpdating } = useAdminEditProfile();
+  const { editProfile: adminEditProfile, isUpdating } = useAdminEditProfile();
+  const { editProfile: clientEditProfile } = useClientEditProfile(); // Hook cho user
   const [popup, setPopup] = useState({ show: false, title: "", message: "", status: "" });
   const { selectedFile, error, setSelectedFile, handleImageChange } = usePreviewImage();
   const [formData, setFormData] = useState({
@@ -45,11 +47,13 @@ const Info = () => {
   const handleSave = async () => {
     setPopup({ show: false, title: "", message: "", status: "" });
 
+    const { fullName, phoneNum } = formData;
     const inputs = { fullName, phoneNum };
     console.log("Inputs:", inputs);
-    const response = await editProfile(inputs, selectedFile);
-    alert(response.Message);
-    if (response.Status === "success") {
+
+    const editResponse = user.isAdmin ? await adminEditProfile(inputs, selectedFile) : await clientEditProfile(inputs);
+
+    if (editResponse.Status === "success") {
       setPopup({
         show: true,
         title: "Success",
@@ -66,7 +70,7 @@ const Info = () => {
       setPopup({
         show: true,
         title: "Error",
-        message: `Error: ${response.Message}`,
+        message: `Error: ${editResponse.Message}`,
         status: "error"
       });
       setTimeout(() => {
@@ -112,7 +116,7 @@ const Info = () => {
 
   return (
     <div className="info">
-      <div className="gradient-box"></div>
+      {user.isAdmin && <div className="gradient-box"></div>} {/* Chỉ hiển thị gradient box nếu là admin */}
       <div className="info-details">
         <div className="name-box">
           <Icon icon="mdi:person-circle-outline" width="125" height="125" />
@@ -152,15 +156,18 @@ const Info = () => {
               disabled
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="profileImage">Profile Image</label>
-            <input
-              type="file"
-              id="profileImage"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-          </div>
+
+          {user.isAdmin && ( // Chỉ hiển thị upload ảnh nếu là admin
+            <div className="form-group">
+              <label htmlFor="profileImage">Profile Image</label>
+              <input
+                type="file"
+                id="profileImage"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </div>
+          )}
         </form>
 
         <div className="change-password-section">

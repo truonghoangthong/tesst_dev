@@ -1,4 +1,4 @@
-/* Container của lịch */
+
 .booking-calendar-container {
   width: 100%;
   height: 100vh;
@@ -6,33 +6,25 @@
   padding: 10px 0;
 }
 
-/* Ẩn tên bảng (nếu có) */
-.rbc-toolbar {
-  display: none;
-}
-
-/* Style cho các slot */
 .rbc-event {
-  background-color: #f2f2f2; /* Màu nền mặc định (available) */
-  border-radius: 10px; /* Border-radius */
-  border: none; /* Xóa border mặc định */
-  color: #333; /* Màu chữ */
+  background-color: #f2f2f2; 
+  border-radius: 10px; 
+  border: none; 
+  color: #333; 
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
-  padding: 5px; /* Thêm padding để chữ đẹp hơn */
+  padding: 5px;
 }
 
-/* Style cho slot booked */
 .rbc-event.booked {
-  background-color: #abdfff; /* Màu nền khi booked */
-  color: #000; /* Màu chữ khi booked */
+  background-color: #abdfff; 
+  color: #000; 
 }
 
-/* Đảm bảo các ngày trong tuần hiển thị đầy đủ */
 .rbc-header {
   padding: 10px;
   font-weight: bold;
