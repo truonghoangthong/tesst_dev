@@ -40,14 +40,7 @@ const usePreviewImage = () => {
         return;
       }
 
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setSelectedFile(reader.result); // Base64 preview
-        setError(null);
-      };
-
-      reader.readAsDataURL(file);
+      setSelectedFile(file);
     } else {
       setSelectedFile(null);
       setError(null);
