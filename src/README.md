@@ -117,7 +117,8 @@ File uploaded successfully: https://storage.googleapis.com/your-bucket-name/uid1
 
 ### 8. **Upload frequency text file**
 - **Method:** `POST` 
-- **Description:** API for uploading text files, automatically renaming them to `frequency.txt`, and appending new content to the existing file. Supported format: `.txt`.
+- **Description:** Uploads a text file to append its content to the existing `frequency.txt`, file. The uploaded file is automatically renamed to  `frequency.txt` upon processing.
+- **Supported format:** `.txt` only.
 ## Request Details  
 ### **Headers**  
 | Key | Value | Required |  
@@ -135,7 +136,7 @@ File uploaded successfully: https://storage.googleapis.com/your-bucket-name/uid1
 ## Response Examples  
 ### **Success (200 OK)**  
 ```plaintext  
-File uploaded successfully: https://storage.cloud.google.com/your-bucket-name/uid123.jpg  
+File uploaded successfully: https://storage.cloud.google.com/your-bucket-name/frequency.txt.  
 ```
 
 ### 9. **Get image**
@@ -163,6 +164,5 @@ File uploaded successfully: https://storage.cloud.google.com/your-bucket-name/ui
 ---
 
 ---
-
 
 
