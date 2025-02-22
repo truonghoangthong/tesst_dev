@@ -5,11 +5,12 @@ import { Link } from "react-router-dom";
 import './sidebar.css';
 
 const Sidebar = ({ isAdmin, visible, onClose }) => {
-  const [isExpanded, setIsExpanded] = useState(false); 
-  const [activeItem, setActiveItem] = useState("Home");
+  const [activeItem, setActiveItem] = useState("Dashboard");
 
   const adminMenuItems = [
-    { name: "Home", icon: "mdi:monitor-dashboard", path: "/admin" },
+    { name: "Dashboard", icon: "mdi:monitor-dashboard", path: "/admin" },
+    { name: "Reports", icon: "mdi:chart-line", path: "/admin/reports" },
+    { name: "Facilities", icon: "mdi:spa", path: "/admin/facilities" },
     { name: "Rooms", icon: "material-symbols:key-vertical-outline", path: "/admin/rooms" },
     { name: "Bookings", icon: "ic:outline-list-alt", path: "/admin/bookings" },
     { name: "Complaints", icon: "material-symbols:person-alert-outline-rounded", path: "/admin/complaints" },
@@ -17,20 +18,12 @@ const Sidebar = ({ isAdmin, visible, onClose }) => {
     { name: "Logout", icon: "mdi:logout" },
   ];
 
-  const toggleSidebar = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   if (!isAdmin) {
     return null;
   }
 
   return (
-    <div className={classNames("sidebar", { expanded: isExpanded, collapsed: !isExpanded, visible })}>
-      <div className="sidebar-toggle" onClick={toggleSidebar}>
-        <Icon icon={isExpanded ? "mdi:menu-open" : "mdi:menu"} className="toggle-icon" />
-      </div>
-
+    <div className={classNames("sidebar", { visible })}>
       {adminMenuItems.map((item) => (
         <Link
           key={item.name}
@@ -39,7 +32,7 @@ const Sidebar = ({ isAdmin, visible, onClose }) => {
           onClick={() => setActiveItem(item.name)}
         >
           <Icon icon={item.icon} className="sidebar-icon" />
-          {isExpanded && <span className="sidebar-text">{item.name}</span>} 
+          <span className="sidebar-text">{item.name}</span>
         </Link>
       ))}
     </div>

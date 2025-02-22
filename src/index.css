@@ -23,7 +23,7 @@ a:hover {
 }
 .content {
   margin-top: 40px;  
-  margin-left: 80px;  
+  margin-left: 200px;  
   min-height: calc(100vh - 60px - 100px); 
   box-sizing: border-box;
   padding-bottom: 100px; 
