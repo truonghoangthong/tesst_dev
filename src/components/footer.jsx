@@ -5,7 +5,7 @@ const Footer = ({ className }) => {
   return (
     <div className={`footer ${className}`}> 
       <div className="footer-left">
-        <img src="../image 1.png" alt="Logo" className="footer-logo"/>
+        <img src="../logo.png" alt="Logo" className="footer-logo"/>
         <div className="footer-contact">
           <p>Neljäs Avenjku 3, 89400 Hyrynsalmi</p>
           <p>(+358) 504-040-373</p>
