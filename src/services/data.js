@@ -3,14 +3,17 @@ import { getHumid } from './humid';
 import { getTemp } from './temp';
 
 const useDataStore = create((set, get) => ({
-  data: { humid: [], temp: [] },  // Initial state
+  data: { humid: [], temp: [] },  
   fetchData: async () => {
     try {
       const humidity = await getHumid();
       const temperature = await getTemp();
 
-      const sortedHumid = humidity.humid.sort((a, b) => new Date(b.time) - new Date(a.time));
-      const sortedTemp = temperature.temp.sort((a, b) => new Date(b.time) - new Date(a.time));
+      const humidityData = typeof humidity === 'string' ? JSON.parse(humidity) : humidity;
+      const temperatureData = typeof temperature === 'string' ? JSON.parse(temperature) : temperature;
+
+      const sortedHumid = humidityData.humid.sort((a, b) => new Date(b.time) - new Date(a.time));
+      const sortedTemp = temperatureData.temp.sort((a, b) => new Date(b.time) - new Date(a.time));
 
       set({
         data: {
@@ -19,7 +22,7 @@ const useDataStore = create((set, get) => ({
         },
       });
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching or parsing data:', error);
     }
   },
   startFetching: () => {
