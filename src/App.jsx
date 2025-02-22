@@ -20,7 +20,6 @@ const ScrollToTop = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-
   return null;
 };
 
@@ -67,14 +66,16 @@ const ProtectedRoutes = ({ user }) => {
 };
 
 const App = () => {
-  const { startFetching } = useDataStore();
   const { user } = useAuthStore();
   const isLoginPage = location.pathname === "/login";
+  const { data, fetchHumidityStream, fetchTemperatureStream } = useDataStore();
 
   useEffect(() => {
-    startFetching();
-  }, [startFetching]);
-
+    fetchHumidityStream(); 
+    fetchTemperatureStream(); 
+    return () => {
+    };
+  }, [fetchHumidityStream, fetchTemperatureStream]);
   return (
     <Router>
       <ScrollToTop />

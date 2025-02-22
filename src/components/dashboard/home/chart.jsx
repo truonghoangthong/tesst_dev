@@ -2,9 +2,9 @@ import React from 'react';
 import useDataStore from '../../../services/data';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const humidTempChart = () => {
+const HumidTempChart = () => {
   const { humid, temp } = useDataStore((state) => state.data);
-  
+
   if (!humid.length || !temp.length) {
     return <div>Loading chart data...</div>; 
   }
@@ -36,4 +36,4 @@ const humidTempChart = () => {
   );
 };
 
-export default humidTempChart;
+export default HumidTempChart;

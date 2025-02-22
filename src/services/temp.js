@@ -1,20 +1,32 @@
-import axios from 'axios';
+export const getTemp = (callback) => {
+  const eventSource = new EventSource('http://8.215.20.85/api/v1/get-tem'); 
 
-const API_URL = 'http://8.215.20.85/api/v1/get-tem'; 
+  eventSource.onopen = () => {
+    console.log('EventSource connection for Temperature opened.');
+  };
 
-export const getTemp = async () => {
-  try {
-    const response = await axios.get(API_URL);
-    //console.log('Temp response:', response);
-    
-    const sortedData = response.data.sort((a, b) => new Date(b.time) - new Date(a.time));
-    //const latestTemperature = sortedData[0]?.temperature; 
-    //console.log(`Latest Temperature: ${latestTemperature}°C`);
+  eventSource.onmessage = (event) => {
+    try {
+      const parsedData = JSON.parse(event.data); 
+      const sortedData = parsedData.sort((a, b) => new Date(b.time) - new Date(a.time)); 
+      console.log('Sorted Temperature Data:', sortedData);
 
-    return { temp: sortedData };
-  } catch (error) {
-    console.error('Error fetching humidity and temperature:', error);
-    return { temp: null }
-  }
-}
+      callback({ temp: sortedData });
 
+    } catch (e) {
+      console.error('Failed to parse temperature data:', e);
+      callback({ temp: null }); 
+    }
+  };
+
+  eventSource.onerror = (error) => {
+    console.error('Temperature EventSource failed:', error);
+    eventSource.close(); 
+    callback({ temp: null });
+  };
+
+  return () => {
+    eventSource.close();
+    console.log('Temperature EventSource connection closed.');
+  };
+};
