@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import './home.css';
 import '../../variables.css';
@@ -13,6 +13,12 @@ const Home = () => {
 
   const latesthumid = humid.length > 0 ? humid[0].humidity : "--";
   const latesttemp = temp.length > 0 ? temp[0].temperature : "--";
+
+  const [selectedCalendar, setSelectedCalendar] = useState('flat'); 
+  const switchCalendar = (calendarType) => {
+    setSelectedCalendar(calendarType);
+    console.log(`Switching to ${calendarType} calendar`);
+  };
   return (
     <div className="home">
       <div className="dir">
@@ -110,7 +116,21 @@ const Home = () => {
       </div>
 
       <div className="calendar-container">
-        <MyCalendar />
+        <div className="calendar-toggle-buttons">
+          <button 
+            className={`calendar-toggle-btn ${selectedCalendar === 'flat' ? 'active' : ''}`}
+            onClick={() => switchCalendar('flat')}
+          >
+            Flat Booking Calendar
+          </button>
+          <button 
+            className={`calendar-toggle-btn ${selectedCalendar === 'facilities' ? 'active' : ''}`}
+            onClick={() => switchCalendar('facilities')}
+          >
+            Facilities Calendar
+          </button>
+        </div>
+        <MyCalendar calendarType={selectedCalendar} />
       </div>
     </div>
   );

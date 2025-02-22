@@ -76,6 +76,29 @@
   margin-left: 5px;
   margin-right: 10px;
 }
+.calendar-toggle-buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-start; 
+  gap: 10px; 
+  width: 100%; 
+  padding-left: 5px;
+}
+
+.calendar-toggle-btn {
+  margin-right: 5px;
+  padding: 10px 20px; 
+  border: none;
+  background-color: #f0f0f0; 
+  font-size: 14px; 
+  border-radius: 5px;
+}
+
+.calendar-toggle-btn.active {
+  background-color: #4d79ff; 
+  color: white; 
+}
+
 .status-available {
   color: #00A75A;
 }

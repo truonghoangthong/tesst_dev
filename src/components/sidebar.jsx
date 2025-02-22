@@ -10,7 +10,6 @@ const Sidebar = ({ isAdmin, visible, onClose }) => {
   const adminMenuItems = [
     { name: "Dashboard", icon: "mdi:monitor-dashboard", path: "/admin" },
     { name: "Reports", icon: "mdi:chart-line", path: "/admin/reports" },
-    { name: "Facilities", icon: "mdi:spa", path: "/admin/facilities" },
     { name: "Rooms", icon: "material-symbols:key-vertical-outline", path: "/admin/rooms" },
     { name: "Bookings", icon: "ic:outline-list-alt", path: "/admin/bookings" },
     { name: "Complaints", icon: "material-symbols:person-alert-outline-rounded", path: "/admin/complaints" },
