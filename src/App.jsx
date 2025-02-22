@@ -69,6 +69,7 @@ const ProtectedRoutes = ({ user }) => {
 const App = () => {
   const { startFetching } = useDataStore();
   const { user } = useAuthStore();
+  const isLoginPage = location.pathname === "/login";
 
   useEffect(() => {
     startFetching();
@@ -78,7 +79,16 @@ const App = () => {
     <Router>
       <ScrollToTop />
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/login"
+          element={
+            <>
+              <Header />
+              <LoginPage />
+              <Footer className={isLoginPage ? 'no-left-padding' : ''}/>
+            </>
+          }
+        />
         <Route
           path="/*"
           element={user ? <ProtectedRoutes user={user} /> : <Navigate to="/login" replace />}
