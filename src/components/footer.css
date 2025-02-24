@@ -11,10 +11,6 @@
   width: calc(100vw - 200px);
   box-sizing: border-box;
 }
-.footer.no-left-padding {
-  margin-left: 0 !important; 
-  width: 100vw !important; 
-}
 
 .footer-left {
   display: flex;

@@ -60,7 +60,7 @@ const ProtectedRoutes = ({ user }) => {
         </Routes>
       </div>
 
-      {!isLoginPage && <Footer isAdmin={isAdmin} className={!isAdmin ? 'no-left-padding' : ''} />}
+      {!isLoginPage && <Footer isAdmin={isAdmin}/>}
     </div>
   );
 };
