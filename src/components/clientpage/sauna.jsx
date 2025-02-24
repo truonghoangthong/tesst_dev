@@ -18,10 +18,10 @@ const generateSlots = () => {
       const slotTime = moment(day).set({ hour, minute: 0, second: 0 });
       slots.push({
         id: `${day.format("YYYY-MM-DD")}-${hour}`,
-        title: "available", // Chỉ hiển thị chữ "available" hoặc "booked"
+        title: "Available", // Hiển thị chữ "Available"
         start: slotTime.toDate(),
         end: moment(slotTime).add(1, "hour").toDate(),
-        status: "available", // Trạng thái ban đầu
+        status: "available", // Trạng thái ban đầu là available
       });
     }
   }
@@ -39,7 +39,7 @@ const BookingCalendar = () => {
         return {
           ...slot,
           status: newStatus,
-          title: newStatus, // Cập nhật title thành "available" hoặc "booked"
+          title: newStatus === "available" ? "Available" : "Booked", // Hiển thị chữ "Available" hoặc "Booked"
         };
       }
       return slot;
@@ -62,7 +62,7 @@ const BookingCalendar = () => {
         startAccessor="start"
         endAccessor="end"
         defaultView="week"
-        views={["week"]}
+        views={["month", "week"]}
         step={60} // Mỗi slot là 1 tiếng
         timeslots={1} // Hiển thị 1 slot mỗi giờ
         min={new Date(0, 0, 0, 8, 0, 0)} // Bắt đầu từ 8h
