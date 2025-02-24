@@ -38,7 +38,7 @@ const ProtectedRoutes = ({ user }) => {
       {!isLoginPage && <Header isAdmin={isAdmin} />}
       {isAdmin && <Sidebar isAdmin={isAdmin}/>}
 
-      <div className={`content ${isAdmin ? "with-sidebar" : "no-sidebar"}`}>
+      <div className={`content ${!isAdmin ? "no-left-padding" : ""}`}>
         <Routes>
           {isAdmin ? (
             <>
@@ -60,15 +60,16 @@ const ProtectedRoutes = ({ user }) => {
         </Routes>
       </div>
 
-      {!isLoginPage && <Footer isAdmin={isAdmin} />}
+      {!isLoginPage && <Footer isAdmin={isAdmin} className={!isAdmin ? 'no-left-padding' : ''} />}
     </div>
   );
 };
 
+
 const App = () => {
   const { user } = useAuthStore();
   const isLoginPage = location.pathname === "/login";
-  const { data, fetchHumidityStream, fetchTemperatureStream } = useDataStore();
+  const { fetchHumidityStream, fetchTemperatureStream } = useDataStore();
 
   useEffect(() => {
     fetchHumidityStream(); 
