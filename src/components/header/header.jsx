@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import Sidebar from "../sidebar";
+import Sidebar from "../sidebar/sidebar";
 import { NavLink } from "react-router-dom"; 
 import './header.css';
 

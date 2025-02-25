@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
 import './sidebar.css';
-import LogoutPopup from './logout-popup'; // Import the logout popup component
+import LogoutPopup from '../popup/logout-popup'; // Import the logout popup component
 
 const Sidebar = ({ isAdmin, visible, onClose }) => {
   const [activeItem, setActiveItem] = useState("Dashboard");

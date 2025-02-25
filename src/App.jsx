@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from "react-router-dom";
-import Sidebar from "./components/sidebar";
-import Header from "./components/header";
-import Footer from "./components/footer";
-import LoginPage from "./components/loginPage";
+import Sidebar from "./components/sidebar/sidebar";
+import Header from "./components/header/header";
+import Footer from "./components/footer/footer";
+import LoginPage from "./components/loginpage/loginPage";
 import Home from './components/dashboard/home/home';  
 import Rooms from "./components/dashboard/rooms/rooms";
 import Reports from "./components/dashboard/home/reports";

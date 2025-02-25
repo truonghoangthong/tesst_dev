@@ -3,7 +3,7 @@ import './LoginPage.css';
 import useLogin from '../../../../Backend/src/hooks/AuthenicationHooks/useLogin';
 import useSignUpWithEmailAndPassword from '../../../../Backend/src/hooks/AuthenicationHooks/useSignUpWithEmailAndPassword'; 
 import useAuthStore from '../../../../Backend/src/store/authStore';
-import Popup from '../popup';
+import Popup from '../popup/popup';
 import { useNavigate } from 'react-router-dom';
 import useReclaimPassword from '../../../../Backend/src/hooks/AuthenicationHooks/useReclaimPassword';  
 
