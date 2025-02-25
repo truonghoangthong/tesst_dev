@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import useAuthStore from "../../../../../Backend/src/store/authStore";
 import useAdminEditProfile from "../../../../../Backend/src/hooks/EditProfileHooks/useAdminEditProfile";
-import useClientEditProfile from "../../../../../Backend/src/hooks/EditProfileHooks/useClientEditProfile"; // Thêm hook cho user
+import useClientEditProfile from "../../../../../Backend/src/hooks/EditProfileHooks/useClientEditProfile"; 
 import usePreviewImage from "../../../../../Backend/src/hooks/EditProfileHooks/usePreviewImage";
 import useChangePassword from "../../../../../Backend/src/hooks/AuthenicationHooks/useChangePassword";
-import Popup from '../../popup';
+import Popup from "../../popup/popup";
 import './info.css';
 
 const Info = () => {
   const user = useAuthStore((state) => state.user);
   const { editProfile: adminEditProfile, isUpdating } = useAdminEditProfile();
-  const { editProfile: clientEditProfile } = useClientEditProfile(); // Hook cho user
+  const { editProfile: clientEditProfile } = useClientEditProfile(); 
   const [popup, setPopup] = useState({ show: false, title: "", message: "", status: "" });
   const { selectedFile, error, setSelectedFile, handleImageChange } = usePreviewImage();
   const [formData, setFormData] = useState({
