@@ -9,22 +9,30 @@ const HumidTempChart = () => {
     return <div>Loading chart data...</div>; 
   }
 
-  const chartData = humid.map((item, index) => ({
-    time: new Date(item.time).toLocaleTimeString(),
+  const combinedData = humid.map((item, index) => ({
+    time: new Date(item.time), 
     humidity: item.humidity,
     temperature: temp[index]?.temperature || null, 
+  }));
+
+  combinedData.sort((a, b) => a.time - b.time);
+
+  const chartData = combinedData.map(item => ({
+    time: item.time.toLocaleDateString(),
+    humidity: item.humidity,
+    temperature: item.temperature,
   }));
 
   return (
     <div>
       <h3 style={{ textAlign: 'center', marginBottom: '20px' }}>
-        Humidity and Temperature over Time
+        Humidity and Temperature over Days
       </h3>
 
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="time" />
+          <XAxis dataKey="time" /> 
           <YAxis />
           <Tooltip />
           <Legend />
