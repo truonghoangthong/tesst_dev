@@ -5,66 +5,73 @@
   overflow: auto;
 }
 
-.info-details {
-  padding: 0 30px;
-}
-
-.info-form {
-  margin-right: 25px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 45%;
-}
-
-.gradient-box {
+.info-gradient-box {
   height: 122px;
   width: 100%;
   background: linear-gradient(to right, #1c2228, #ABDFFF);
 }
 
-.name-box {
+.info-details {
+  padding: 0 30px;
+}
+
+.info-info-form {
+  margin-right: 25px;
+  display: grid;
+  grid-template-columns: 1fr; 
+  grid-gap: 15px;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+.info-name-box {
   display: flex;
   align-items: center;
   margin: 10px 0;
 }
 
-.name-column {
+.info-name-column {
   display: flex;
   flex-direction: column;
   margin-left: 40px;
 }
 
-.info-name {
+.info-info-name {
   font-size: 30px;
 }
 
-.info-email {
+.info-info-email {
   font-size: 25px;
 }
 
-.info-row {
-  display: flex;
-  justify-content: space-between; 
-  align-items: flex-start;
+.info-info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px;
   width: 100%;
   padding-top: 30px;
 }
 
-.info-column {
+.info-info-column {
   display: flex;
   flex-direction: column;
   flex: 1; 
 }
 
-.change-password-form {
+.info-change-password-form {
   background-color: #f2f2f2;
-  box-sizing: border-box;
   padding: 15px;
   border-radius: 10px;
+  display: grid;
+  grid-template-columns: 1fr; 
+  grid-gap: 15px;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
 }
 
-.save-profile-button {
+.info-save-profile-button {
   background-color: #ABDFFF;
   color: black;
   position: absolute;
@@ -76,7 +83,7 @@
   font-size: 16px;
 }
 
-.change-password-button {
+.info-change-password-button {
   width: auto;
   background-color: #FF6B6B;
   color: white;
@@ -85,20 +92,22 @@
   height: 40px;
 }
 
-.change-password-button:hover {
+.info-change-password-button:hover {
   background-color: #FF3B3B;
 }
 
-.form-group {
+.info-form-group {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 15px;
-  width: 100%; 
-  max-width: 500px;
+  width: 100%;
 }
 
 label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   font-weight: bold;
+  font-size: 16px;
 }
 
 .info input {
@@ -112,24 +121,28 @@ label {
   box-sizing: border-box; 
 }
 
+.info-info-form input, .info-change-password-form input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 @media (max-width: 767px) {
-  .info-row {
+  .info-info-row {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .info input {
-    padding: 12px;
-    max-width: 100%;
-  }
-
-  .save-profile-button {
-    right: 20px;
-    top: 220px;
-  }
-
-  .change-password-button {
+  .info-info-form, .info-change-password-form {
+    grid-template-columns: 1fr; 
     width: 100%;
-    height: 40px;
+  }
+
+  .info-save-profile-button, .info-change-password-button {
+    width: 100%;
+    grid-column: span 1;
   }
 }

@@ -11,6 +11,7 @@ import Bookings from "./components/dashboard/bookings";
 import Info from "./components/dashboard/info/info";
 import Complaints from "./components/dashboard/complaints";
 import BookingCalendar from "./components/clientpage/sauna";
+import ClientComplaint from "./components/clientpage/clientcomplaint/clientcomplaint";
 import useDataStore from "./services/data";
 import useAuthStore from "../../Backend/src/store/authStore";
 
@@ -54,7 +55,7 @@ const ProtectedRoutes = ({ user }) => {
               <Route path="/client/sauna" element={<BookingCalendar />} />
               <Route path="/client/laundry" element={<span>Laundry</span>} />
               <Route path="/client/info" element={<Info />} />
-              <Route path="/client/complaint" element={<span>Client Complaints</span>} />
+              <Route path="/client/complaint" element={<ClientComplaint />} />
             </>
           )}
         </Routes>

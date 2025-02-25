@@ -1,0 +1,51 @@
+.complaint-form {
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Hai cột cho các trường đầu */
+  gap: 20px;
+}
+
+.complaint-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.complaint-form-group label {
+  font-weight: bold;
+}
+
+.complaint-form-group input,
+.complaint-form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.complaint-submit-button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.complaint-submit-button:hover {
+  background-color: #0056b3;
+}
+
+/* Đảm bảo rằng "Reason" và "Details" chỉ chiếm 1 cột */
+.complaint-form .complaint-form-group.reason,
+.complaint-form .complaint-form-group.details {
+  grid-column: span 2; /* Chiếm hết chiều rộng của 2 cột */
+}
+
+@media (max-width: 768px) {
+  .complaint-form {
+    grid-template-columns: 1fr; /* Trở về 1 cột khi màn hình nhỏ */
+  }
+}
