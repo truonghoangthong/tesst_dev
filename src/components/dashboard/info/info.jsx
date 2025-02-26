@@ -120,9 +120,9 @@ const Info = () => {
 
   return (
     <div className="info">
-      {user.isAdmin && <div className="info-gradient-box"></div>}
+      {user.isAdmin && <div className="gradient-box"></div>}
       <div className="info-details">
-        <div className="info-name-box">
+        <div className="name-box">
           {user.profileImage ? (
             <img
               src={user.profileImage}
@@ -134,19 +134,18 @@ const Info = () => {
           ) : (
             <Icon icon="mdi:person-circle-outline" width="100" height="100" />
           )}
-          <div className="info-name-column"> 
-            <span className="info-info-name">{fullName}</span>
-            <span className="info-info-email">{email}</span>
+          <div className="name-column"> 
+            <span className="info-name">{fullName}</span>
+            <span className="info-email">{email}</span>
           </div>
         </div>
-        
-        <button className="info-save-profile-button" onClick={handleSave} disabled={isUpdating}>
+
+        <button className="save-profile-button" onClick={handleSave} disabled={isUpdating}>
           Save
         </button>
-        
-        <div className="info-info-row">
-          <form className="info-info-form">
-            <div className="info-form-group">
+        <div className="info-row">
+          <form className="info-form">
+            <div className="form-group">
               <label htmlFor="fullName">Full Name</label>
               <input
                 type="text"
@@ -155,7 +154,7 @@ const Info = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="info-form-group">
+            <div className="form-group">
               <label htmlFor="phoneNum">Phone Number</label>
               <input
                 type="text"
@@ -164,7 +163,7 @@ const Info = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="info-form-group">
+            <div className="form-group">
               <label htmlFor="email">Email Address</label>
               <input
                 type="email"
@@ -173,9 +172,9 @@ const Info = () => {
                 disabled
               />
             </div>
-        
+
             {user.isAdmin && (
-              <div className="info-form-group">
+              <div className="form-group">
                 <label htmlFor="profileImage">Profile Image</label>
                 <input
                   type="file"
@@ -186,10 +185,10 @@ const Info = () => {
               </div>
             )}
           </form>
-          
-          <div className="info-info-column">
-            <form className="info-change-password-form" onSubmit={handleChangePassword}>
-              <div className="info-form-group">
+
+          <div className="info-column">
+            <form className="change-password-form" onSubmit={handleChangePassword}>
+              <div className="form-group">
                 <label htmlFor="currentPassword">Current Password</label>
                 <input
                   type="password"
@@ -198,7 +197,7 @@ const Info = () => {
                   onChange={(e) => setCurrentPassword(e.target.value)}
                 />
               </div>
-              <div className="info-form-group">
+              <div className="form-group">
                 <label htmlFor="newPassword">New Password</label>
                 <input
                   type="password"
@@ -207,7 +206,7 @@ const Info = () => {
                   onChange={(e) => setNewPassword(e.target.value)}
                 />
               </div>
-              <div className="info-form-group">
+              <div className="form-group">
                 <label htmlFor="confirmPassword">Confirm New Password</label>
                 <input
                   type="password"
@@ -216,14 +215,14 @@ const Info = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
-              <button type="submit" className="info-change-password-button">
+              <button type="submit" className="change-password-button">
                 Change Password
               </button>
             </form>
           </div>
         </div>
       </div>
-          
+
       {popup.show && (
         <Popup
           title={popup.title}

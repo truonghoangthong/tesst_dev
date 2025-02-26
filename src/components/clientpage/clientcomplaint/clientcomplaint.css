@@ -2,15 +2,23 @@
   padding: 20px;
   background-color: #fff;
   border: 1px solid #ddd;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Hai cột cho các trường đầu */
-  gap: 20px;
+  width: 100%;
+  margin: 0 auto; 
+  box-sizing: border-box;
+}
+
+.complaint-form-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 20px; 
 }
 
 .complaint-form-group {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  box-sizing: border-box;
 }
 
 .complaint-form-group label {
@@ -23,6 +31,12 @@
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
+  box-sizing: border-box; 
+}
+
+.complaint-form-group.reason,
+.complaint-form-group.details {
+  margin-bottom: 20px;
 }
 
 .complaint-submit-button {
@@ -32,20 +46,16 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  width: 100%; 
 }
 
 .complaint-submit-button:hover {
   background-color: #0056b3;
 }
 
-/* Đảm bảo rằng "Reason" và "Details" chỉ chiếm 1 cột */
-.complaint-form .complaint-form-group.reason,
-.complaint-form .complaint-form-group.details {
-  grid-column: span 2; /* Chiếm hết chiều rộng của 2 cột */
-}
-
 @media (max-width: 768px) {
-  .complaint-form {
-    grid-template-columns: 1fr; /* Trở về 1 cột khi màn hình nhỏ */
+  .complaint-form-row {
+    flex-direction: column;
+    gap: 0;
   }
 }
