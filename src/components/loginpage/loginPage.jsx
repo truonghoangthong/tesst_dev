@@ -123,11 +123,11 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="container login-page">
-      <div className="slideshow-container">
+    <div className="loginPage">
+      <div className="slideshow">
         <img src={images[currentImage]} alt="Slideshow" className="slideshow-image" />
       </div>
-      <div className="login-container">
+      <div className="login-form">
         <div className="login-box">
           <h2>{isSignUp ? "Sign Up" : isForgotPassword ? "Forgot Password" : "Login"}</h2>
           <form onSubmit={handleSubmit}>

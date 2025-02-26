@@ -8,7 +8,7 @@
   flex-direction: row;
   position: relative;
   bottom: 0;
-  width: calc(100vw - 200px);
+  width: calc(100% - 200px);
   box-sizing: border-box;
 }
 
