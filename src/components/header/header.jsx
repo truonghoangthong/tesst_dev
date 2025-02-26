@@ -37,10 +37,10 @@ const Header = ({ isAdmin }) => {
           {isAdmin ? (
             <Icon icon="mdi:menu" className="menu-icon" onClick={toggleSidebar} />
           ) : (
-            <div className="guest-section">
+            <NavLink to="/client/info" className="guest-section">
               <Icon icon="mdi:account" className="guest-icon" />
               <span className="guest-label">Guest</span>
-            </div>
+            </NavLink>
           )}
         </div>
       </div>
