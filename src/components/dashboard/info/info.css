@@ -74,13 +74,12 @@
 .save-profile-button {
   background-color: #ABDFFF;
   color: black;
-  position: absolute;
-  right: 60px;
-  top: 200px;
   width: 100px;
   height: 40px;
   border-radius: 10px;
   font-size: 16px;
+  margin-top: 20px;
+  justify-self: end;
 }
 
 .change-password-button {
@@ -185,5 +184,9 @@ label {
   .save-profile-button, .change-password-button {
     width: 100%;
     grid-column: span 1;
+  }
+  .save-profile-button {
+    justify-self: center; 
+    width: 100%;
   }
 }
