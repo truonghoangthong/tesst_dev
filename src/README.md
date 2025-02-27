@@ -146,6 +146,37 @@ File uploaded successfully: https://storage.cloud.google.com/your-bucket-name/fr
      ```
      Success (200): Returns the image file.
      ```
+     
+### 11. **Weather forecast**
+- **Method:** `GET`
+- **Description:** This API provides a 7-day weather forecast with hourly intervals based on the specified city name.
+- **Query Parameters:**
+  + `city` : The city's name to retrieve the weather forecast for.
+- **Response Example:**
+     ```
+     {
+       "newContent": [
+         {
+           "time": "2025-02-27T17:00:00Z",
+           "temperature": 0.3,
+           "windSpeed": 2.6,
+           "humidity": 96,
+           "temperatureApparent": -2.8,
+           "weather": "Cloudy",
+           "uvIndex": "Low"
+         },
+         {
+           "time": "2025-02-27T18:00:00Z",
+           "temperature": 0.3,
+           "windSpeed": 2.8,
+           "humidity": 96,
+           "temperatureApparent": -3,
+           "weather": "Cloudy",
+           "uvIndex": "Low"
+         }
+       ]
+     }
+     ```
 
 ### 10. **Get logs Records**
 - **Method:** `GET`
