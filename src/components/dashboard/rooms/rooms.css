@@ -9,6 +9,8 @@
 @media (max-width: 767px) {
   .rooms {
     left: 0;
-    width: 100%;
+    display: flex;
+    overflow-x: scroll;
+    flex-direction: column;
   }
 }

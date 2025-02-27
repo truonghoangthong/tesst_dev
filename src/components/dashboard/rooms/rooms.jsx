@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Icon } from "@iconify/react";
-import "./rooms.css"; // Đổi lại file CSS nếu cần thiết
+import "./rooms.css"; 
 import "../../variables.css";
 import { bookingStore } from "../../../state/bookingStore.js";
 import { userStore } from "../../../state/user.js";
@@ -66,7 +66,6 @@ const Rooms = () => {
     setModalOpen(true);
   };
 
-  // Cột mặc định cho rooms là Check-in và Check-out
   const getColumns = () => {
     return ["Booking No.", "Guest", "Check-in", "Check-out", "Status", "Actions", "Note"];
   };

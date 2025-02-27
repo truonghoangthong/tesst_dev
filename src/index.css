@@ -100,4 +100,8 @@ button:focus-visible {
   .footer {
     margin-left: 0;
   }
+  .content {
+    margin-left: 0 !important; 
+    width: 100% !important; 
+  }
 }
