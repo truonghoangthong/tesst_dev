@@ -6,11 +6,13 @@ import winston from 'winston';
 import fs from 'fs';
 import admin_router from './Admin_route.mjs';
 import user_router from './User_route.mjs';
+import info_router from './Info_route.mjs';
 import multer from 'multer';
 import { Storage } from '@google-cloud/storage';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
+import axios from "axios";
+import 'dotenv/config';
 // Convert the module URL to a file path
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,13 +57,16 @@ app.use('/admin', admin_router);
 // user route
 app.use('/user', user_router);
 
+// info route
+app.use('/info',info_router);
+
 // Endpoint - Update LED status in InfluxDB
 app.get('/api/v1/update-led-status', async (req, res) => {
   const { status } = req.query;
 
   if (status !== 'on' && status !== 'off') {
     res.status(400).send("Invalid status. Must be 'on' or 'off'.");
-    logger.error({ statusCode: 400, message: 'Invalid LED status', timestamp: new Date().toISOString() });        
+    logger.error({ statusCode: 400, message: 'Invalid LED status', timestamp: new Date().toISOString() });
     return;
   }
 
@@ -126,7 +131,7 @@ app.get('/api/v1/embed-temperature', async (req, res) => {
 
   if (!temperature) {
     res.status(400).send('Missing temperature');
-    logger.error({ statusCode: 400, message: 'Missing temperature', timestamp: new Date().toISOString() });       
+    logger.error({ statusCode: 400, message: 'Missing temperature', timestamp: new Date().toISOString() });
     return;
   }
 
@@ -134,7 +139,7 @@ app.get('/api/v1/embed-temperature', async (req, res) => {
 
   if (isNaN(numeric_temperature)) {
     res.status(400).send('Invalid values.');
-    logger.error({ statusCode: 400, message: 'Invalid temperature value', timestamp: new Date().toISOString() }); 
+    logger.error({ statusCode: 400, message: 'Invalid temperature value', timestamp: new Date().toISOString() });
     return;
   }
 
@@ -145,7 +150,7 @@ app.get('/api/v1/embed-temperature', async (req, res) => {
     await DB_WRITE_POINT.flush();
 
     res.send(`Temperature: ${temperature}`);
-    logger.info({ statusCode: 200, message: 'Temperature recorded and uid recorded', timestamp: new Date().toISOString() });
+    logger.info({ statusCode: 200, message: 'Temperature recorded and uid recorded', timestamp: new Date().toISOString() });   
   } catch (err) {
     console.error(err);
     res.status(500).send('Error writing data to InfluxDB');
@@ -167,7 +172,7 @@ app.get('/api/v1/embed-humidity', async (req, res) => {
 
   if (isNaN(numeric_humidity)) {
     res.status(400).send('Invalid values.');
-    logger.error({ statusCode: 400, message: 'Invalid humidity value', timestamp: new Date().toISOString() });    
+    logger.error({ statusCode: 400, message: 'Invalid humidity value', timestamp: new Date().toISOString() });
     return;
   }
 
@@ -188,97 +193,121 @@ app.get('/api/v1/embed-humidity', async (req, res) => {
 
 // Endpoint - Get Temperature from InfluxDB
 app.get('/api/v1/get-tem', async (req, res) => {
+  res.set('Content-Type', 'text/event-stream');
+  res.set('Cache-Control', 'no-cache');
+  res.set('Connection', 'keep-alive');
   const query = `
     from(bucket: "${ENV.INFLUX.BUCKET}")
     |> range(start: -30d)
     |> filter(fn: (r) => r._measurement == "qparams")
     |> filter(fn: (r) => r._field == "temperature")
   `;
+  const interval =  setInterval(async () => {
 
-  try {
-    const results = {};
-    const DB_READ_API = DB_CLIENT.getQueryApi(ENV.INFLUX.ORG);
+      try {
+        const results = {};
+        const DB_READ_API = DB_CLIENT.getQueryApi(ENV.INFLUX.ORG);
 
-    await DB_READ_API.queryRows(query, {
-      next(row, tableMeta) {
-        const data = tableMeta.toObject(row);
-        const time = data._time;
+        await DB_READ_API.queryRows(query, {
+          next(row, tableMeta) {
+            const data = tableMeta.toObject(row);
+            const time = data._time;
 
-        if (!results[time]) {
-          results[time] = { time };
-        }
+            if (!results[time]) {
+              results[time] = { time };
+            }
 
-        results[time][data._field] = data._value;
-      },
-      error(error) {
-        console.error('Error during query:', error);
-        res.status(500).send('Error fetching data from InfluxDB');
-        logger.error({ statusCode: 500, message: 'Error fetching data from InfluxDB', timestamp: new Date().toISOString(), error: error.message });
-      },
-      complete() {
-        const formattedResults = Object.values(results);
-        if (formattedResults.length === 0) {
-          res.status(404).send('No data found');
-          logger.info({ statusCode: 404, message: 'No temperature data found', timestamp: new Date().toISOString() });
-        } else {
-          res.json(formattedResults);
-          logger.info({ statusCode: 200, message: 'Temperature data fetched successfully', timestamp: new Date().toISOString() });
-        }
-      },
+            results[time][data._field] = data._value;
+          },
+          error(error) {
+            console.error('Error during query:', error);
+            res.write('data: "Error fetching data from InfluxDB,error 500"\n\n');
+            logger.error({ statusCode: 500, message: 'Error fetching data from InfluxDB', timestamp: new Date().toISOString(), error: error.message });
+          },
+          complete() {
+            const formattedResults = Object.values(results);
+            if (formattedResults.length === 0) {
+              res.write('data: "No data found,error 404"\n\n');
+              logger.info({ statusCode: 404, message: 'No temperature data found', timestamp: new Date().toISOString() });     
+            } else {
+              res.write(`data: ${JSON.stringify(formattedResults)}\n\n`);
+              logger.info({ statusCode: 200, message: 'Temperature data fetched successfully', timestamp: new Date().toISOString() });
+            }
+          },
+        });
+      } catch (err) {
+        console.error('Error in /get-tem route:', err);
+        res.write('data: "Error fetching data from InfluxDB"\n\n');
+        logger.error({ statusCode: 500, message: 'Error fetching data from InfluxDB', timestamp: new Date().toISOString(), error: err.message });
+      }
+    }, 1500);
+    req.on('close', () => {
+      clearInterval(interval);
+      console.log('Client connection closed.');
     });
-  } catch (err) {
-    console.error('Error in /get-tem route:', err);
-    res.status(500).send('Error fetching data from InfluxDB');
-    logger.error({ statusCode: 500, message: 'Error fetching data from InfluxDB', timestamp: new Date().toISOString(), error: err.message });
-  }
 });
 
 // Endpoint - Get Humidity from InfluxDB
 app.get('/api/v1/get-hum', async (req, res) => {
+  res.set('Content-Type', 'text/event-stream');
+  res.set('Cache-Control', 'no-cache');
+  res.set('Connection', 'keep-alive');
+
   const query = `
     from(bucket: "${ENV.INFLUX.BUCKET}")
     |> range(start: -30d)
     |> filter(fn: (r) => r._measurement == "qparams")
     |> filter(fn: (r) => r._field == "humidity")
   `;
+  const interval =  setInterval(async () => {
+    try {
+      const results = {};
+      const DB_READ_API = DB_CLIENT.getQueryApi(ENV.INFLUX.ORG);
 
-  try {
-    const results = {};
-    const DB_READ_API = DB_CLIENT.getQueryApi(ENV.INFLUX.ORG);
+      await DB_READ_API.queryRows(query, {
+        next(row, tableMeta) {
+          const data = tableMeta.toObject(row);
+          const time = data._time;
+          if (!results[time]) {
+            results[time] = { time };
+          }
+          results[time][data._field] = data._value;
+        },
 
-    await DB_READ_API.queryRows(query, {
-      next(row, tableMeta) {
-        const data = tableMeta.toObject(row);
-        const time = data._time;
+        error(error) {
+          console.error('Error during query:', error);
+          res.write('data: "Error fetching data from InfluxDB,error 500"\n\n');
+          logger.error({statusCode: 500,message: 'Error fetching data from InfluxDB',timestamp: new Date().toISOString(),error: error.message,
+          });
+        },
 
-        if (!results[time]) {
-          results[time] = { time };
-        }
+        complete() {
+          const formattedResults = Object.values(results);
 
-        results[time][data._field] = data._value;
-      },
-      error(error) {
-        console.error('Error during query:', error);
-        res.status(500).send('Error fetching data from InfluxDB');
-        logger.error({ statusCode: 500, message: 'Error fetching data from InfluxDB', timestamp: new Date().toISOString(), error: error.message });
-      },
-      complete() {
-        const formattedResults = Object.values(results);
-        if (formattedResults.length === 0) {
-          res.status(404).send('No data found');
-          logger.info({ statusCode: 404, message: 'No humidity data found', timestamp: new Date().toISOString() });
-        } else {
-          res.json(formattedResults);
-          logger.info({ statusCode: 200, message: 'Humidity data fetched successfully', timestamp: new Date().toISOString() });
-        }
-      },
-    });
-  } catch (err) {
-    console.error('Error in /get-hum route:', err);
-    res.status(500).send('Error fetching data from InfluxDB');
-    logger.error({ statusCode: 500, message: 'Error fetching data from InfluxDB', timestamp: new Date().toISOString(), error: err.message });
-  }
+          if (formattedResults.length === 0) {
+            res.write('data: "No data found,error 404"\n\n');
+            logger.info({statusCode: 404,message: 'No humidity data found',timestamp: new Date().toISOString(),
+            });
+          } else {
+            res.write(`data: ${JSON.stringify(formattedResults)}\n\n`);
+            logger.info({statusCode: 200,message: 'Humidity data fetched successfully',timestamp: new Date().toISOString(),    
+            });
+          }
+        },
+      });
+    } catch (err) {
+      console.error('Error in /get-hum route:', err);
+      res.write('data: "Error fetching data from InfluxDB"\n\n');
+      logger.error({statusCode: 500,message: 'Error fetching data from InfluxDB',timestamp: new Date().toISOString(),error: err.message,
+      });
+    }
+  }, 1500);
+  req.on('close', () => {
+    clearInterval(interval);
+    console.log('Client connection closed.');
+  });
 });
+
 
 // Endpoint - upload image to Google cloud Storage
 app.post('/api/v1/upload', upload.single('image'), async (req, res) => {
@@ -292,7 +321,7 @@ app.post('/api/v1/upload', upload.single('image'), async (req, res) => {
 
   const style_of_image = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
   if (!style_of_image.includes(req.file.mimetype)) {
-    logger.error({ statusCode: 400, message: `type of file is invalid`, timestamp: new Date().toISOString() });   
+    logger.error({ statusCode: 400, message: `type of file is invalid`, timestamp: new Date().toISOString() });
     return res.status(400).send('Only image files are allowed (jpeg, png, gif, webp).');
   }
   try {
@@ -335,7 +364,7 @@ app.post('/api/v1/update_frequency', upload.single('txt'), async (req, res) => {
 
   const style_of_file = ['text/plain'];
   if (!style_of_file.includes(req.file.mimetype)) {
-    logger.error({ statusCode: 400, message: `type of file is invalid`, timestamp: new Date().toISOString() });   
+    logger.error({ statusCode: 400, message: `type of file is invalid`, timestamp: new Date().toISOString() });
     return res.status(400).send('Only txt file is allowed.');
   }
 
@@ -415,7 +444,7 @@ app.get('/api/v1/update-relay-status', async (req, res) => {
 
   if (status !== 'on' && status !== 'off') {
     res.status(400).send("Invalid status. Must be 'on' or 'off'.");
-    logger.error({ statusCode: 400, message: 'Invalid Relay status', timestamp: new Date().toISOString() });      
+    logger.error({ statusCode: 400, message: 'Invalid Relay status', timestamp: new Date().toISOString() });
     return;
   }
 
@@ -428,7 +457,7 @@ app.get('/api/v1/update-relay-status', async (req, res) => {
     await DB_WRITE_POINT.flush();
 
     res.send(`Relay status ${status}`);
-    logger.info({ statusCode: 200, message: `Relay status updated to ${status}`, timestamp: new Date().toISOString() });
+    logger.info({ statusCode: 200, message: `Relay status updated to ${status}`, timestamp: new Date().toISOString() });       
   } catch (err) {
     console.error(err);
     res.status(500).send('Error writing data to InfluxDB');
@@ -473,6 +502,76 @@ app.get('/api/v1/get-relay-status', async (req, res) => {
     res.status(500).send('Error fetching relay status');
   }
 });
+
+app.get('/info/weather', async (req, res) => {
+  const { city } = req.query;
+
+  try {
+    const apiKey = process.env.TOMORROW_API_KEY;
+    const originalUrl = `https://api.tomorrow.io/v4/weather/forecast?location=${city}&timesteps=1h&apikey=${apiKey}`;
+
+    const response = await axios.get(originalUrl, {
+      timeout: 60000
+    });
+
+    const data = response.data;
+
+    const newContent = data.timelines.hourly.map(item => ({
+      time: item.time,
+      temperature: item.values.temperature,
+      windSpeed: item.values.windSpeed,
+      humidity: item.values.humidity,
+      temperatureApparent: item.values.temperatureApparent,
+      weather: weatherType(item.values.weatherCode),
+      uvIndex: uvType(item.values.uvIndex),
+    }));
+
+    function weatherType(weatherCode) {
+      switch (weatherCode) {
+        case 0: return 'Unknown';
+        case 1000: return 'Clear, Sunny';
+        case 1100: return 'Mostly Clear';
+        case 1101: return 'Partly Cloudy';
+        case 1102: return 'Mostly Cloudy';
+        case 1001: return 'Cloudy';
+        case 2000: return 'Fog';
+        case 2100: return 'Light Fog';
+        case 4000: return 'Drizzle';
+        case 4001: return 'Rain';
+        case 4200: return 'Light Rain';
+        case 4201: return 'Heavy Rain';
+        case 5000: return 'Snow';
+        case 5001: return 'Flurries';
+        case 5100: return 'Light Snow';
+        case 5101: return 'Heavy Snow';
+        case 6000: return 'Freezing Drizzle';
+        case 6001: return 'Freezing Rain';
+        case 6200: return 'Light Freezing Rain';
+        case 6201: return 'Heavy Freezing Rain';
+        case 7000: return 'Ice Pellets';
+        case 7101: return 'Heavy Ice Pellets';
+        case 7102: return 'Light Ice Pellets';
+        case 8000: return 'Thunderstorm';
+        default: return 'Unknown';
+      }
+    }
+
+    function uvType(uvIndex) {
+      if (uvIndex <= 2) return 'Low';
+      if (uvIndex <= 5) return 'Moderate';
+      if (uvIndex <= 7) return 'High';
+      if (uvIndex <= 10) return 'Very High';
+      return 'Extreme';
+    }
+
+    res.json({ newContent });
+
+  } catch (err) {
+    console.error('Error fetching weather data:', err);
+    res.status(500).json({ error: 'Error fetching data from API' });
+  }
+});
+
 
 // Endpoint - Get logs
 app.get('/api/v1/logs', (req, res) => {
