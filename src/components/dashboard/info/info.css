@@ -176,6 +176,10 @@ label {
   width: 100%;
   box-sizing: border-box;
 }
+.logout-button {
+  background-color: #FF6B6B;
+  color: white;
+}
 
 @media (max-width: 767px) {
   .info-content {

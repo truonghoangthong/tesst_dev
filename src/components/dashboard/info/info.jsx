@@ -6,6 +6,7 @@ import useClientEditProfile from "../../../../../Backend/src/hooks/EditProfileHo
 import usePreviewImage from "../../../../../Backend/src/hooks/EditProfileHooks/usePreviewImage";
 import useChangePassword from "../../../../../Backend/src/hooks/AuthenicationHooks/useChangePassword";
 import Popup from "../../popup/popup";
+import useLogout from "../../../../../Backend/src/hooks/AuthenicationHooks/useLogout";
 import './info.css';
 
 const Info = () => {
@@ -24,6 +25,7 @@ const Info = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordPopup, setPasswordPopup] = useState({ show: false, title: "", message: "", status: "" });
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -114,6 +116,17 @@ const Info = () => {
     }, 10000);
   };
 
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    const response = await useLogout();
+    if (response.Status === "success") {
+      navigate("/"); 
+    } else {
+      alert(response.Message);
+      setIsLoggingOut(false);
+    }
+  };
+
   const closePopup = () => setPopup({ show: false, title: "", message: "", status: "" });
 
   const { fullName, phoneNum, email } = formData;
@@ -143,6 +156,17 @@ const Info = () => {
         <button className="save-profile-button" onClick={handleSave} disabled={isUpdating}>
           Save
         </button>
+
+        { !user.isAdmin && (
+          <button 
+            className="save-profile-button logout-button" 
+            onClick={handleLogout} 
+            disabled={isLoggingOut}
+          >
+            {isLoggingOut ? "Logging out..." : "Logout"}
+          </button>
+        )}
+
         <div className="info-content">
           <form className="info-form">
             <div className="form-group">

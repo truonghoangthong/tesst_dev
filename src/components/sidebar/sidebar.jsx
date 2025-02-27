@@ -3,11 +3,11 @@ import { Icon } from "@iconify/react";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
 import './sidebar.css';
-import LogoutPopup from '../popup/logout-popup'; // Import the logout popup component
+import LogoutPopup from '../popup/logout-popup'; 
 
 const Sidebar = ({ isAdmin, visible, onClose }) => {
   const [activeItem, setActiveItem] = useState("Dashboard");
-  const [showLogoutPopup, setShowLogoutPopup] = useState(false); // State to control the logout popup visibility
+  const [showLogoutPopup, setShowLogoutPopup] = useState(false); 
 
   const adminMenuItems = [
     { name: "Dashboard", icon: "mdi:monitor-dashboard", path: "/admin" },
@@ -23,7 +23,6 @@ const Sidebar = ({ isAdmin, visible, onClose }) => {
     return null;
   }
 
-  // Handle logout click
   const handleLogoutClick = () => {
     setShowLogoutPopup(true);
   };
@@ -38,7 +37,7 @@ const Sidebar = ({ isAdmin, visible, onClose }) => {
           onClick={() => {
             setActiveItem(item.name);
             if (item.name === "Logout") {
-              handleLogoutClick(); // Show the logout popup when "Logout" is clicked
+              handleLogoutClick(); 
             }
           }}
         >
@@ -46,8 +45,7 @@ const Sidebar = ({ isAdmin, visible, onClose }) => {
           <span className="sidebar-text">{item.name}</span>
         </Link>
       ))}
-      
-      {/* Show the LogoutPopup if it's triggered */}
+
       {showLogoutPopup && <LogoutPopup />}
     </div>
   );
