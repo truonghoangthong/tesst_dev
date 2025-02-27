@@ -143,7 +143,7 @@ const Info = () => {
         <button className="save-profile-button" onClick={handleSave} disabled={isUpdating}>
           Save
         </button>
-        <div className="info-row">
+        <div className="info-content">
           <form className="info-form">
             <div className="form-group">
               <label htmlFor="fullName">Full Name</label>
@@ -186,40 +186,38 @@ const Info = () => {
             )}
           </form>
 
-          <div className="info-column">
-            <form className="change-password-form" onSubmit={handleChangePassword}>
-              <div className="form-group">
-                <label htmlFor="currentPassword">Current Password</label>
-                <input
-                  type="password"
-                  id="currentPassword"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="newPassword">New Password</label>
-                <input
-                  type="password"
-                  id="newPassword"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm New Password</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-              <button type="submit" className="change-password-button">
-                Change Password
-              </button>
-            </form>
-          </div>
+          <form className="change-password-form" onSubmit={handleChangePassword}>
+            <div className="form-group">
+              <label htmlFor="currentPassword">Current Password</label>
+              <input
+                type="password"
+                id="currentPassword"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="newPassword">New Password</label>
+              <input
+                type="password"
+                id="newPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirm New Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+            <button type="submit" className="change-password-button">
+              Change Password
+            </button>
+          </form>
         </div>
       </div>
 
