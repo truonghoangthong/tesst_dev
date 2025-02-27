@@ -129,6 +129,17 @@ label {
   box-sizing: border-box;
 }
 
+.info-form input[type="email"] {
+  background-color: #e0e0e0; 
+  color: black; 
+  border: 1px solid #ccc; 
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .save-profile-button, .change-password-button {
   grid-column: span 1;
   padding: 12px;

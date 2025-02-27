@@ -127,6 +127,7 @@ const ClientComplaint = () => {
             onChange={handleChange}
             rows="5"
             placeholder="Details"
+            required
           />
         </div>
 
