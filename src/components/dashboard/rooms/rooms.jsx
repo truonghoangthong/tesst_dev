@@ -77,6 +77,21 @@ const Rooms = () => {
         <Icon icon="material-symbols:chevron-right-rounded" width="24" height="24" />
         <span>{activeRoom}</span>
       </div>
+
+      <div className="tab-dropdown-container">
+        <select
+          className="tab-dropdown"
+          value={activeRoom}
+          onChange={(e) => setActiveRoom(e.target.value)}
+        >
+          {rooms.map((room) => (
+            <option key={room} value={room}>
+              {room}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="tabs">
         {rooms.map((room) => (
           <span
