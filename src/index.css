@@ -99,9 +99,10 @@ button:focus-visible {
 @media (max-width: 767px) {
   .footer {
     margin-left: 0;
+    width: 100vw !important;
   }
   .content {
     margin-left: 0 !important; 
-    width: 100% !important; 
+    width: 100vw !important; 
   }
 }
