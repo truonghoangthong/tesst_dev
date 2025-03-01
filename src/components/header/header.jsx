@@ -46,7 +46,7 @@ const Header = ({ isAdmin }) => {
         </div>
       </div>
 
-      {isAdmin && <Sidebar visible={isSidebarVisible} onClose={toggleSidebar} isAdmin={isAdmin} />}
+      {isAdmin && <Sidebar visible={isSidebarVisible} isAdmin={isAdmin} />}
     </>
   );
 };

@@ -28,7 +28,7 @@ const Sidebar = ({ isAdmin, visible }) => {
   };
 
   return (
-    <div className={classNames("sidebar", { visible: visible, hidden: !visible })}>
+    <div className={classNames("sidebar", { visible, hidden: !visible })}>
       {adminMenuItems.map((item) => (
         <Link
           key={item.name}
