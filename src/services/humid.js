@@ -9,7 +9,7 @@ export const getHumid = (callback) => {
     try {
       const parsedData = JSON.parse(event.data); 
       const sortedData = parsedData.sort((a, b) => new Date(b.time) - new Date(a.time)); 
-      console.log('Sorted Humidity Data:', sortedData);
+      //console.log('Sorted Humidity Data:', sortedData);
 
       callback({ humid: sortedData });
 
