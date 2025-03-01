@@ -214,15 +214,12 @@
     padding: 8px 10px;
     font-size: 14px;
   }
+}
+@media (max-width: 1000px) {
   .tabs {
     display: none;
   }
   .tab-dropdown-container {
     display: block;
-  }
-}
-@media (max-width: 1000px) {
-  .tab-item {
-    padding: 6px 16px;
   }
 }

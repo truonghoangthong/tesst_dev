@@ -21,7 +21,7 @@ const Bookings = ({ type = "sauna" }) => {
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [activeType, setActiveType] = useState(type); // Quản lý tab active (mặc định là sauna)
+  const [activeType, setActiveType] = useState(type); 
 
   const toggleDropdown = (index) => {
     setDropdownOpen(dropdownOpen === index ? null : index);
@@ -91,6 +91,21 @@ const Bookings = ({ type = "sauna" }) => {
         <Icon icon="material-symbols:chevron-right-rounded" width="24" height="24" />
         <span>{activeType.charAt(0).toUpperCase() + activeType.slice(1)}</span>  
       </div>
+
+      <div className="tab-dropdown-container">
+        <select
+          className="tab-dropdown"
+          value={activeType}
+          onChange={(e) => setActiveType(e.target.value)}
+        >
+          {["sauna", "laundry"].map((tab) => (
+            <option key={tab} value={tab}>
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="tabs">
         {["sauna", "laundry"].map((tab) => (
           <span
