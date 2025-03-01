@@ -30,6 +30,7 @@ a:hover {
   padding-bottom: 100px; 
   overflow-y: auto; 
   background-color: white;
+  z-index: 1;
 }
 .content.no-left-padding {
   margin-left: 0 !important; 

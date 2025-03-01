@@ -18,6 +18,9 @@
   transform: translateX(0);
 }
 
+.sidebar.hidden {
+  display: none; 
+}
 .sidebar-icon {
   width: 24px;
   height: 24px;
@@ -68,12 +71,8 @@
     height: 100%;
     position: fixed;
     top: 40px;
-    right: -200px;
-    transition: transform 0.3s ease;
-  }
-
-  .sidebar.visible {
     right: 0;
+    transition: transform 0.3s ease; 
   }
 
   .sidebar-text {
@@ -93,6 +92,9 @@
     align-items: center;
     width: 20px;
     height: 20px;
+  }
+  .sidebar.visible {
+    transform: translateX(0);
   }
 }
 

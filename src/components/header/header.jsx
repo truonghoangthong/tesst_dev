@@ -6,8 +6,9 @@ import './header.css';
 
 const Header = ({ isAdmin }) => { 
   const [isSidebarVisible, setSidebarVisible] = useState(false); 
+
   const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
+    setSidebarVisible(!isSidebarVisible); 
   };
   
   const guestOptions = [
@@ -45,7 +46,7 @@ const Header = ({ isAdmin }) => {
         </div>
       </div>
 
-      {isAdmin && <Sidebar visible={isSidebarVisible} onClose={toggleSidebar} />}
+      {isAdmin && <Sidebar visible={isSidebarVisible} onClose={toggleSidebar} isAdmin={isAdmin} />}
     </>
   );
 };

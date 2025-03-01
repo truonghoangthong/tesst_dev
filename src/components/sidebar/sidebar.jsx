@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import './sidebar.css';
 import LogoutPopup from '../popup/logout-popup'; 
 
-const Sidebar = ({ isAdmin, visible, onClose }) => {
+const Sidebar = ({ isAdmin, visible }) => {
   const [activeItem, setActiveItem] = useState("Dashboard");
   const [showLogoutPopup, setShowLogoutPopup] = useState(false); 
 
@@ -28,7 +28,7 @@ const Sidebar = ({ isAdmin, visible, onClose }) => {
   };
 
   return (
-    <div className={classNames("sidebar", { visible })}>
+    <div className={classNames("sidebar", { visible: visible, hidden: !visible })}>
       {adminMenuItems.map((item) => (
         <Link
           key={item.name}
