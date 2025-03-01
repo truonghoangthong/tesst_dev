@@ -1,5 +1,5 @@
 import React from "react";
-import Chart from "./chart";
+import Chart from "../home/chart";
 import { Icon } from "@iconify/react";
 import './reports.css';
 import '../../variables.css';

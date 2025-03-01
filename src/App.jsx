@@ -6,7 +6,7 @@ import Footer from "./components/footer/footer";
 import LoginPage from "./components/loginpage/loginPage";
 import Home from './components/dashboard/home/home';  
 import Rooms from "./components/dashboard/rooms/rooms";
-import Reports from "./components/dashboard/home/reports";
+import Reports from "./components/dashboard/reports/reports";
 import Bookings from "./components/dashboard/bookings";
 import Info from "./components/dashboard/info/info";
 import Complaints from "./components/dashboard/complaints";
