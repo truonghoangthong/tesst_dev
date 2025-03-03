@@ -1,0 +1,64 @@
+.app {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.weather-section {
+  background: #f0f0f0;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.events-tabs {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 500px; 
+}
+
+.event-item {
+  border-bottom: 1px solid #ccc;
+  margin: 0; 
+}
+
+.event-title {
+  background: #ddd;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%; 
+}
+
+.event-title.active {
+  background: #bbb;
+}
+
+.event-content {
+  background: #eee;
+  padding: 0 15px;
+  max-height: 0; 
+  overflow: hidden;
+  opacity: 0; 
+  transform: translateY(-10px); 
+  width: 100%;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease, transform 0.3s ease; 
+}
+
+.event-content.active {
+  max-height: 500px; 
+  opacity: 1; 
+  transform: translateY(0); 
+}
+
+.event-title:hover {
+  background: #ccc;
+}
+
+.event-item .event-content + .event-title {
+  margin-top: 5px;
+}

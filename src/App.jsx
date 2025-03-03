@@ -12,6 +12,7 @@ import Info from "./components/dashboard/info/info";
 import Complaints from "./components/dashboard/complaints";
 import BookingCalendar from "./components/clientpage/sauna";
 import ClientComplaint from "./components/clientpage/clientcomplaint/clientcomplaint";
+import TvView from "./components/TV/tv";
 import useDataStore from "./services/data";
 import useAuthStore from "../../Backend/src/store/authStore";
 
@@ -82,6 +83,7 @@ const App = () => {
     <Router>
       <ScrollToTop />
       <Routes>
+        <Route path="/tv" element={<TvView />} />
         <Route
           path="/login"
           element={
