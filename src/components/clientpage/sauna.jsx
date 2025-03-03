@@ -4,23 +4,22 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./sauna.css"; // Import file CSS
 
-// Cấu hình moment localizer cho react-big-calendar
 const localizer = momentLocalizer(moment);
 
-// Hàm tạo các slot đặt chỗ
+// Function to generate slots for a given start date (entire week)
 const generateSlots = (startDate) => {
   const slots = [];
-  const endDate = moment(startDate).endOf("week"); // Kết thúc vào chủ nhật
+  const endDate = moment(startDate).endOf("week"); // End of the week (Sunday)
 
-  for (let day = startDate; day.isBefore(endDate); day.add(1, "day")) {
+  for (let day = moment(startDate); day.isBefore(endDate); day.add(1, "day")) {
     for (let hour = 8; hour <= 21; hour++) {
       const slotTime = moment(day).set({ hour, minute: 0, second: 0 });
       slots.push({
         id: `${day.format("YYYY-MM-DD")}-${hour}`,
-        title: "Available", // Hiển thị chữ "Available"
+        title: "Available", // Display "Available" by default
         start: slotTime.toDate(),
         end: moment(slotTime).add(1, "hour").toDate(),
-        status: "available", // Trạng thái ban đầu là available
+        status: "available", // Set status as "available" initially
       });
     }
   }
@@ -28,18 +27,19 @@ const generateSlots = (startDate) => {
 };
 
 const BookingCalendar = () => {
-  const [slots, setSlots] = useState(generateSlots(moment())); // Load slots mặc định cho tuần hiện tại
-  const [currentView, setCurrentView] = useState("month"); // Chế độ mặc định là month
-  const [selectedDate, setSelectedDate] = useState(null); // Ngày đã chọn trong tháng
+  const [slots, setSlots] = useState(generateSlots(moment())); // Default slots for the current week
+  const [currentView, setCurrentView] = useState("month"); // Start with "month" view
+  const [selectedDate, setSelectedDate] = useState(null); // Store selected date
 
-  // Xử lý khi người dùng chọn một ngày trong chế độ tháng
+  // Handle selecting a date in "month" view (drill down to "week")
   const handleSelectDate = (date) => {
+    console.log("Selected date in month view:", date); // Debugging log
     setSelectedDate(date);
-    setSlots(generateSlots(moment(date).startOf("week"))); // Cập nhật các slot cho tuần của ngày đã chọn
-    setCurrentView("week"); // Chuyển sang chế độ tuần
+    setSlots(generateSlots(moment(date).startOf("week"))); // Generate slots for the selected week
+    setCurrentView("week"); // Change view to "week"
   };
 
-  // Xử lý khi người dùng click vào một slot trong chế độ tuần
+  // Handle slot click in "week" view
   const handleSlotClick = (event) => {
     const updatedSlots = slots.map((slot) => {
       if (slot.id === event.id) {
@@ -47,7 +47,7 @@ const BookingCalendar = () => {
         return {
           ...slot,
           status: newStatus,
-          title: newStatus === "available" ? "Available" : "Booked", // Hiển thị chữ "Available" hoặc "Booked"
+          title: newStatus === "available" ? "Available" : "Booked", // Update title to reflect the status
         };
       }
       return slot;
@@ -55,50 +55,51 @@ const BookingCalendar = () => {
     setSlots(updatedSlots);
   };
 
-  // Tùy chỉnh class cho các slot dựa trên trạng thái
   const eventPropGetter = (event) => {
     return {
-      className: event.status === "booked" ? "booked" : "", // Thêm class "booked" nếu trạng thái là booked
+      className: event.status === "booked" ? "booked" : "",
     };
   };
 
-  // Function to calculate the number of booked slots for each day
-  const getBookedSlotsCount = (date) => {
-    return slots.filter(
-      (slot) => moment(slot.start).isSame(date, "day") && slot.status === "booked"
-    ).length;
-  };
-
-  // Custom date formatting and rendering
+  // Render only "Available" or "Booked" status in the event
   const eventLabelGetter = ({ start }) => {
     const currentView = localizer.view();
     if (currentView === "month") {
-      // For month view, show booked slot count
-      const bookedCount = getBookedSlotsCount(moment(start).startOf('day'));
-      return `${bookedCount} booked`; // Show number of booked slots
+      return ""; // Hide times and only show status in month view
     }
-    return undefined; // Default behavior for other views (week view will show default title)
+    return `${start && start.title === "Available" ? "Available" : "Booked"}`; // Show only status in week view
   };
 
+  // Use onDrillDown to switch views from month to week when a day is clicked
+  const handleDrillDown = (date) => {
+    console.log("Drill down clicked, switching to week view for date:", date); // Debugging log
+    setSelectedDate(date);
+    setSlots(generateSlots(moment(date).startOf("week"))); // Generate slots for the selected week
+    setCurrentView("week"); // Force view change to "week"
+  };
+
+  // Render only slots in the week view, hide in month view
+  const eventsToDisplay = currentView === "week" ? slots : [];
+
   return (
-    <div className="booking-calendar-container">
+    <div className="booking-calendar-container sauna-calendar">
       <Calendar
         localizer={localizer}
-        events={slots}
+        events={eventsToDisplay} // Only show slots if in week view
         startAccessor="start"
         endAccessor="end"
-        defaultView={currentView} // Chế độ view thay đổi theo state
-        views={["month", "week"]}
-        step={60} // Mỗi slot là 1 tiếng
-        timeslots={1} // Hiển thị 1 slot mỗi giờ
-        min={new Date(0, 0, 0, 8, 0, 0)} // Bắt đầu từ 8h
-        max={new Date(0, 0, 0, 22, 0, 0)} // Kết thúc lúc 21h
-        onSelectEvent={handleSlotClick} // Xử lý khi click vào slot (chỉ hoạt động trong chế độ tuần)
-        onSelectSlot={currentView === "week" ? handleSelectDate : null} // Chỉ cho phép chọn slot trong chế độ tuần
-        eventPropGetter={eventPropGetter} // Tùy chỉnh class cho slot
-        eventLabelGetter={eventLabelGetter} // Tùy chỉnh nhãn cho sự kiện
-        selectable={currentView === "week"} // Chỉ cho phép chọn slot trong chế độ tuần
-        onDrillDown={handleSelectDate} // Chuyển sang chế độ tuần khi nhấn vào ngày trong chế độ tháng
+        defaultView={currentView} // Use state to control view
+        views={["month", "week"]} // Only allow "month" and "week" views
+        step={60} // Each slot is 1 hour
+        timeslots={1} // Show 1 slot per hour
+        min={new Date(0, 0, 0, 8, 0, 0)} // Start from 8 AM
+        max={new Date(0, 0, 0, 22, 0, 0)} // End at 10 PM
+        onSelectEvent={handleSlotClick} // Slot click handler
+        onSelectSlot={currentView === "week" ? handleSelectDate : null} // Only allow selecting a date in "week" view
+        eventPropGetter={eventPropGetter}
+        eventLabelGetter={eventLabelGetter}
+        selectable={currentView === "week"} // Only allow selecting a slot in "week" view
+        onDrillDown={handleDrillDown} // Drill down when clicking on a day in the "month" view
       />
     </div>
   );

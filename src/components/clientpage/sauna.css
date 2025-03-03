@@ -1,16 +1,19 @@
-
-.booking-calendar-container {
+.sauna-calendar {
+  box-sizing: border-box;
+  padding: 10px;
+}
+.sauna-calendar .booking-calendar-container {
   width: 100%;
   height: 100vh;
   box-sizing: border-box;
   padding: 20px;
 }
 
-.rbc-event {
-  background-color: #f2f2f2; 
-  border-radius: 10px; 
-  border: none; 
-  color: #333; 
+.sauna-calendar .rbc-event {
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  border: none;
+  color: #333;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,13 +23,28 @@
   padding: 5px;
 }
 
-.rbc-event.booked {
-  background-color: #abdfff; 
-  color: #000; 
+.sauna-calendar .rbc-event.booked {
+  background-color: #abdfff;
+  color: #000;
 }
 
-.rbc-header {
+.sauna-calendar .rbc-header {
   padding: 10px;
   font-weight: bold;
   text-align: center;
 }
+
+.sauna-calendar .rbc-month-view {
+  min-height: 100vh; /* Make sure the calendar fills the screen */
+}
+
+.sauna-calendar .rbc-month-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sauna-calendar .rbc-day {
+  height: 100px; /* Increase height for better visibility */
+  position: relative;
+}
+
