@@ -21,26 +21,39 @@ const HumidTempChart = () => {
     return <div>Loading chart data...</div>;
   }
 
-  const combinedData = humid.map((item, index) => {
-    const matchingWeather = weatherData.find(weather => {
-      const weatherTime = new Date(weather.time);
+  // Filter data by specific hours (e.g., 1h, 2h, etc.)
+  const filterDataByHour = (hour) => {
+    return humid.map((item, index) => {
       const itemTime = new Date(item.time);
-      return weatherTime.getTime() === itemTime.getTime();
-    });
+      if (itemTime.getHours() === hour) {
+        const matchingWeather = weatherData.find(weather => {
+          const weatherTime = new Date(weather.time);
+          return weatherTime.getTime() === itemTime.getTime();
+        });
 
-    return {
-      time: new Date(item.time),  
-      humidityIndoor: item.humidity,  
-      temperatureIndoor: temp[index]?.temperature || null,  
-      humidityOutdoor: matchingWeather?.humidity || null,  
-      temperatureOutdoor: matchingWeather?.temperature || null,  
-    };
+        return {
+          time: itemTime,  
+          humidityIndoor: item.humidity,  
+          temperatureIndoor: temp[index]?.temperature || null,  
+          humidityOutdoor: matchingWeather?.humidity || null,  
+          temperatureOutdoor: matchingWeather?.temperature || null,  
+        };
+      }
+      return null;
+    }).filter(item => item !== null);  
+  };
+
+  const selectedHours = [1, 2, 3]; 
+
+  let filteredData = [];
+  selectedHours.forEach(hour => {
+    filteredData = filteredData.concat(filterDataByHour(hour));
   });
 
-  combinedData.sort((a, b) => a.time - b.time); 
+  filteredData.sort((a, b) => a.time - b.time);
 
-  const chartData = combinedData.map(item => ({
-    time: item.time.toLocaleTimeString(),  
+  const chartData = filteredData.map(item => ({
+    time: item.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
     humidityIndoor: item.humidityIndoor,
     temperatureIndoor: item.temperatureIndoor,
     humidityOutdoor: item.humidityOutdoor,
