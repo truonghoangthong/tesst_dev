@@ -1,29 +1,96 @@
-.app {
-  font-family: Arial, sans-serif;
+/* Đặt nền của ứng dụng TV với ảnh nền và đảm bảo nó không có lớp nền đen mờ */
+.tv-app {
+  font-family: 'Arial', sans-serif;
   padding: 20px;
-  max-width: 600px;
-  margin: auto;
+  width: 100vw;
+  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  background-image: url('public/licensed-image.jpg'); /* Thêm đường dẫn đến hình ảnh nền */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  box-sizing: border-box;
 }
 
-.weather-section {
-  background: #f0f0f0;
+/* Loại bỏ lớp nền đen mờ */
+.tv-app::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0); /* Không có nền đen mờ nữa */
+  z-index: 1;
+}
+
+/* Các phần panel chính có z-index > 1 để nổi bật */
+.left-panel, .right-panel {
+  position: relative;
+  z-index: 2;
+}
+
+.left-panel {
+  flex-grow: 2;
+  flex-basis: 0;
+  min-width: 0;
   padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.right-panel {
+  flex-grow: 1;
+  flex-basis: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.right-panel h2 {
+  color: white;
+}
+/* Phần weather section với nền trắng mờ */
+.weather-section {
+  background: rgba(255, 255, 255, 0.8); /* Nền trắng mờ */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Các thông tin thời tiết */
+.weather-info {
+  display: flex;
+  align-items: center;
+}
+
+.weather-details {
+  margin-left: 15px;
+}
+
+h2 {
+  margin-bottom: 10px;
+  font-size: 1.8rem;
 }
 
 .events-tabs {
   display: flex;
   flex-direction: column;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  width: 500px; 
 }
 
 .event-item {
   border-bottom: 1px solid #ccc;
-  margin: 0; 
 }
 
 .event-title {
@@ -31,7 +98,6 @@
   padding: 12px 15px;
   cursor: pointer;
   transition: background 0.3s ease;
-  width: 100%; 
 }
 
 .event-title.active {
@@ -39,26 +105,21 @@
 }
 
 .event-content {
-  background: #eee;
+  background: #f9f9f9;
   padding: 0 15px;
-  max-height: 0; 
+  max-height: 0;
   overflow: hidden;
-  opacity: 0; 
-  transform: translateY(-10px); 
-  width: 100%;
-  transition: max-height 0.3s ease-out, opacity 0.3s ease, transform 0.3s ease; 
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: max-height 0.3s ease-out, opacity 0.3s ease, transform 0.3s ease;
 }
 
 .event-content.active {
-  max-height: 500px; 
-  opacity: 1; 
-  transform: translateY(0); 
+  max-height: 500px;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .event-title:hover {
   background: #ccc;
-}
-
-.event-item .event-content + .event-title {
-  margin-top: 5px;
 }

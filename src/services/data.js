@@ -39,15 +39,7 @@ const useDataStore = create((set) => ({
           set((state) => ({
             data: {
               ...state.data,
-              weather: {
-                temperature: data.temperature,
-                humidity: data.humidity,
-                windSpeed: data.windSpeed,
-                temperatureApparent: data.temperatureApparent,
-                weatherCondition: data.weatherCondition,
-                uvIndex: data.uvIndex,
-                time: data.time,
-              },
+              weather: data,  // Store the entire weather data object as it is
             },
           }));
           console.log('Weather data successfully set in the store:', data);
