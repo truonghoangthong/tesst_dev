@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import './sidebar.css';
 import LogoutPopup from '../popup/logout-popup'; 
 
-const Sidebar = ({ isAdmin, visible }) => {
+const Sidebar = ({ isAdmin, visible, closeSidebar }) => {
   const [activeItem, setActiveItem] = useState("Dashboard");
   const [showLogoutPopup, setShowLogoutPopup] = useState(false); 
 
@@ -27,6 +27,16 @@ const Sidebar = ({ isAdmin, visible }) => {
     setShowLogoutPopup(true);
   };
 
+  const handleMenuItemClick = (itemName) => {
+    setActiveItem(itemName);
+    if (itemName === "Logout") {
+      handleLogoutClick(); 
+    }
+    if (closeSidebar) {
+      closeSidebar(); 
+    }
+  };
+
   return (
     <div className={classNames("sidebar", { visible, hidden: !visible })}>
       {adminMenuItems.map((item) => (
@@ -34,12 +44,7 @@ const Sidebar = ({ isAdmin, visible }) => {
           key={item.name}
           to={item.path}
           className={classNames("sidebar-gr", { active: activeItem === item.name })}
-          onClick={() => {
-            setActiveItem(item.name);
-            if (item.name === "Logout") {
-              handleLogoutClick(); 
-            }
-          }}
+          onClick={() => handleMenuItemClick(item.name)}
         >
           <Icon icon={item.icon} className="sidebar-icon" />
           <span className="sidebar-text">{item.name}</span>

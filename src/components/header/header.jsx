@@ -1,16 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import Sidebar from "../sidebar/sidebar";
 import { NavLink } from "react-router-dom"; 
 import './header.css';
 
 const Header = ({ isAdmin }) => { 
-  const [isSidebarVisible, setSidebarVisible] = useState(false); 
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); 
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible); 
   };
-  
+
+  const closeSidebar = () => {
+    setSidebarVisible(false); 
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const guestOptions = [
     { name: "Complaint", path: "complaint" },
     { name: "Sauna", path: "sauna" },
@@ -46,7 +62,7 @@ const Header = ({ isAdmin }) => {
         </div>
       </div>
 
-      {isAdmin && <Sidebar visible={isSidebarVisible} isAdmin={isAdmin} />}
+      {isAdmin && <Sidebar visible={isSidebarVisible} isAdmin={isAdmin} closeSidebar={isMobile ? closeSidebar : () => {}} />}
     </>
   );
 };
