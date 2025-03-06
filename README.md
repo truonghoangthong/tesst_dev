@@ -7,7 +7,7 @@
 ## Authors 👷
 - [Khoi Do](https://github.com/khoidm2004) (Project Manager + Backend Dev+  Tester + Deployer)
 - [Dung Nguyen](https://github.com/pingviini314159) (IoT Dev)
-- [Thong Truong](https://github.com/truonghoangthong) (Backend Dev + Deployer)
+- [Thong Truong](https://github.com/truonghoangthong) (Backend Dev + IoT Dev + Deployer)
 - [Nhi Nguyen](https://github.com/nhingnguyen) (Designer + Frontend Dev)
 
 ## [Demo▶️](https://drive.google.com/drive/folders/1WDxwJbH2DybVhDekEtNLBAzu7ruS1jE6?usp=drive_link)
