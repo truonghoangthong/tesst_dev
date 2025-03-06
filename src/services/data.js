@@ -4,7 +4,7 @@ import { getTemp } from './temp';
 import getWeatherData from './weather'; 
 
 const useDataStore = create((set) => ({
-  data: { humid: [], temp: [], weather: null },
+  data: { humid: [], temp: [], weatherData: [] },
 
   fetchHumidityStream: () => {
     getHumid((data) => {
@@ -35,14 +35,14 @@ const useDataStore = create((set) => ({
   fetchWeatherData: async () => {
     try {
       await getWeatherData((data) => {
-        if (data.temperature && data.humidity) {
+        if (data.weatherData) {
           set((state) => ({
             data: {
               ...state.data,
-              weather: data,  // Store the entire weather data object as it is
+              weatherData: data.weatherData, 
             },
           }));
-          console.log('Weather data successfully set in the store:', data);
+          console.log('Weather data successfully set in the store:', data.weatherData);
         } else {
           console.log('Invalid weather data received:', data);
         }

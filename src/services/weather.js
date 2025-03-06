@@ -3,28 +3,23 @@ import axios from 'axios';
 const getWeatherData = async (callback) => {
   try {
     const response = await axios.get('http://8.215.20.85/info/weather?city=hyrynsalmi');
-    const weatherData = response.data;
+    
+    // Access the 'newContent' array from the response
+    const weatherDataArray = response.data.newContent;
 
-    console.log('Weather data received:', weatherData);
+    console.log('Weather data array received:', weatherDataArray);
 
-    if (weatherData.temperature && weatherData.humidity) {
+    if (Array.isArray(weatherDataArray) && weatherDataArray.length > 0) {
       callback({
-        temperature: weatherData.temperature,
-        humidity: weatherData.humidity,
-        windSpeed: weatherData.windSpeed,
-        temperatureApparent: weatherData.temperatureApparent,
-        weatherCondition: weatherData.weather,
-        uvIndex: weatherData.uvIndex,
-        time: weatherData.time,
+        weatherData: weatherDataArray, // Pass the array of weather data
       });
     } else {
-      callback({ weather: null });
+      callback({ weatherData: null });
     }
   } catch (error) {
     console.error('Error fetching weather data:', error);
-    callback({ weather: null });
+    callback({ weatherData: null });
   }
 };
 
-// Default export
 export default getWeatherData;

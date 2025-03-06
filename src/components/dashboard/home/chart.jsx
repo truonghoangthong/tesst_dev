@@ -3,7 +3,7 @@ import useDataStore from '../../../services/data';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const HumidTempChart = () => {
-  const { humid, temp, weather } = useDataStore((state) => state.data);  
+  const { humid, temp, weatherData } = useDataStore((state) => state.data);  
   const fetchWeatherData = useDataStore((state) => state.fetchWeatherData);  
   const [loading, setLoading] = useState(true);
 
@@ -12,42 +12,32 @@ const HumidTempChart = () => {
   }, [fetchWeatherData]);
 
   useEffect(() => {
-    if (humid.length > 0 && temp.length > 0 && weather && weather.time) {  
+    if (humid.length > 0 && temp.length > 0 && weatherData.length > 0) {  
       setLoading(false);
     }
-  }, [humid, temp, weather]); 
+  }, [humid, temp, weatherData]); 
 
   if (loading) {
     return <div>Loading chart data...</div>;
   }
 
-  // Define a fixed time (e.g., "12:00 PM") for testing
-  const fixedTime = '12:00';  
-
-
   const combinedData = humid.map((item, index) => {
-
-    const itemTime = new Date(item.time);
-    itemTime.setHours(12);  
-    itemTime.setMinutes(0);
-    itemTime.setSeconds(0);
-
-    const matchingWeather = weather && weather.time 
-      ? new Date(weather.time).setHours(12, 0, 0, 0) === itemTime.getTime() 
-        ? weather 
-        : null 
-      : null;
+    const matchingWeather = weatherData.find(weather => {
+      const weatherTime = new Date(weather.time);
+      const itemTime = new Date(item.time);
+      return weatherTime.getTime() === itemTime.getTime();
+    });
 
     return {
-      time: itemTime,  
+      time: new Date(item.time),  
       humidityIndoor: item.humidity,  
       temperatureIndoor: temp[index]?.temperature || null,  
-      humidityOutdoor: matchingWeather?.humidity || null, 
+      humidityOutdoor: matchingWeather?.humidity || null,  
       temperatureOutdoor: matchingWeather?.temperature || null,  
     };
   });
 
-  combinedData.sort((a, b) => a.time - b.time);
+  combinedData.sort((a, b) => a.time - b.time); 
 
   const chartData = combinedData.map(item => ({
     time: item.time.toLocaleTimeString(),  
