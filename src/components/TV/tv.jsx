@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './tv.css';
-import { WiDaySunny, WiCloud, WiRain, WiThunderstorm, WiThermometer, WiHumidity, WiStrongWind, WiBarometer, WiTime9 } from 'react-icons/wi'; // Import thêm các icon
+import { WiDaySunny, WiCloud, WiRain, WiThunderstorm, WiThermometer, WiHumidity, WiStrongWind, WiBarometer, WiTime9 } from 'react-icons/wi'; 
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; // To display expand/collapse icon
 
-// Fake weather data generator
 const generateFakeWeatherData = () => {
   return {
     temperature: (Math.random() * 15 + 10).toFixed(1), // Temperature from 10 to 25 °C
@@ -15,7 +19,6 @@ const generateFakeWeatherData = () => {
   };
 };
 
-// Function to get corresponding icon for weather
 const getWeatherIcon = (weather) => {
   switch (weather) {
     case 'Clear':
@@ -36,42 +39,6 @@ const eventsData = [
   { id: 2, title: 'Event 2', content: 'An art exhibition will be open from 2 PM to 6 PM on March 22nd.' },
   { id: 3, title: 'Event 3', content: 'An outdoor concert will be held on the evening of March 25th.' },
 ];
-
-function EventsTabs() {
-  const [expandedEventId, setExpandedEventId] = useState(null);
-
-  useEffect(() => {
-    let currentIndex = 0;
-    const interval = setInterval(() => {
-      setExpandedEventId(eventsData[currentIndex].id);
-      currentIndex = (currentIndex + 1) % eventsData.length;
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleClick = (id) => {
-    setExpandedEventId(expandedEventId === id ? null : id);
-  };
-
-  return (
-    <div className="events-tabs">
-      {eventsData.map(event => (
-        <div key={event.id} className="event-item">
-          <div
-            className={`event-title ${expandedEventId === event.id ? 'active' : ''}`}
-            onClick={() => handleClick(event.id)}
-          >
-            {event.title}
-          </div>
-          <div className={`event-content ${expandedEventId === event.id ? 'active' : ''}`}>
-            {event.content}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 function WeatherSection() {
   const [weatherData, setWeatherData] = useState(null);
@@ -110,6 +77,27 @@ function WeatherSection() {
   );
 }
 
+function EventsTabs() {
+  return (
+    <div className="events-tabs">
+      {eventsData.map(event => (
+        <Accordion key={event.id} disableGutters elevation={0} square>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls={`panel${event.id}-content`}
+            id={`panel${event.id}-header`}
+          >
+            <Typography>{event.title}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>{event.content}</Typography>
+          </AccordionDetails>
+        </Accordion>
+      ))}
+    </div>
+  );
+}
+
 function TvView() {
   return (
     <div className="tv-app">
@@ -125,3 +113,4 @@ function TvView() {
 }
 
 export default TvView;
+
