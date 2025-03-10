@@ -4,8 +4,7 @@ import "./rooms/rooms.css";
 import "./../variables.css";
 import { bookingStore } from "../../state/bookingStore.js"; 
 import { userStore } from "../../state/user.js";
-import CardModel from "../cardModel";
-
+import CardModal from "../card/cardModel.jsx";
 const Bookings = ({ type = "sauna" }) => {
   const users = userStore((state) => state.users);
   const { rooms, sauna, laundry, setRoomsBookings, setSaunaBookings, setLaundryBookings } = bookingStore();
@@ -17,7 +16,7 @@ const Bookings = ({ type = "sauna" }) => {
       ? setSaunaBookings
       : setLaundryBookings;
 
-  const statusOptions = ["Available", "Booked", "Pending confirmation", "Triggered the trigger", "Cleaning", "Occupied"];
+  const statusOptions = ["Booked", "Pending confirmation", "Cleaning"];
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -176,7 +175,7 @@ const Bookings = ({ type = "sauna" }) => {
         </tbody>
       </table>
 
-      <CardModel
+      <CardModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
         content={modalContent}

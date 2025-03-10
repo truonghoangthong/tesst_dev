@@ -4,8 +4,7 @@ import "./rooms/rooms.css";
 import "./../variables.css";
 import { complaintsStore } from "../../state/complaintStore.js"; 
 import { userStore } from "../../state/user.js";
-import CardModel from "../cardModel";
-
+import CardModal from "../card/cardModel.jsx";
 const Complaints = () => {
   const users = userStore((state) => state.users);
   const { complaints, setComplaints } = complaintsStore(); 
@@ -144,8 +143,7 @@ const Complaints = () => {
         </tbody>
       </table>
 
-      {/* Modal hiển thị thông tin chi tiết */}
-      <CardModel
+      <CardModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
         content={modalContent}

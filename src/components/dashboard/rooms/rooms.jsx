@@ -4,8 +4,7 @@ import "./rooms.css";
 import "../../variables.css";
 import { bookingStore } from "../../../state/bookingStore.js";
 import { userStore } from "../../../state/user.js";
-import CardModel from "../../cardModel";
-
+import CardModal from "../../card/cardModel.jsx";
 const Rooms = () => {
   const users = userStore((state) => state.users);
   const { rooms, bookings, setBookings } = bookingStore(); 
@@ -162,7 +161,7 @@ const Rooms = () => {
         </tbody>
       </table>
 
-      <CardModel
+      <CardModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
         content={modalContent}
