@@ -80,6 +80,7 @@
   display: flex;
   gap: 15px;
   max-height: 100%;
+  width: 100%;
 }
 
 .right-panel h2 {
@@ -168,6 +169,7 @@ h2.date {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .MuiAccordion-root {
@@ -175,6 +177,7 @@ h2.date {
   background-color: #333;
   color: white;
   height: auto;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .MuiAccordionSummary-root {
@@ -182,6 +185,7 @@ h2.date {
   padding: 12px 15px;
   cursor: pointer;
   transition: background 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .MuiAccordionSummary-root:hover {
@@ -189,16 +193,21 @@ h2.date {
 }
 
 .MuiAccordionDetails-root {
-  background-color: #222;
+  background-color: white; 
   padding: 15px;
   height: auto;
-  color: white;
+  color: #333; 
+  font-size: 1.2rem; 
+  font-family: 'Montserrat', sans-serif;
 }
 
 .MuiAccordionSummary-expandIcon {
   color: #fff;
 }
-
+.MuiAccordion-root.Mui-expanded .MuiAccordionDetails-root {
+  border-radius: 20px;
+}
 .MuiTypography-root {
   font-size: 1.2rem;
+  font-family: 'Montserrat', sans-serif;
 }
