@@ -6,12 +6,13 @@ import Tab from '@mui/material/Tab';
 import { getDayAndTime } from '../../services/getDayandTime';
 import useDataStore from '../../services/data';
 import WeatherDay from './weatherday';
-import getLowHighTempHumid from '../../services/get7days'; // Import hàm lấy thông tin nhiệt độ min/max
+import getLowHighTempHumid from '../../services/get7days';
 import getWeatherIcon from '../../services/getWeatherIcon.jsX';
 import { Skeleton } from '@mui/material';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import './tv.css';
 
-// Register Chart.js components including the Filler plugin
+// Đăng ký các thành phần của Chart.js và plugin datalabels
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -20,7 +21,8 @@ ChartJS.register(
   Filler,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels // Đăng ký plugin datalabels
 );
 
 const WeatherSection = ({ updateWeatherBackground }) => {
@@ -44,17 +46,14 @@ const WeatherSection = ({ updateWeatherBackground }) => {
     const currentDate = new Date().toDateString(); 
     const nextDay = new Date();
     nextDay.setDate(nextDay.getDate() + 1);  
-
     const nextDayString = nextDay.toDateString(); 
-
     return weatherData.filter((dataItem) => {
       const dataTime = new Date(dataItem.time);
       const dataDateString = dataTime.toDateString();
-      return dataDateString === currentDate || dataDateString === nextDayString;  // Lọc cả ngày hôm nay và ngày mai
+      return dataDateString === currentDate || dataDateString === nextDayString;
     });
   }, [weatherData]);
 
-  // Lọc dữ liệu mỗi 3 giờ trong cả ngày hôm nay và ngày mai
   const filteredDataEvery3Hours = useMemo(() => {
     const currentTime = roundToNearestHour();
     return filteredWeatherData.filter((dataItem) => {
@@ -64,18 +63,14 @@ const WeatherSection = ({ updateWeatherBackground }) => {
     });
   }, [filteredWeatherData]);
 
-  // Nếu cần, đảm bảo hiển thị ít nhất 3 điểm dữ liệu cho ngày hôm sau
   const extendedFilteredData = useMemo(() => {
     const currentTime = new Date();
     const endOfDay = new Date();
-    endOfDay.setHours(23, 59, 59, 999); // Tính thời gian kết thúc của ngày hôm nay
-
+    endOfDay.setHours(23, 59, 59, 999);
     const tomorrowData = filteredWeatherData.filter((dataItem) => {
       const dataTime = new Date(dataItem.time);
-      return dataTime > endOfDay;  // Lọc các dữ liệu sau thời gian kết thúc của ngày hôm nay
+      return dataTime > endOfDay;
     });
-
-    // Ghép dữ liệu của ngày hôm nay và ngày mai
     return [...filteredDataEvery3Hours, ...tomorrowData];
   }, [filteredDataEvery3Hours, filteredWeatherData]);
 
@@ -109,10 +104,8 @@ const WeatherSection = ({ updateWeatherBackground }) => {
     const humidityValues = extendedFilteredData.map((dataItem) => dataItem.humidity);
     const maxHumidity = Math.max(...humidityValues);
     const minHumidity = Math.min(...humidityValues);
-
     const minY = Math.max(minHumidity - 3, 0);  
     const maxY = Math.min(maxHumidity + 3, 100);  
-
     return { minY, maxY };
   }, [extendedFilteredData]);
 
@@ -154,14 +147,13 @@ const WeatherSection = ({ updateWeatherBackground }) => {
     plugins: {
       legend: { display: false },
       title: { display: true, text: 'Temperature Data' },
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            const label = context.dataset.label || '';
-            const value = context.raw;
-            return `${label}: ${value}°C`;
-          },
-        },
+      tooltip: { enabled: false },
+      datalabels: {
+        color: 'white',
+        anchor: 'end',
+        align: 'top',
+        formatter: (value) => `${value}°C`,
+        font: { size: 12, weight: 'bold' },
       },
     },
     scales: {
@@ -169,15 +161,13 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         display: true,
         ticks: {
           maxRotation: 45, 
-          minRotation: 30, // Rotate less for smaller intervals
-          stepSize: 3,  // Increase stepSize to create more spacing between the ticks (adjust to your needs)
-          font: {
-            size: 14,  // Increase font size for X-axis labels
-            weight: 'bold',  // Optional: make labels bold for better visibility
-          },
+          minRotation: 30,
+          stepSize: 3,
+          font: { size: 14, weight: 'bold' },
+          color: 'white',
           callback: (value, index) => {
-            // Display every other label for better spacing, or adjust this as needed
-            return index % 2 === 0 ? value : ''; 
+            const date = new Date(extendedFilteredData[index]?.time);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
           },
         },
       },
@@ -185,7 +175,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         display: true,
         min: tempMinY - 3,
         max: tempMaxY + 3,
-        ticks: { beginAtZero: false, stepSize: 1 },
+        ticks: { beginAtZero: false, stepSize: 1, color: 'white' },
       },
     },
     elements: {
@@ -196,39 +186,22 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         borderColor: 'white',
         borderWidth: 2,
         hitRadius: 10,
-        draw: function (chart) {
-          const ctx = chart.ctx;
-          const chartData = chart.data;
-          const dataset = chartData.datasets[chart.datasetIndex];
-          const meta = chart.getDatasetMeta(chart.datasetIndex);
-  
-          meta.data.forEach((point, index) => {
-            const value = dataset.data[index]; 
-            const x = point.x;
-            const y = point.y;
-  
-            ctx.font = '12px Arial';
-            ctx.fillStyle = 'black';
-            ctx.fillText(`${value}°C`, x, y - 10); 
-          });
-        },
       },
     },
-  }), [tempMinY, tempMaxY]);
+  }), [tempMinY, tempMaxY, extendedFilteredData]);
   
   const optionsHumidity = useMemo(() => ({
     responsive: true,
     plugins: {
       legend: { display: false },
       title: { display: true, text: 'Humidity Data' },
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            const label = context.dataset.label || '';
-            const value = context.raw;
-            return `${label}: ${value}%`;
-          },
-        },
+      tooltip: { enabled: false },
+      datalabels: {
+        color: 'white',
+        anchor: 'end',
+        align: 'top',
+        formatter: (value) => `${value}%`,
+        font: { size: 12, weight: 'bold' },
       },
     },
     scales: {
@@ -237,13 +210,12 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         ticks: {
           maxRotation: 45,
           minRotation: 30,
-          stepSize: 3, // Increase stepSize to create more spacing between the ticks (adjust to your needs)
-          font: {
-            size: 14,  // Increase font size for X-axis labels
-            weight: 'bold',  // Optional: make labels bold for better visibility
-          },
+          stepSize: 3,
+          font: { size: 14, weight: 'bold' },
+          color: 'white',
           callback: (value, index) => {
-            return index % 2 === 0 ? value : ''; // Display every other label for better spacing
+            const date = new Date(extendedFilteredData[index]?.time);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
           },
         },
       },
@@ -251,7 +223,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         display: true,
         min: humidityMinY - 3,
         max: humidityMaxY + 3,
-        ticks: { beginAtZero: false, stepSize: 1 },
+        ticks: { beginAtZero: false, stepSize: 1, color: 'white' },
       },
     },
     elements: {
@@ -262,26 +234,9 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         borderColor: 'white',
         borderWidth: 2,
         hitRadius: 10,
-        draw: function (chart) {
-          const ctx = chart.ctx;
-          const chartData = chart.data;
-          const dataset = chartData.datasets[chart.datasetIndex];
-          const meta = chart.getDatasetMeta(chart.datasetIndex);
-  
-          meta.data.forEach((point, index) => {
-            const value = dataset.data[index]; 
-            const x = point.x;
-            const y = point.y;
-  
-            ctx.font = '12px Arial';
-            ctx.fillStyle = 'black';
-            ctx.fillText(`${value}%`, x, y - 10);
-          });
-        },
       },
     },
-  }), [humidityMinY, humidityMaxY]);
-  
+  }), [humidityMinY, humidityMaxY, extendedFilteredData]);
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
@@ -324,36 +279,17 @@ const WeatherSection = ({ updateWeatherBackground }) => {
           sx={{
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
             borderRadius: '12px',
-            '& .MuiTabs-indicator': {
-              backgroundColor: 'white',
-            },
+            '& .MuiTabs-indicator': { backgroundColor: 'white' },
           }}
         >
-          <Tab
-            label="Temperature"
-            sx={{
-              color: 'white',
-              '&.Mui-selected': {
-                color: 'white',
-              },
-            }}
-          />
-          <Tab
-            label="Humidity"
-            sx={{
-              color: 'white',
-              '&.Mui-selected': {
-                color: 'white',
-              },
-            }}
-          />
+          <Tab label="Temperature" sx={{ color: 'white', '&.Mui-selected': { color: 'white' } }} />
+          <Tab label="Humidity" sx={{ color: 'white', '&.Mui-selected': { color: 'white' } }} />
         </Tabs>
         <div className="chart-container">
           {selectedTab === 0 && <Line data={temperatureData} options={optionsTemperature} />}
           {selectedTab === 1 && <Line data={humidityData} options={optionsHumidity} />}
         </div>
       </div>
-      
       <div className="weather-summary">
         {dailyStats.length === 0 ? (
           <p>Loading data...</p>
@@ -361,16 +297,16 @@ const WeatherSection = ({ updateWeatherBackground }) => {
           dailyStats.map((stat, index) => (
             <WeatherDay
               key={index}
-              day={stat.shortDay} // Hiển thị ngày rút gọn (Mon, Tue, ...)
+              day={stat.shortDay}
               weather={stat.weather}
-              tempHigh={stat.maxTemp} // Temperature cao nhất
-              tempLow={stat.minTemp} // Temperature thấp nhất
+              tempHigh={stat.maxTemp}
+              tempLow={stat.minTemp}
             />
           ))
         )}
       </div>
     </div>
   );
-}
+};
 
 export default WeatherSection;
