@@ -63,14 +63,6 @@ const useDataStore = create((set) => {
         }, 30 * 60 * 1000); // 30 minutes 
       }
     },
-
-    stopWeatherDataInterval: () => {
-      if (weatherIntervalId) {
-        clearInterval(weatherIntervalId);
-        weatherIntervalId = null;
-        console.log('Weather data auto-fetching stopped.');
-      }
-    }
   };
 });
 

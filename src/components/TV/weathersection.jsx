@@ -23,11 +23,17 @@ ChartJS.register(
 
 const WeatherSection = ({ updateWeatherBackground }) => {
   const dailyStats = getLowHighTempHumid();
-  const { data } = useDataStore();
+  const { data, fetchWeatherData } = useDataStore();
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const weatherData = useMemo(() => data.weatherData || [], [data.weatherData]);
+  useEffect(() => {
+    if (data.weatherData.length === 0) {
+      fetchWeatherData();
+    }
+  }, [data.weatherData, fetchWeatherData]);
 
+  const weatherData = useMemo(() => data.weatherData || [], [data.weatherData]);
+  
   const roundToNearestHour = () => {
     const currentTime = new Date();
     currentTime.setMinutes(0, 0, 0);
@@ -38,7 +44,6 @@ const WeatherSection = ({ updateWeatherBackground }) => {
     const currentDate = new Date().toDateString(); 
     const nextDay = new Date();
     nextDay.setDate(nextDay.getDate() + 1);  
-
     const nextDayString = nextDay.toDateString(); 
 
     return weatherData.filter((dataItem) => {
@@ -57,18 +62,16 @@ const WeatherSection = ({ updateWeatherBackground }) => {
     });
   }, [filteredWeatherData]);
 
-  // Nếu cần, đảm bảo hiển thị ít nhất 3 điểm dữ liệu cho ngày hôm sau
   const extendedFilteredData = useMemo(() => {
     const currentTime = new Date();
     const endOfDay = new Date();
-    endOfDay.setHours(23, 59, 59, 999); // Tính thời gian kết thúc của ngày hôm nay
+    endOfDay.setHours(23, 59, 59, 999); 
 
     const tomorrowData = filteredWeatherData.filter((dataItem) => {
       const dataTime = new Date(dataItem.time);
-      return dataTime > endOfDay;  // Lọc các dữ liệu sau thời gian kết thúc của ngày hôm nay
+      return dataTime > endOfDay;
     });
 
-    // Ghép dữ liệu của ngày hôm nay và ngày mai
     return [...filteredDataEvery3Hours, ...tomorrowData];
   }, [filteredDataEvery3Hours, filteredWeatherData]);
 
@@ -159,14 +162,13 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         display: true,
         ticks: {
           maxRotation: 45, 
-          minRotation: 30, // Rotate less for smaller intervals
-          stepSize: 3,  // Increase stepSize to create more spacing between the ticks 
+          minRotation: 30,
+          stepSize: 3,  
           font: {
-            size: 14,  // Increase font size for X-axis labels
-            weight: 'bold',  // Optional: make labels bold for better visibility
+            size: 14,  
+            weight: 'bold',  
           },
           callback: (value, index) => {
-            // Display every other label for better spacing, or adjust this as needed
             return index % 2 === 0 ? value : ''; 
           },
         },
@@ -227,13 +229,13 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         ticks: {
           maxRotation: 45,
           minRotation: 30,
-          stepSize: 3, // Increase stepSize to create more spacing between the ticks (adjust to your needs)
+          stepSize: 3, 
           font: {
-            size: 14,  // Increase font size for X-axis labels
-            weight: 'bold',  // Optional: make labels bold for better visibility
+            size: 14,  
+            weight: 'bold',  
           },
           callback: (value, index) => {
-            return index % 2 === 0 ? value : ''; // Display every other label for better spacing
+            return index % 2 === 0 ? value : ''; 
           },
         },
       },
@@ -271,7 +273,6 @@ const WeatherSection = ({ updateWeatherBackground }) => {
       },
     },
   }), [humidityMinY, humidityMaxY]);
-  
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
@@ -282,6 +283,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
   if (!latestWeather) {
     return <div>Loading weather data...</div>;
   }
+
   useEffect(() => {
     if (latestWeather) {
       updateWeatherBackground(latestWeather.weather);  
@@ -292,78 +294,27 @@ const WeatherSection = ({ updateWeatherBackground }) => {
 
   return (
     <div className="weather-section">
-      <div className="top-panel">
-        {getWeatherIcon(latestWeather.weather)}
-        <h1>
-          <span className="temperature">{latestWeather.temperature}</span>
-          <span className="temperature-unit">°C</span>
-        </h1>
-        <div className="top-panel-data">
-          <p>Feels like: {latestWeather.temperatureApparent}°C</p>
-          <p>UV Index: {latestWeather.uvIndex}</p>
-          <p>Wind speed: {latestWeather.windSpeed} m/s</p>
-        </div>
-        <div className="top-panel right">
-          <h2 className="date">{todaytime.date}</h2>
-          <div className="day-time">
-            <p className="day">{todaytime.day}</p>
-            <p className="time">{todaytime.time}</p>
+      <Tabs value={selectedTab} onChange={handleChange} centered>
+        <Tab label="Temperature" />
+        <Tab label="Humidity" />
+      </Tabs>
+      <div className="tab-content">
+        {selectedTab === 0 && (
+          <div>
+            <h2>Temperature: {todaytime.time}</h2>
+            <Line data={temperatureData} options={optionsTemperature} />
           </div>
-        </div>
-      </div>
-      <div className="bottom-panel">
-        <Tabs
-          value={selectedTab}
-          onChange={handleChange}
-          aria-label="weather data tabs"
-          sx={{
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '12px',
-            '& .MuiTabs-indicator': {
-              backgroundColor: 'white',
-            },
-          }}
-        >
-          <Tab
-            label="Temperature"
-            sx={{
-              color: 'white',
-              '&.Mui-selected': {
-                color: 'white',
-              },
-            }}
-          />
-          <Tab
-            label="Humidity"
-            sx={{
-              color: 'white',
-              '&.Mui-selected': {
-                color: 'white',
-              },
-            }}
-          />
-        </Tabs>
-        {selectedTab === 0 && <Line data={temperatureData} options={optionsTemperature} />}
-        {selectedTab === 1 && <Line data={humidityData} options={optionsHumidity} />}
-      </div>
-      
-      <div className="weather-summary">
-        {dailyStats.length === 0 ? (
-          <p>Loading data...</p>
-        ) : (
-          dailyStats.map((stat, index) => (
-            <WeatherDay
-              key={index}
-              day={stat.shortDay} // Hiển thị ngày rút gọn (Mon, Tue, ...)
-              weather={stat.weather}
-              tempHigh={stat.maxTemp} // Temperature cao nhất
-              tempLow={stat.minTemp} // Temperature thấp nhất
-            />
-          ))
+        )}
+        {selectedTab === 1 && (
+          <div>
+            <h2>Humidity: {todaytime.time}</h2>
+            <Line data={humidityData} options={optionsHumidity} />
+          </div>
         )}
       </div>
+      <WeatherDay weatherData={latestWeather} />
     </div>
   );
-}
+};
 
 export default WeatherSection;
