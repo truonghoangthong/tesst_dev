@@ -348,8 +348,10 @@ const WeatherSection = ({ updateWeatherBackground }) => {
             }}
           />
         </Tabs>
-        {selectedTab === 0 && <Line data={temperatureData} options={optionsTemperature} />}
-        {selectedTab === 1 && <Line data={humidityData} options={optionsHumidity} />}
+        <div className="chart-container">
+          {selectedTab === 0 && <Line data={temperatureData} options={optionsTemperature} />}
+          {selectedTab === 1 && <Line data={humidityData} options={optionsHumidity} />}
+        </div>
       </div>
       
       <div className="weather-summary">
