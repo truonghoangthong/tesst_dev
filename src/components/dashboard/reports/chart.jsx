@@ -8,10 +8,6 @@ const HumidTempChart = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchWeatherData();  
-  }, [fetchWeatherData]);
-
-  useEffect(() => {
     if (humid.length > 0 && temp.length > 0 && weatherData.length > 0) {  
       setLoading(false);
     }

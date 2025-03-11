@@ -5,13 +5,11 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { getDayAndTime } from '../../services/getDayandTime';
 import useDataStore from '../../services/data';
-import { Icon } from '@iconify/react';
 import WeatherDay from './weatherday';
-import getLowHighTempHumid from '../../services/get7days'; // Import hàm lấy thông tin nhiệt độ min/max
+import getLowHighTempHumid from '../../services/get7days'; 
 import getWeatherIcon from '../../services/getWeatherIcon.jsX';
 import './tv.css';
 
-// Register Chart.js components including the Filler plugin
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -25,12 +23,8 @@ ChartJS.register(
 
 const WeatherSection = () => {
   const dailyStats = getLowHighTempHumid();
-  const { data, fetchWeatherData } = useDataStore();
+  const { data } = useDataStore();
   const [selectedTab, setSelectedTab] = useState(0);
-
-  useEffect(() => {
-    fetchWeatherData();
-  }, [fetchWeatherData]);
 
   const weatherData = useMemo(() => data.weatherData || [], [data.weatherData]);
 
@@ -50,11 +44,10 @@ const WeatherSection = () => {
     return weatherData.filter((dataItem) => {
       const dataTime = new Date(dataItem.time);
       const dataDateString = dataTime.toDateString();
-      return dataDateString === currentDate || dataDateString === nextDayString;  // Lọc cả ngày hôm nay và ngày mai
+      return dataDateString === currentDate || dataDateString === nextDayString;  
     });
   }, [weatherData]);
 
-  // Lọc dữ liệu mỗi 3 giờ trong cả ngày hôm nay và ngày mai
   const filteredDataEvery3Hours = useMemo(() => {
     const currentTime = roundToNearestHour();
     return filteredWeatherData.filter((dataItem) => {
@@ -167,7 +160,7 @@ const WeatherSection = () => {
         ticks: {
           maxRotation: 45, 
           minRotation: 30, // Rotate less for smaller intervals
-          stepSize: 3,  // Increase stepSize to create more spacing between the ticks (adjust to your needs)
+          stepSize: 3,  // Increase stepSize to create more spacing between the ticks 
           font: {
             size: 14,  // Increase font size for X-axis labels
             weight: 'bold',  // Optional: make labels bold for better visibility
