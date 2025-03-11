@@ -21,7 +21,7 @@ ChartJS.register(
   Legend
 );
 
-const WeatherSection = () => {
+const WeatherSection = ({ updateWeatherBackground }) => {
   const dailyStats = getLowHighTempHumid();
   const { data } = useDataStore();
   const [selectedTab, setSelectedTab] = useState(0);
@@ -282,6 +282,11 @@ const WeatherSection = () => {
   if (!latestWeather) {
     return <div>Loading weather data...</div>;
   }
+  useEffect(() => {
+    if (latestWeather) {
+      updateWeatherBackground(latestWeather.weather);  
+    }
+  }, [latestWeather, updateWeatherBackground]);
 
   const todaytime = getDayAndTime(latestWeather.time);
 

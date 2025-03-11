@@ -28,15 +28,10 @@ const TvView = () => {
     }
   };
 
-  useEffect(() => {
-    const latestWeather = 'Sunny'; 
-    updateWeatherBackground(latestWeather);
-  }, []);
-
   return (
     <div className={`tv-app ${weatherClass}`}>
       <div className="left-panel">
-        <WeatherSection />
+        <WeatherSection updateWeatherBackground={updateWeatherBackground} />
       </div>
       <div className="right-panel">
         <h2>Events</h2>

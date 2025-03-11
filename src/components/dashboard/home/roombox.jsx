@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from "@iconify/react";
-import './roombox.css';  // You can create a new file for styles or reuse the existing ones
+import './roombox.css';  
 
 const DashboardBox = ({ status, humid, temp, guest, additionalStyles = {} }) => {
   const statusStyles = {

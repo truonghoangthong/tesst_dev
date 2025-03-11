@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { Icon } from "@iconify/react";
 import "./rooms/rooms.css";
 import "./../variables.css";
+import "./../status.css";
 import { bookingStore } from "../../state/bookingStore.js"; 
 import { userStore } from "../../state/user.js";
 import CardModal from "../card/cardModel.jsx";

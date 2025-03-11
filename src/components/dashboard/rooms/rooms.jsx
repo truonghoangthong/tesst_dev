@@ -5,6 +5,8 @@ import "../../variables.css";
 import { bookingStore } from "../../../state/bookingStore.js";
 import { userStore } from "../../../state/user.js";
 import CardModal from "../../card/cardModel.jsx";
+import "../../status.css";
+
 const Rooms = () => {
   const users = userStore((state) => state.users);
   const { rooms, bookings, setBookings } = bookingStore(); 

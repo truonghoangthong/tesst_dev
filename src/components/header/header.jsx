@@ -36,7 +36,7 @@ const Header = ({ isAdmin }) => {
   return (
     <>
       <div className={`header ${!isAdmin ? 'guest' : ''}`}>
-        <img className="resortlogo" src="/public/logo.png" alt="logo" />
+        <img className="resortlogo" src="/logo.png" alt="logo" />
         
         <div className="header-options">
           {!isAdmin && guestOptions.map(option => (

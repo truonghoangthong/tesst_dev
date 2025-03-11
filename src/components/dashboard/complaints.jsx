@@ -5,6 +5,8 @@ import "./../variables.css";
 import { complaintsStore } from "../../state/complaintStore.js"; 
 import { userStore } from "../../state/user.js";
 import CardModal from "../card/cardModel.jsx";
+import "./../status.css";
+
 const Complaints = () => {
   const users = userStore((state) => state.users);
   const { complaints, setComplaints } = complaintsStore(); 

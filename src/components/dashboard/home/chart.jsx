@@ -4,12 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 const HumidTempChart = () => {
   const { humid, temp, weatherData } = useDataStore((state) => state.data);  
-  const fetchWeatherData = useDataStore((state) => state.fetchWeatherData);  
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchWeatherData();  
-  }, [fetchWeatherData]);
 
   useEffect(() => {
     if (humid.length > 0 && temp.length > 0 && weatherData.length > 0) {  

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import './home.css';
 import '../../variables.css';
+import '../../status.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import MyCalendar from "../home/calendar";
 import useDataStore from "../../../services/data";
