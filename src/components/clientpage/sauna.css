@@ -1,7 +1,3 @@
-.sauna-calendar {
-  box-sizing: border-box;
-  padding: 10px;
-}
 .sauna-calendar .booking-calendar-container {
   width: 100%;
   height: 100vh;
@@ -23,7 +19,7 @@
   padding: 5px;
 }
 
-.sauna-calendar .rbc-event.booked {
+.sauna-calendar .rbc-event.sauna-booked {
   background-color: #abdfff;
   color: #000;
 }
@@ -47,4 +43,3 @@
   height: 100px; /* Increase height for better visibility */
   position: relative;
 }
-

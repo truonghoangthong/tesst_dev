@@ -50,26 +50,28 @@ const BookingCalendar = () => {
   // Tùy chỉnh class cho các slot dựa trên trạng thái
   const eventPropGetter = (event) => {
     return {
-      className: event.status === "booked" ? "booked" : "", // Thêm class "booked" nếu trạng thái là booked
+      className: event.status === "booked" ? "sauna-booked" : "", // Thêm class "sauna-booked" nếu trạng thái là booked
     };
   };
 
   return (
-    <div className="booking-calendar-container">
-      <Calendar
-        localizer={localizer}
-        events={slots}
-        startAccessor="start"
-        endAccessor="end"
-        defaultView="week"
-        views={["week"]}
-        step={60} // Mỗi slot là 1 tiếng
-        timeslots={1} // Hiển thị 1 slot mỗi giờ
-        min={new Date(0, 0, 0, 8, 0, 0)} // Bắt đầu từ 8h
-        max={new Date(0, 0, 0, 22, 0, 0)} // Kết thúc lúc 21h
-        onSelectEvent={handleSlotClick} // Xử lý khi click vào slot
-        eventPropGetter={eventPropGetter} // Tùy chỉnh class cho slot
-      />
+    <div className="sauna-calendar"> {/* Lớp bao bọc để tạo tiền tố độc đáo */}
+      <div className="booking-calendar-container">
+        <Calendar
+          localizer={localizer}
+          events={slots}
+          startAccessor="start"
+          endAccessor="end"
+          defaultView="week"
+          views={["week"]}
+          step={60} // Mỗi slot là 1 tiếng
+          timeslots={1} // Hiển thị 1 slot mỗi giờ
+          min={new Date(0, 0, 0, 8, 0, 0)} // Bắt đầu từ 8h
+          max={new Date(0, 0, 0, 22, 0, 0)} // Kết thúc lúc 21h
+          onSelectEvent={handleSlotClick} // Xử lý khi click vào slot
+          eventPropGetter={eventPropGetter} // Tùy chỉnh class cho slot
+        />
+      </div>
     </div>
   );
 };

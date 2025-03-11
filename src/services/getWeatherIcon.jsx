@@ -1,6 +1,5 @@
-// src/utils/getWeatherIcon.js
-
 import { Icon } from '@iconify/react';
+import '../components/TV/tv.css';
 
 const getWeatherIcon = (weather) => {
   const iconMap = {
