@@ -1,22 +1,38 @@
-export const extractBookings = (gridData) => {
+export const extractBookings = (slots) => {
+  const bookedSlots = slots.filter((slot) => slot.status === "booked"); 
+  bookedSlots.sort((a, b) => a.start - b.start); 
+
   const bookings = [];
+  let currentBooking = null;
 
-  gridData.forEach((row, rowIndex) => {
-    Object.keys(row).forEach((day) => {
-      if (day !== 'time' && row[day] === 'Booked') {
-        const from = row.time;  
-
-        const to = rowIndex === gridData.length - 1 ? '22:00' : gridData[rowIndex + 1].time;  
-
-        bookings.push({
-          guestName: 'Tên khách hàng',  
-          from,                         
-          to,                            
-          day: day.charAt(0).toUpperCase() + day.slice(1), 
-        });
+  bookedSlots.forEach((slot) => {
+    if (!currentBooking) {
+      currentBooking = {
+        userId: "user-id", 
+        fullName: "User Full Name", 
+        from: slot.start,
+        to: slot.end,
+        saunaBookingId: `booking-${slot.id}`, 
+      };
+    } else {
+      if (slot.start.getTime() === currentBooking.to.getTime()) {
+        currentBooking.to = slot.end;
+      } else {
+        bookings.push(currentBooking);
+        currentBooking = {
+          userId: "user-id", 
+          fullName: "User Full Name", 
+          from: slot.start,
+          to: slot.end,
+          saunaBookingId: `booking-${slot.id}`, 
+        };
       }
-    });
+    }
   });
+
+  if (currentBooking) {
+    bookings.push(currentBooking);
+  }
 
   return bookings;
 };
