@@ -4,14 +4,13 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./sauna.css"; // Import file CSS
 
-// Cấu hình moment localizer cho react-big-calendar
 const localizer = momentLocalizer(moment);
 
 // Hàm tạo các slot đặt chỗ
-const generateSlots = () => {
+const generateSlots = (startOfWeek) => {
   const slots = [];
-  const startDate = moment().startOf("week").add(1, "day"); // Bắt đầu từ thứ 2
-  const endDate = moment(startDate).endOf("week"); // Kết thúc vào chủ nhật
+  const startDate = moment(startOfWeek).startOf("week"); // Bắt đầu từ Chủ Nhật
+  const endDate = moment(startDate).endOf("week"); // Kết thúc vào Thứ Bảy
 
   for (let day = startDate; day.isBefore(endDate); day.add(1, "day")) {
     for (let hour = 8; hour <= 21; hour++) {
@@ -29,7 +28,7 @@ const generateSlots = () => {
 };
 
 const BookingCalendar = () => {
-  const [slots, setSlots] = useState(generateSlots());
+  const [slots, setSlots] = useState(generateSlots(moment().startOf("week"))); // Khởi tạo slots cho tuần hiện tại
 
   // Xử lý khi người dùng click vào một slot
   const handleSlotClick = (event) => {
@@ -47,6 +46,13 @@ const BookingCalendar = () => {
     setSlots(updatedSlots);
   };
 
+  // Xử lý khi người dùng chuyển tuần
+  const handleNavigate = (newDate) => {
+    const startOfWeek = moment(newDate).startOf("week"); // Lấy ngày bắt đầu của tuần mới
+    const newSlots = generateSlots(startOfWeek); // Tạo slots mới cho tuần mới
+    setSlots(newSlots);
+  };
+
   // Tùy chỉnh class cho các slot dựa trên trạng thái
   const eventPropGetter = (event) => {
     return {
@@ -54,8 +60,13 @@ const BookingCalendar = () => {
     };
   };
 
+  // Custom component để chỉ hiển thị trạng thái (không hiển thị thời gian)
+  const EventComponent = ({ event }) => (
+    <span>{event.title}</span>
+  );
+
   return (
-    <div className="sauna-calendar"> {/* Lớp bao bọc để tạo tiền tố độc đáo */}
+    <div className="sauna-calendar">
       <div className="booking-calendar-container">
         <Calendar
           localizer={localizer}
@@ -69,7 +80,11 @@ const BookingCalendar = () => {
           min={new Date(0, 0, 0, 8, 0, 0)} // Bắt đầu từ 8h
           max={new Date(0, 0, 0, 22, 0, 0)} // Kết thúc lúc 21h
           onSelectEvent={handleSlotClick} // Xử lý khi click vào slot
+          onNavigate={handleNavigate} // Xử lý khi chuyển tuần
           eventPropGetter={eventPropGetter} // Tùy chỉnh class cho slot
+          components={{
+            event: EventComponent, // Sử dụng component tùy chỉnh để hiển thị sự kiện
+          }}
         />
       </div>
     </div>

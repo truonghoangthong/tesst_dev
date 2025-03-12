@@ -12,7 +12,6 @@ import { Skeleton } from '@mui/material';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import './tv.css';
 
-// Đăng ký các thành phần của Chart.js và plugin datalabels
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,7 +21,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ChartDataLabels // Đăng ký plugin datalabels
+  ChartDataLabels 
 );
 
 const WeatherSection = ({ updateWeatherBackground }) => {
@@ -75,7 +74,10 @@ const WeatherSection = ({ updateWeatherBackground }) => {
   }, [filteredDataEvery3Hours, filteredWeatherData]);
 
   const labelsWithInterval = useMemo(() => {
-    return extendedFilteredData.map((dataItem) => getDayAndTime(dataItem.time).time);
+    return extendedFilteredData.map((dataItem) => {
+      const date = new Date(dataItem.time);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    });
   }, [extendedFilteredData]);
 
   const calculateTemperatureRange = useCallback(() => {
@@ -166,8 +168,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
           font: { size: 14, weight: 'bold' },
           color: 'white',
           callback: (value, index) => {
-            const date = new Date(extendedFilteredData[index]?.time);
-            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            return labelsWithInterval[index] || null;
           },
         },
       },
@@ -188,8 +189,8 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         hitRadius: 10,
       },
     },
-  }), [tempMinY, tempMaxY, extendedFilteredData]);
-  
+  }), [tempMinY, tempMaxY, labelsWithInterval]);
+
   const optionsHumidity = useMemo(() => ({
     responsive: true,
     plugins: {
@@ -214,8 +215,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
           font: { size: 14, weight: 'bold' },
           color: 'white',
           callback: (value, index) => {
-            const date = new Date(extendedFilteredData[index]?.time);
-            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            return labelsWithInterval[index] || null;
           },
         },
       },
@@ -236,7 +236,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         hitRadius: 10,
       },
     },
-  }), [humidityMinY, humidityMaxY, extendedFilteredData]);
+  }), [humidityMinY, humidityMaxY, labelsWithInterval]);
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
