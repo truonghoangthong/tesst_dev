@@ -1,4 +1,3 @@
-/* Lớp bao bọc để tạo tiền tố độc đáo */
 .sauna-calendar .booking-calendar-container {
   width: 100%;
   height: 100vh;
@@ -6,7 +5,6 @@
   padding: 20px;
 }
 
-/* Style cho các event */
 .sauna-calendar .rbc-event {
   background-color: #f2f2f2;
   border-radius: 10px;
@@ -22,51 +20,43 @@
   box-sizing: border-box;
 }
 
-/* Style cho các event đã được đặt */
 .sauna-calendar .rbc-event.sauna-booked {
   background-color: #abdfff;
   color: #000;
 }
 
-/* Style cho header của các ngày */
 .sauna-calendar .rbc-header {
   padding: 10px;
   font-weight: bold;
   text-align: center;
 }
 
-/* Style cho view tháng */
 .sauna-calendar .rbc-month-view {
   min-height: 100vh;
 }
 
-/* Style cho header của tháng */
 .sauna-calendar .rbc-month-header {
   display: flex;
   justify-content: space-between;
 }
 
-/* Style cho các ô ngày */
 .sauna-calendar .rbc-day {
   height: 100px;
   position: relative;
 }
 
-/* Ẩn label của event */
 .sauna-calendar .rbc-event-label {
   display: none;
 }
 
-/* Điều chỉnh container của các event */
 .sauna-calendar .rbc-events-container {
   margin: 0;
 }
 
-/* Điều chỉnh kích thước của time header gutter và time gutter */
 .sauna-calendar .rbc-time-header-gutter,
 .sauna-calendar .rbc-time-gutter {
-  width: 80px; /* Điều chỉnh kích thước theo ý muốn */
-  min-width: 80px; /* Đảm bảo kích thước tối thiểu */
+  width: 80px; 
+  min-width: 80px; 
 }
 
 .sauna-calendar .rbc-time-header-gutter {
