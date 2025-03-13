@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Icon } from "@iconify/react";
-import "./rooms.css"; 
+import "./rooms.css";
 import "../../variables.css";
 import useRoomBookingStore from "../../../../../Backend/src/store/roomBookingStore.js";
 import CardModal from "../../card/cardModel.jsx";
 
+
 const Rooms = () => {
   const { roomBookings, fetchRoomBookings } = useRoomBookingStore();
-  const [activeRoom, setActiveRoom] = useState("A"); // Still using "A", "B", "C" internally
+  const [activeRoom, setActiveRoom] = useState("A");
   const [modalContent, setModalContent] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
-  // Fetch bookings when the component loads
   useEffect(() => {
     fetchRoomBookings();
   }, [fetchRoomBookings]);
@@ -21,30 +21,24 @@ const Rooms = () => {
   }, [roomBookings, activeRoom]);
 
   const handleGuestClick = (guest) => {
-    setModalContent(
-      <table className="info-table">
-        <tbody>
-          <tr>
-            <th>Name</th>
-            <td>{guest.fullName}</td>
-          </tr>
-          <tr>
-            <th>UID</th>
-            <td>{guest.uid}</td>
-          </tr>
-        </tbody>
-      </table>
-    );
+    setModalContent([
+      { "Name": guest.fullName },
+      { "UID": guest.uid },
+    ]);
     setModalOpen(true);
   };
 
   const handleActionClick = (action) => {
-    setModalContent(`Edit Action: ${action}`);
+    setModalContent([
+      { "Action": action || "No Action" },
+    ]);
     setModalOpen(true);
   };
 
   const handleNoteClick = (note) => {
-    setModalContent(`Edit Note: ${note}`);
+    setModalContent([
+      { "Note": note || "No Note" },
+    ]);
     setModalOpen(true);
   };
 
@@ -106,19 +100,19 @@ const Rooms = () => {
             <tr key={booking.bookingId}>
               <td>{booking.bookingId}</td>
               <td>
-                <span variant="link" onClick={() => handleGuestClick(booking.client)}>
+                <span onClick={() => handleGuestClick(booking.client)}>
                   {booking.client.fullName}
                 </span>
               </td>
               <td>{new Date(booking.bookingPeriod.startFrom.toMillis()).toLocaleString()}</td>
               <td>{new Date(booking.bookingPeriod.endAt.toMillis()).toLocaleString()}</td>
               <td>
-                <span variant="link" onClick={() => handleActionClick(booking.action)}>
+                <span onClick={() => handleActionClick(booking.action)}>
                   {booking.action || "No Action"}
                 </span>
               </td>
               <td>
-                <span variant="link" onClick={() => handleNoteClick(booking.note)}>
+                <span onClick={() => handleNoteClick(booking.note)}>
                   {booking.note || "No Note"}
                 </span>
               </td>
@@ -131,7 +125,9 @@ const Rooms = () => {
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
         content={modalContent}
-        setModalContent={setModalContent}
+        onSave={(updatedData) => {
+          console.log("Updated data:", updatedData);
+        }}
       />
     </div>
   );

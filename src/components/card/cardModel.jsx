@@ -1,71 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import useAuthStore from '../../../../Backend/src/store/authStore'; 
-import './cardmodel.css'; 
+import './cardmodel.css';
 
-const Card = ({ children }) => {
-  return <div className="custom-card">{children}</div>;
-};
-
-const CardModal = ({ isOpen, onClose, content, setModalContent, guest }) => {
-  const [editableText, setEditableText] = useState(content);
-  const [isEditing, setIsEditing] = useState(false);
-  const { users, setUsers } = useAuthStore(); 
+const CardModal = ({ isOpen, onClose, content, onSave }) => {
+  const [localContent, setLocalContent] = useState(content);
 
   useEffect(() => {
-    setEditableText(content);
-  }, [content, isOpen]); 
+    if (content) {
+      setLocalContent(content);
+    }
+  }, [content]);
 
-  if (!isOpen) return null;
-
-  const resetEditableText = () => {
-    setEditableText(content); 
-  };
+  if (!isOpen || !content) return null;
 
   const handleSave = () => {
-    if (isEditing) {
-      if (guest) {
-        const updatedUsers = users.map((user) =>
-          user.id === guest.id ? { ...user, name: editableText } : user
-        );
-        setUsers(updatedUsers); 
-      } else {
-        setModalContent(editableText); 
-      }
-    }
-    setIsEditing(false); 
-    onClose(); 
-  };
-
-  const handleClose = () => {
-    resetEditableText(); 
-    setIsEditing(false); 
-    onClose(); 
-  };
-
-  const handleEditClick = () => {
-    setIsEditing(true);
+    onSave(localContent);
+    onClose();
   };
 
   return (
     <div className="custom-modal-overlay">
-      <Card>
+      <div className="custom-card">
         <div className="custom-card-content">
           <div className="custom-editable-section">
-            {isEditing ? (
-              <input
-                type="text"
-                value={editableText}
-                onChange={(e) => setEditableText(e.target.value)}
-                className="custom-input"
-              />
+            {Array.isArray(localContent) ? (
+              <table className="info-table">
+                <tbody>
+                  {localContent.map((row, index) => (
+                    <tr key={index}>
+                      {Object.keys(row).map((key) => (
+                        <td key={key}>
+                          <strong>{key}:</strong> {row[key]}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             ) : (
-              <p onClick={handleEditClick} className="custom-editable-text">
-                {editableText}
-              </p>
+              <p>{localContent}</p>
             )}
           </div>
           <div className="custom-button-container">
-            <button className="custom-button close-button" onClick={handleClose}>
+            <button className="custom-button close-button" onClick={onClose}>
               Close
             </button>
             <button className="custom-button save-button" onClick={handleSave}>
@@ -73,7 +49,7 @@ const CardModal = ({ isOpen, onClose, content, setModalContent, guest }) => {
             </button>
           </div>
         </div>
-      </Card>
+      </div>
     </div>
   );
 };
