@@ -5,12 +5,13 @@ import "../../variables.css";
 import useRoomBookingStore from "../../../../../Backend/src/store/roomBookingStore.js";
 import CardModal from "../../card/cardModel.jsx";
 
-
 const Rooms = () => {
   const { roomBookings, fetchRoomBookings } = useRoomBookingStore();
   const [activeRoom, setActiveRoom] = useState("A");
   const [modalContent, setModalContent] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
+
+  const isMobile = window.innerWidth <= 768; 
 
   useEffect(() => {
     fetchRoomBookings();
@@ -21,25 +22,46 @@ const Rooms = () => {
   }, [roomBookings, activeRoom]);
 
   const handleGuestClick = (guest) => {
-    setModalContent([
-      { "Name": guest.fullName },
-      { "UID": guest.uid },
-    ]);
-    setModalOpen(true);
+    if (!isMobile) {
+      setModalContent([
+        { "Name": guest.fullName },
+        { "UID": guest.uid },
+      ]);
+      setModalOpen(true);
+    }
   };
 
   const handleActionClick = (action) => {
-    setModalContent([
-      { "Action": action || "No Action" },
-    ]);
-    setModalOpen(true);
+    if (!isMobile) {
+      setModalContent([
+        { "Action": action || "No Action" },
+      ]);
+      setModalOpen(true);
+    }
   };
 
   const handleNoteClick = (note) => {
-    setModalContent([
-      { "Note": note || "No Note" },
-    ]);
-    setModalOpen(true);
+    if (!isMobile) {
+      setModalContent([
+        { "Note": note || "No Note" },
+      ]);
+      setModalOpen(true);
+    }
+  };
+
+  const handleRowClick = (booking) => {
+    if (isMobile) {
+      setModalContent([
+        { "Booking ID": booking.bookingId },
+        { "Guest Name": booking.client.fullName },
+        { "Guest UID": booking.client.uid },
+        { "Check-in": new Date(booking.bookingPeriod.startFrom.toMillis()).toLocaleString() },
+        { "Check-out": new Date(booking.bookingPeriod.endAt.toMillis()).toLocaleString() },
+        { "Action": booking.action || "No Action" },
+        { "Note": booking.note || "No Note" },
+      ]);
+      setModalOpen(true);
+    }
   };
 
   const getColumns = () => {
@@ -97,22 +119,31 @@ const Rooms = () => {
         </thead>
         <tbody>
           {bookingsForActiveRoom.map((booking) => (
-            <tr key={booking.bookingId}>
+            <tr key={booking.bookingId} onClick={() => handleRowClick(booking)}>
               <td>{booking.bookingId}</td>
               <td>
-                <span onClick={() => handleGuestClick(booking.client)}>
+                <span onClick={(e) => {
+                  e.stopPropagation();
+                  handleGuestClick(booking.client);
+                }}>
                   {booking.client.fullName}
                 </span>
               </td>
               <td>{new Date(booking.bookingPeriod.startFrom.toMillis()).toLocaleString()}</td>
               <td>{new Date(booking.bookingPeriod.endAt.toMillis()).toLocaleString()}</td>
               <td>
-                <span onClick={() => handleActionClick(booking.action)}>
+                <span onClick={(e) => {
+                  e.stopPropagation();
+                  handleActionClick(booking.action);
+                }}>
                   {booking.action || "No Action"}
                 </span>
               </td>
               <td>
-                <span onClick={() => handleNoteClick(booking.note)}>
+                <span onClick={(e) => {
+                  e.stopPropagation();
+                  handleNoteClick(booking.note);
+                }}>
                   {booking.note || "No Note"}
                 </span>
               </td>

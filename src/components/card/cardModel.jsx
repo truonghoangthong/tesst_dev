@@ -27,11 +27,8 @@ const CardModal = ({ isOpen, onClose, content, onSave }) => {
                 <tbody>
                   {localContent.map((row, index) => (
                     <tr key={index}>
-                      {Object.keys(row).map((key) => (
-                        <td key={key}>
-                          <strong>{key}:</strong> {row[key]}
-                        </td>
-                      ))}
+                      <td className="info-key">{Object.keys(row)[0]}:</td>
+                      <td className="info-value">{row[Object.keys(row)[0]]}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -5,6 +5,8 @@
   margin: 16px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+  width: 90%;
+  max-width: 500px; 
 }
 
 .custom-modal-overlay {
@@ -20,12 +22,6 @@
   z-index: 1000;
 }
 
-@media (max-width: 768px) {
-  .custom-modal-overlay {
-    display: none;
-  }
-}
-
 .custom-card-content {
   padding: 16px;
 }
@@ -34,23 +30,34 @@
   margin-bottom: 16px;
 }
 
-.custom-input {
+.info-table {
   width: 100%;
-  padding: 8px;
-  font-size: 16px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  border-collapse: collapse;
 }
 
-.custom-editable-text {
-  font-size: 16px;
-  cursor: pointer;
+.info-table tr {
+  border-bottom: 1px solid #eee; 
+}
+
+.info-table td {
+  padding: 8px 0; 
+}
+
+.info-key {
+  font-weight: bold; 
+  width: 40%; 
+  text-align: left; 
+}
+
+.info-value {
+  width: 60%; 
+  text-align: left; 
 }
 
 .custom-button-container {
   display: flex;
   justify-content: flex-end;
+  margin-top: 16px; 
 }
 
 .custom-button {
