@@ -105,6 +105,7 @@ const BookingCalendar = () => {
       });
 
       if (bookingToDelete) {
+        console.log("Booking to delete:", bookingToDelete);
         await deleteSaunaBooking(bookingToDelete.saunaBookingId, user.uid); 
       }
     }
