@@ -142,7 +142,7 @@ const LoginPage = () => {
                   required
                 />
                 <button type="submit" disabled={loginLoading}>
-                  {loginLoading ? 'Sending reset email...' : 'Send Reset Email'}
+                  {loginLoading ? <div className="login-loader"></div> : 'Send Reset Email'}
                 </button>
                 <p onClick={() => setIsForgotPassword(false)} className="toggle-link">Back to Login</p>
               </>
@@ -187,10 +187,10 @@ const LoginPage = () => {
                 <button type="submit" disabled={isSignUp ? signUpLoading : loginLoading}>
                   {isSignUp
                     ? signUpLoading
-                      ? 'Signing up...'
+                      ? <div className="login-loader"></div>  
                       : 'Sign Up'
                     : loginLoading
-                    ? 'Logging in...'
+                    ? <div className="login-loader"></div>  
                     : 'Login'}
                 </button>
                 {!isSignUp && (

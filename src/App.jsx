@@ -10,7 +10,7 @@ import Reports from "./components/dashboard/reports/reports";
 import Bookings from "./components/dashboard/bookings";
 import Info from "./components/dashboard/info/info";
 import Complaints from "./components/dashboard/complaints";
-import BookingCalendar from "./components/clientpage/sauna";
+import BookingCalendar from "./components/clientpage/sauna/sauna";
 import ClientComplaint from "./components/clientpage/clientcomplaint/clientcomplaint";
 import TvView from "./components/TV/tv";
 import useDataStore from "./services/data";

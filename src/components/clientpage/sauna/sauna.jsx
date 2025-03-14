@@ -3,8 +3,9 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./sauna.css";
-import useAuthStore from '../../../../Backend/src/store/authStore';
-import useSaunaBookingStore from '../../../../Backend/src/store/saunaBookingStore';
+import useAuthStore from '../../../../../Backend/src/store/authStore';
+import useSaunaBookingStore from '../../../../../Backend/src/store/saunaBookingStore';
+import Popup from "../../popup/popup";
 
 const localizer = momentLocalizer(moment);
 
@@ -32,7 +33,15 @@ const BookingCalendar = () => {
   const [slots, setSlots] = useState(generateSlots(moment().startOf("week")));
   const user = useAuthStore((state) => state.user);
   const { addSaunaBooking, deleteSaunaBooking, fetchSaunaBookings, saunaBookings } = useSaunaBookingStore();
-
+  const [popup, setPopup] = useState({
+      show: false,
+      title: "",
+      message: "",
+      status: "",
+    });
+  const closePopup = () => {
+    setPopup({ show: false, title: "", message: "", status: "" });
+  };
   useEffect(() => {
     fetchSaunaBookings();
   }, [fetchSaunaBookings]);
@@ -105,8 +114,15 @@ const BookingCalendar = () => {
       });
 
       if (bookingToDelete) {
-        console.log("Booking to delete:", bookingToDelete);
-        await deleteSaunaBooking(bookingToDelete.saunaBookingId, user.uid); 
+        console.log("Booking id:", bookingToDelete.saunaBookingId);
+        console.log("Booking uid:", bookingToDelete.client.uid);
+        const result = await deleteSaunaBooking(bookingToDelete.saunaBookingId, bookingToDelete.client.uid); 
+        setPopup({
+          show: true,
+          title: result.Title,
+          message: result.Message,
+          status: result.Status,
+        });
       }
     }
   };
@@ -147,6 +163,14 @@ const BookingCalendar = () => {
           }}
         />
       </div>
+      {popup.show && (
+        <Popup
+          title={popup.title}
+          message={popup.message}
+          status={popup.status}
+          onClose={closePopup}
+        />
+      )}
     </div>
   );
 };
