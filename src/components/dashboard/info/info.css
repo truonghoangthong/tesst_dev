@@ -67,27 +67,33 @@
   box-sizing: border-box;
 }
 
-.save-profile-button {
-  background-color: #ABDFFF;
-  color: black;
-  width: 100px;
-  height: 40px;
-  border-radius: 10px;
-  font-size: 16px;
-  margin-top: 20px;
-  justify-self: end;
+.save-profile-button,
+.my-booking-button,
+.logout-button {
+  background-color: #ABDFFF; 
+  color: black; 
+  width: auto; 
+  padding: 12px 20px;
+  border-radius: 10px; 
+  font-size: 16px; 
+  margin-top: 20px; 
+  margin-right: 15px; 
+  display: inline-block; 
+  justify-self: center; 
+  cursor: pointer; 
 }
 
-.change-password-button {
-  width: auto;
-  background-color: #FF6B6B;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  height: 40px;
+.save-profile-button:hover,
+.my-booking-button:hover {
+  background-color: #9ccce7; 
 }
 
-.change-password-button:hover {
+.logout-button {
+  background-color: #FF6B6B; 
+  color: white; 
+}
+
+.logout-button:hover {
   background-color: #FF3B3B;
 }
 
@@ -136,21 +142,53 @@ label {
   box-sizing: border-box;
 }
 
-.save-profile-button, .change-password-button {
-  grid-column: span 1;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-}
+@media (max-width: 767px) {
+  .info-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
 
-.save-profile-button {
-  background-color: #ABDFFF;
-  color: black;
+  .info-form, .change-password-form {
+    grid-template-columns: 1fr; 
+    width: 100%;
+  }
+
+  .change-password-form {
+    width: 100%; 
+  }
+
+  .save-profile-button, .change-password-button {
+    width: 100%; 
+    grid-column: span 1;
+  }
+
+  .save-profile-button {
+    justify-self: center; 
+    width: 100%; 
+  }
+
+  .change-password-button {
+    justify-self: center;
+    width: 100%; 
+  }
+
+  .save-profile-button,
+  .my-booking-button,
+  .logout-button {
+    width: 100%; 
+    margin-top: 10px; 
+  }
 }
 
 .change-password-button {
+  width: auto;
   background-color: #FF6B6B;
   color: white;
+  border: none;
+  border-radius: 10px;
+  height: 40px;
 }
 
 .change-password-button:hover {
@@ -162,6 +200,7 @@ label {
   flex-direction: column;
   margin-bottom: 15px;
 }
+
 .change-password-form label {
   font-size: 16px;
   font-weight: bold;
@@ -176,6 +215,7 @@ label {
   width: 100%;
   box-sizing: border-box;
 }
+
 .logout-button {
   background-color: #FF6B6B;
   color: white;

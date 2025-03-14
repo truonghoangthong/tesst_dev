@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import useAuthStore from "../../../../../Backend/src/store/authStore";
 import useAdminEditProfile from "../../../../../Backend/src/hooks/EditProfileHooks/useAdminEditProfile";
 import useClientEditProfile from "../../../../../Backend/src/hooks/EditProfileHooks/useClientEditProfile"; 
@@ -7,14 +8,17 @@ import usePreviewImage from "../../../../../Backend/src/hooks/EditProfileHooks/u
 import useChangePassword from "../../../../../Backend/src/hooks/AuthenicationHooks/useChangePassword";
 import Popup from "../../popup/popup";
 import useLogout from "../../../../../Backend/src/hooks/AuthenicationHooks/useLogout";
+import '../../loader.css';
 import './info.css';
 
 const Info = () => {
+  const navigate = useNavigate(); // Initialize navigate for routing
   const user = useAuthStore((state) => state.user);
+  const { handleLogout, loading } = useLogout(); // Use loading from useLogout hook
   const { editProfile: adminEditProfile, isUpdating } = useAdminEditProfile();
   const { editProfile: clientEditProfile } = useClientEditProfile(); 
   const [popup, setPopup] = useState({ show: false, title: "", message: "", status: "" });
-  const { selectedFile, error, setSelectedFile, handleImageChange } = usePreviewImage();
+  const { selectedFile, setSelectedFile, handleImageChange } = usePreviewImage();
   const [formData, setFormData] = useState({
     fullName: user.fullName || "",
     phoneNum: user.phoneNum || "",
@@ -25,7 +29,6 @@ const Info = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordPopup, setPasswordPopup] = useState({ show: false, title: "", message: "", status: "" });
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -116,15 +119,17 @@ const Info = () => {
     }, 10000);
   };
 
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
-    const response = await useLogout();
+  const Logout = async () => {
+    const response = await handleLogout();
     if (response.Status === "success") {
       navigate("/"); 
     } else {
       alert(response.Message);
-      setIsLoggingOut(false);
     }
+  };
+
+  const handleMyBooking = () => {
+    navigate("/client/rooms"); 
   };
 
   const closePopup = () => setPopup({ show: false, title: "", message: "", status: "" });
@@ -158,13 +163,22 @@ const Info = () => {
         </button>
 
         { !user.isAdmin && (
-          <button 
-            className="save-profile-button logout-button" 
-            onClick={handleLogout} 
-            disabled={isLoggingOut}
-          >
-            {isLoggingOut ? "Logging out..." : "Logout"}
-          </button>
+          <>
+            <button 
+              className="save-profile-button my-booking-button" 
+              onClick={handleMyBooking}
+            >
+              My Booking
+            </button>
+
+            <button 
+              className="save-profile-button logout-button" 
+              onClick={Logout} 
+              disabled={loading}  
+            >
+              {loading ? <div className="loader"></div> : "Logout"}  
+            </button>
+          </>
         )}
 
         <div className="info-content">

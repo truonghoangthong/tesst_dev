@@ -6,6 +6,7 @@ import useAuthStore from '../../../../Backend/src/store/authStore';
 import Popup from '../popup/popup';
 import { useNavigate } from 'react-router-dom';
 import useReclaimPassword from '../../../../Backend/src/hooks/AuthenicationHooks/useReclaimPassword';  
+import '../loader.css';
 
 const images = [
   '/img1.png',
@@ -142,7 +143,7 @@ const LoginPage = () => {
                   required
                 />
                 <button type="submit" disabled={loginLoading}>
-                  {loginLoading ? <div className="login-loader"></div> : 'Send Reset Email'}
+                  {loginLoading ? <div className="loader"></div> : 'Send Reset Email'}
                 </button>
                 <p onClick={() => setIsForgotPassword(false)} className="toggle-link">Back to Login</p>
               </>
@@ -187,10 +188,10 @@ const LoginPage = () => {
                 <button type="submit" disabled={isSignUp ? signUpLoading : loginLoading}>
                   {isSignUp
                     ? signUpLoading
-                      ? <div className="login-loader"></div>  
+                      ? <div className="loader"></div>  
                       : 'Sign Up'
                     : loginLoading
-                    ? <div className="login-loader"></div>  
+                    ? <div className="loader"></div>  
                     : 'Login'}
                 </button>
                 {!isSignUp && (
