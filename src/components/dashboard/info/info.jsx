@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 import useAuthStore from "../../../../../Backend/src/store/authStore";
 import useAdminEditProfile from "../../../../../Backend/src/hooks/EditProfileHooks/useAdminEditProfile";
 import useClientEditProfile from "../../../../../Backend/src/hooks/EditProfileHooks/useClientEditProfile"; 
@@ -12,9 +12,9 @@ import '../../loader.css';
 import './info.css';
 
 const Info = () => {
-  const navigate = useNavigate(); // Initialize navigate for routing
+  const navigate = useNavigate(); 
   const user = useAuthStore((state) => state.user);
-  const { handleLogout, loading } = useLogout(); // Use loading from useLogout hook
+  const { handleLogout, loading } = useLogout();
   const { editProfile: adminEditProfile, isUpdating } = useAdminEditProfile();
   const { editProfile: clientEditProfile } = useClientEditProfile(); 
   const [popup, setPopup] = useState({ show: false, title: "", message: "", status: "" });

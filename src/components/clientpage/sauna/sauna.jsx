@@ -115,8 +115,8 @@ const BookingCalendar = () => {
 
       if (bookingToDelete) {
         console.log("Booking id:", bookingToDelete.saunaBookingId);
-        console.log("Booking uid:", bookingToDelete.client.uid);
-        const result = await deleteSaunaBooking(bookingToDelete.saunaBookingId, bookingToDelete.client.uid); 
+        console.log("Booking uid:", user.uid);
+        const result = await deleteSaunaBooking(bookingToDelete.saunaBookingId, user.uid); 
         setPopup({
           show: true,
           title: result.Title,
