@@ -124,14 +124,13 @@ const useRoomBookingStore = create((set) => ({
         };
       }
 
-      await deleteDoc(roomBookingRef);
+      const docRef = doc(firestore, "roomBooking", roomBookingId);
+      await deleteDoc(docRef);
 
       set((state) => ({
-        roomBookings: [
-          state.roomBookings.filter(
-            (roomBooking) => roomBooking.bookingId !== roomBookingId
-          ),
-        ],
+        roomBookings: state.roomBookings.filter(
+          (roomBooking) => roomBooking.bookingId !== roomBookingId
+        ),
       }));
 
       return {

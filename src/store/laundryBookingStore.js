@@ -127,15 +127,14 @@ const useLaundryBookingStore = create((set) => ({
         };
       }
 
-      await deleteDoc(laundryBookingRef);
+      const docRef = doc(firestore, "laundryBooking", laundryBookingId);
+      await deleteDoc(docRef);
 
       set((state) => ({
-        laundryBookings: [
-          state.laundryBookings.filter(
-            (laundryBooking) =>
-              laundryBooking.laundryBookingId !== laundryBookingId
-          ),
-        ],
+        laundryBookings: state.laundryBookings.filter(
+          (laundryBooking) =>
+            laundryBooking.laundryBookingId !== laundryBookingId
+        ),
       }));
 
       return {

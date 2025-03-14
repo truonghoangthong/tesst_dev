@@ -122,14 +122,13 @@ const useSaunaBookingStore = create((set) => ({
         };
       }
 
-      await deleteDoc(saunaBookingRef);
+      const docRef = doc(firestore, "saunaBooking", saunaBookingId);
+      await deleteDoc(docRef);
 
       set((state) => ({
-        saunaBookings: [
-          state.saunaBookings.filter(
-            (saunaBooking) => saunaBooking.saunaBookingId !== saunaBookingId
-          ),
-        ],
+        saunaBookings: state.saunaBookings.filter(
+          (saunaBooking) => saunaBooking.saunaBookingId !== saunaBookingId
+        ),
       }));
 
       return {
