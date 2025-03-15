@@ -1,0 +1,79 @@
+.laundry-calendar .booking-calendar-container {
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.laundry-calendar .rbc-event {
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  border: none;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.laundry-calendar .rbc-event.washer-booked {
+  background-color: #abdfff; 
+  color: #000;
+}
+
+.laundry-calendar .rbc-event.dryer-booked {
+  background-color: #ffabab;
+  color: #000;
+}
+
+.laundry-calendar .rbc-header {
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.laundry-calendar .rbc-month-view {
+  min-height: 100vh;
+}
+
+.laundry-calendar .rbc-month-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.laundry-calendar .rbc-day {
+  height: 100px;
+  position: relative;
+}
+
+.laundry-calendar .rbc-event-label {
+  display: none;
+}
+
+.laundry-calendar .rbc-events-container {
+  margin: 0;
+}
+
+.laundry-calendar .rbc-time-header-gutter,
+.laundry-calendar .rbc-time-gutter {
+  width: 80px; 
+  min-width: 80px; 
+}
+
+.laundry-calendar .rbc-time-header-gutter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2f2f2;
+}
+
+.laundry-calendar .rbc-time-gutter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2f2f2; 
+}

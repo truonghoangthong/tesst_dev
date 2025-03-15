@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import "./sauna.css";
+import "./laundry.css";
 import useAuthStore from '../../../../../Backend/src/store/authStore';
-import useSaunaBookingStore from '../../../../../Backend/src/store/saunaBookingStore';
+import useLaundryBookingStore from '../../../../../Backend/src/store/laundryBookingStore';
 import Popup from "../../popup/popup";
 
 const localizer = momentLocalizer(moment);
@@ -17,48 +17,65 @@ const generateSlots = (startOfWeek) => {
   for (let day = startDate; day.isBefore(endDate); day.add(1, "day")) {
     for (let hour = 8; hour <= 21; hour++) {
       const slotTime = moment(day).set({ hour, minute: 0, second: 0 });
-      slots.push({
-        id: `${day.format("YYYY-MM-DD")}-${hour}`,
-        title: "available",
-        start: slotTime.toDate(),
-        end: moment(slotTime).add(1, "hour").toDate(),
-        status: "available",
-      });
+      slots.push(
+        {
+          id: `${day.format("YYYY-MM-DD")}-${hour}-washer`,
+          title: "available",
+          start: slotTime.toDate(),
+          end: moment(slotTime).add(1, "hour").toDate(),
+          status: "available",
+          type: "washer", 
+        },
+        {
+          id: `${day.format("YYYY-MM-DD")}-${hour}-dryer`,
+          title: "available",
+          start: slotTime.toDate(),
+          end: moment(slotTime).add(1, "hour").toDate(),
+          status: "available",
+          type: "dryer", 
+        }
+      );
     }
   }
   return slots;
 };
 
-const SaunaCalendar = () => {
+const LaundryCalendar = () => {
   const [slots, setSlots] = useState(generateSlots(moment().startOf("week")));
   const user = useAuthStore((state) => state.user);
-  const { addSaunaBooking, deleteSaunaBooking, fetchSaunaBookings, saunaBookings } = useSaunaBookingStore();
+  const { addLaundryBooking, deleteLaundryBooking, fetchLaundryBookings, laundryBookings } = useLaundryBookingStore();
   const [popup, setPopup] = useState({
       show: false,
       title: "",
       message: "",
       status: "",
     });
+
   const closePopup = () => {
     setPopup({ show: false, title: "", message: "", status: "" });
   };
+
   useEffect(() => {
-    fetchSaunaBookings();
-  }, [fetchSaunaBookings]);
+    fetchLaundryBookings();
+  }, [fetchLaundryBookings]);
 
   useEffect(() => {
     const updatedSlots = slots.map((slot) => {
-      const isBooked = saunaBookings.some((booking) => {
-
+      const isBooked = laundryBookings.some((booking) => {
         const startFrom = booking.bookingPeriod.startFrom;
         const endAt = booking.bookingPeriod.endAt;
 
         const startFromDate = startFrom?.toDate ? startFrom.toDate() : startFrom;
         const endAtDate = endAt?.toDate ? endAt.toDate() : endAt;
 
+        const facilities = booking.facilities || {};
+        const isWasherBooked = slot.type === "washer" && facilities.isWashingMachine;
+        const isDryerBooked = slot.type === "dryer" && facilities.isDryer;
+
         return (
           startFromDate.getTime() === slot.start.getTime() &&
-          endAtDate.getTime() === slot.end.getTime()
+          endAtDate.getTime() === slot.end.getTime() &&
+          (isWasherBooked || isDryerBooked)
         );
       });
 
@@ -69,7 +86,7 @@ const SaunaCalendar = () => {
       };
     });
     setSlots(updatedSlots);
-  }, [saunaBookings]);
+  }, [laundryBookings]);
 
   const handleSlotClick = async (event) => {
     const updatedSlots = slots.map((slot) => {
@@ -97,26 +114,35 @@ const SaunaCalendar = () => {
           fullName: user.fullName,
           uid: user.uid,
         },
+        facilities: {
+          isWashingMachine: clickedSlot.type === "washer",
+          isDryer: clickedSlot.type === "dryer",
+        },
       };
-      await addSaunaBooking(newBooking); 
+      await addLaundryBooking(newBooking); 
     } else {
-      const bookingToDelete = saunaBookings.find((booking) => {
+      const bookingToDelete = laundryBookings.find((booking) => {
         const startFrom = booking.bookingPeriod.startFrom;
         const endAt = booking.bookingPeriod.endAt;
 
         const startFromDate = startFrom?.toDate ? startFrom.toDate() : startFrom;
         const endAtDate = endAt?.toDate ? endAt.toDate() : endAt;
 
+        const facilities = booking.facilities || {};
+        const isWasherBooking = clickedSlot.type === "washer" && facilities.isWashingMachine;
+        const isDryerBooking = clickedSlot.type === "dryer" && facilities.isDryer;
+
         return (
           startFromDate.getTime() === clickedSlot.start.getTime() &&
-          endAtDate.getTime() === clickedSlot.end.getTime()
+          endAtDate.getTime() === clickedSlot.end.getTime() &&
+          (isWasherBooking || isDryerBooking)
         );
       });
 
       if (bookingToDelete) {
-        console.log("Booking id:", bookingToDelete.saunaBookingId);
+        console.log("Booking id:", bookingToDelete.laundryBookingId);
         console.log("Booking uid:", user.uid);
-        const result = await deleteSaunaBooking(bookingToDelete.saunaBookingId, user.uid); 
+        const result = await deleteLaundryBooking(bookingToDelete.laundryBookingId, user.uid); 
         setPopup({
           show: true,
           title: result.Title,
@@ -135,14 +161,14 @@ const SaunaCalendar = () => {
 
   const eventPropGetter = (event) => {
     return {
-      className: event.status === "booked" ? "sauna-booked" : "",
+      className: event.status === "booked" ? `${event.type}-booked` : "",
     };
   };
 
   const EventComponent = ({ event }) => <span>{event.title}</span>;
 
   return (
-    <div className="sauna-calendar">
+    <div className="laundry-calendar">
       <div className="booking-calendar-container">
         <Calendar
           localizer={localizer}
@@ -175,4 +201,4 @@ const SaunaCalendar = () => {
   );
 };
 
-export default SaunaCalendar;
+export default LaundryCalendar;

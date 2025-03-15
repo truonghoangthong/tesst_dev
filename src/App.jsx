@@ -10,10 +10,11 @@ import Reports from "./components/dashboard/reports/reports";
 import Bookings from "./components/dashboard/bookings";
 import Info from "./components/dashboard/info/info";
 import Complaints from "./components/dashboard/complaints";
-import BookingCalendar from "./components/clientpage/sauna/sauna";
+import SaunaCalendar from "./components/clientpage/sauna/sauna";
 import ClientComplaint from "./components/clientpage/clientcomplaint/clientcomplaint";
 import TvView from "./components/TV/tv";
 import RoomBooking from "./components/clientpage/roomBooking/roomBooking";
+import LaundryCalendar from "./components/clientpage/laundry/laundry";
 import useDataStore from "./services/data";
 import useAuthStore from "../../Backend/src/store/authStore";
 
@@ -54,8 +55,8 @@ const ProtectedRoutes = ({ user }) => {
             </>
           ) : (
             <>
-              <Route path="/client/sauna" element={<BookingCalendar />} />
-              <Route path="/client/laundry" element={<span>Laundry</span>} />
+              <Route path="/client/sauna" element={<SaunaCalendar />} />
+              <Route path="/client/laundry" element={<LaundryCalendar/>} />
               <Route path="/client/info" element={<Info />} />
               <Route path="/client/complaint" element={<ClientComplaint />} />
               <Route path="/client/rooms" element={<RoomBooking/>} />
