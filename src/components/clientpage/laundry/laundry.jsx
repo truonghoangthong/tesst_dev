@@ -24,7 +24,7 @@ const generateSlots = (startOfWeek) => {
           start: slotTime.toDate(),
           end: moment(slotTime).add(1, "hour").toDate(),
           status: "available",
-          type: "washer", 
+          type: "washer",
         },
         {
           id: `${day.format("YYYY-MM-DD")}-${hour}-dryer`,
@@ -32,7 +32,7 @@ const generateSlots = (startOfWeek) => {
           start: slotTime.toDate(),
           end: moment(slotTime).add(1, "hour").toDate(),
           status: "available",
-          type: "dryer", 
+          type: "dryer",
         }
       );
     }
@@ -45,11 +45,11 @@ const LaundryCalendar = () => {
   const user = useAuthStore((state) => state.user);
   const { addLaundryBooking, deleteLaundryBooking, fetchLaundryBookings, laundryBookings } = useLaundryBookingStore();
   const [popup, setPopup] = useState({
-      show: false,
-      title: "",
-      message: "",
-      status: "",
-    });
+    show: false,
+    title: "",
+    message: "",
+    status: "",
+  });
 
   const closePopup = () => {
     setPopup({ show: false, title: "", message: "", status: "" });
@@ -61,7 +61,7 @@ const LaundryCalendar = () => {
 
   useEffect(() => {
     const updatedSlots = slots.map((slot) => {
-      const isBooked = laundryBookings.some((booking) => {
+      const booking = laundryBookings.find((booking) => {
         const startFrom = booking.bookingPeriod.startFrom;
         const endAt = booking.bookingPeriod.endAt;
 
@@ -79,23 +79,40 @@ const LaundryCalendar = () => {
         );
       });
 
-      return {
-        ...slot,
-        status: isBooked ? "booked" : "available",
-        title: isBooked ? "booked" : "available",
-      };
+      if (booking) {
+        return {
+          ...slot,
+          status: "booked",
+          title: booking.client.uid === user.uid ? "my-reservation" : "booked",
+        };
+      } else {
+        return slot;
+      }
     });
     setSlots(updatedSlots);
-  }, [laundryBookings]);
+  }, [laundryBookings, user.uid]);
 
   const handleSlotClick = async (event) => {
+    const currentTime = new Date();
+    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000);
+
+    if (event.start < oneHourBefore) {
+      setPopup({
+        show: true,
+        title: "Error",
+        message: "You cannot modify a slot that is within 1 hour of the current time.",
+        status: "error",
+      });
+      return;
+    }
+
     const updatedSlots = slots.map((slot) => {
       if (slot.id === event.id) {
         const newStatus = slot.status === "available" ? "booked" : "available";
         return {
           ...slot,
           status: newStatus,
-          title: newStatus,
+          title: newStatus === "booked" ? "my-reservation" : "available",
         };
       }
       return slot;
@@ -119,7 +136,7 @@ const LaundryCalendar = () => {
           isDryer: clickedSlot.type === "dryer",
         },
       };
-      await addLaundryBooking(newBooking); 
+      await addLaundryBooking(newBooking);
     } else {
       const bookingToDelete = laundryBookings.find((booking) => {
         const startFrom = booking.bookingPeriod.startFrom;
@@ -140,9 +157,7 @@ const LaundryCalendar = () => {
       });
 
       if (bookingToDelete) {
-        console.log("Booking id:", bookingToDelete.laundryBookingId);
-        console.log("Booking uid:", user.uid);
-        const result = await deleteLaundryBooking(bookingToDelete.laundryBookingId, user.uid); 
+        const result = await deleteLaundryBooking(bookingToDelete.laundryBookingId, user.uid);
         setPopup({
           show: true,
           title: result.Title,
@@ -156,16 +171,79 @@ const LaundryCalendar = () => {
   const handleNavigate = (newDate) => {
     const startOfWeek = moment(newDate).startOf("week");
     const newSlots = generateSlots(startOfWeek);
-    setSlots(newSlots);
+
+    const updatedSlots = newSlots.map((slot) => {
+      const booking = laundryBookings.find((booking) => {
+        const startFrom = booking.bookingPeriod.startFrom;
+        const endAt = booking.bookingPeriod.endAt;
+
+        const startFromDate = startFrom?.toDate ? startFrom.toDate() : startFrom;
+        const endAtDate = endAt?.toDate ? endAt.toDate() : endAt;
+
+        const facilities = booking.facilities || {};
+        const isWasherBooked = slot.type === "washer" && facilities.isWashingMachine;
+        const isDryerBooked = slot.type === "dryer" && facilities.isDryer;
+
+        return (
+          startFromDate.getTime() === slot.start.getTime() &&
+          endAtDate.getTime() === slot.end.getTime() &&
+          (isWasherBooked || isDryerBooked)
+        );
+      });
+
+      if (booking) {
+        return {
+          ...slot,
+          status: "booked",
+          title: booking.client.uid === user.uid ? "my-reservation" : "booked",
+        };
+      } else {
+        return slot;
+      }
+    });
+
+    setSlots(updatedSlots);
   };
 
   const eventPropGetter = (event) => {
-    return {
-      className: event.status === "booked" ? `${event.type}-booked` : "",
-    };
+    const currentTime = new Date();
+    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000);
+    const isWithinOneHour = event.start < oneHourBefore;
+
+    if (isWithinOneHour) {
+      return {
+        className: "laundry-past",
+      };
+    } else if (event.title === "my-reservation") {
+      return {
+        className: "laundry-my-reservation",
+      };
+    } else if (event.status === "booked") {
+      return {
+        className: "laundry-booked",
+      };
+    } else {
+      return {
+        className: "laundry-available",
+      };
+    }
   };
 
-  const EventComponent = ({ event }) => <span>{event.title}</span>;
+  const EventComponent = ({ event }) => {
+    const currentTime = new Date();
+    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000);
+    const isWithinOneHour = event.start < oneHourBefore;
+
+    if (isWithinOneHour) {
+      return <span>Past</span>;
+    } else if (event.title === "my-reservation") {
+      return <span>Cancel</span>;
+    } else if (event.status === "booked") {
+      return <span>Booked</span>;
+    } else {
+      return <span>Available</span>;
+    }
+  };
 
   return (
     <div className="laundry-calendar">

@@ -6,7 +6,6 @@
 }
 
 .laundry-calendar .rbc-event {
-  background-color: #f2f2f2;
   border-radius: 10px;
   border: none;
   color: #333;
@@ -18,16 +17,33 @@
   cursor: pointer;
   padding: 5px;
   box-sizing: border-box;
+  background-color: #f2f2f2;
+  margin-bottom: 10px; 
 }
 
-.laundry-calendar .rbc-event.washer-booked {
-  background-color: #abdfff; 
-  color: #000;
+.laundry-calendar .rbc-event.laundry-past {
+  background-color: transparent;
+  color: #999;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
-.laundry-calendar .rbc-event.dryer-booked {
-  background-color: #ffabab;
+.laundry-calendar .rbc-event.laundry-my-reservation {
+  background-color: #ffcccc;
   color: #000;
+  border: 1px solid #ffcccc;
+}
+
+.laundry-calendar .rbc-event.laundry-booked {
+  background-color: #abdfff;
+  color: #000;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.laundry-calendar .rbc-event.laundry-available {
+  background-color: #f2f2f2;
+  color: #333;
 }
 
 .laundry-calendar .rbc-header {
@@ -60,8 +76,8 @@
 
 .laundry-calendar .rbc-time-header-gutter,
 .laundry-calendar .rbc-time-gutter {
-  width: 80px; 
-  min-width: 80px; 
+  width: 80px;
+  min-width: 80px;
 }
 
 .laundry-calendar .rbc-time-header-gutter {
@@ -75,5 +91,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f2f2f2; 
+  background-color: #f2f2f2;
+}
+
+.laundry-calendar .rbc-day + .rbc-day {
+  margin-left: 15px;
 }
