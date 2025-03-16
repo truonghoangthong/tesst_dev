@@ -146,7 +146,33 @@ const SaunaCalendar = () => {
   const handleNavigate = (newDate) => {
     const startOfWeek = moment(newDate).startOf("week");
     const newSlots = generateSlots(startOfWeek);
-    setSlots(newSlots);
+
+    const updatedSlots = newSlots.map((slot) => {
+      const booking = saunaBookings.find((booking) => {
+        const startFrom = booking.bookingPeriod.startFrom;
+        const endAt = booking.bookingPeriod.endAt;
+
+        const startFromDate = startFrom?.toDate ? startFrom.toDate() : startFrom;
+        const endAtDate = endAt?.toDate ? endAt.toDate() : endAt;
+
+        return (
+          startFromDate.getTime() === slot.start.getTime() &&
+          endAtDate.getTime() === slot.end.getTime()
+        );
+      });
+
+      if (booking) {
+        return {
+          ...slot,
+          status: "booked",
+          title: booking.client.uid === user.uid ? "my-reservation" : "booked",
+        };
+      } else {
+        return slot;
+      }
+    });
+
+    setSlots(updatedSlots);
   };
 
   const eventPropGetter = (event) => {
@@ -175,7 +201,7 @@ const SaunaCalendar = () => {
 
   const EventComponent = ({ event }) => {
     const currentTime = new Date();
-    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); // Tính thời gian 1 tiếng trước
+    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); //1hr before 
     const isWithinOneHour = event.start < oneHourBefore;
 
     if (isWithinOneHour) {
