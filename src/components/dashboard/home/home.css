@@ -12,22 +12,22 @@
 
 .db-box-list {
   display: flex;
-  justify-content: space-between; /* Các db-box sẽ trải đều chiều rộng */
+  justify-content: space-between;
   align-items: center;
-  flex-wrap: nowrap; /* Đảm bảo các db-box không xuống dòng */
+  flex-wrap: nowrap; 
   position: relative;
   width: 100%;
-  gap: 10px; /* Khoảng cách giữa các db-box */
+  gap: 20px; 
 }
 
 .db-box {
   background-color: #F2F2F2;
   border-radius: 10px;
-  flex: 1; /* Mỗi db-box sẽ chiếm một phần không gian đều nhau */
-  height: 150px; /* Giữ nguyên hoặc điều chỉnh tùy ý */
+  flex: 1; 
+  height: 125px;
   display: flex;
   justify-content: center;
-  align-items: center; /* Căn giữa nội dung theo chiều dọc */
+  align-items: center; 
   padding: 10px;
   box-sizing: border-box;
   transition: transform 0.1s ease;
@@ -52,8 +52,10 @@
   padding: 10px 20px; 
   border: none;
   background-color: #f0f0f0; 
+  color: black; 
   font-size: 14px; 
   border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease; 
 }
 
 .calendar-toggle-btn.active {
@@ -88,11 +90,11 @@
   }
 
   .db-box-list {
-    flex-wrap: wrap; /* Cho phép các db-box xuống dòng trên màn hình nhỏ */
+    flex-wrap: wrap; 
   }
 
   .db-box {
-    flex: 1 1 calc(50% - 10px); /* Hiển thị 2 db-box trên mỗi hàng */
+    flex: 1 1 calc(50% - 10px); 
     margin-bottom: 15px;
   }
 

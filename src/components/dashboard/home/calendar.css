@@ -1,0 +1,58 @@
+.calendar-container {
+  padding: 5px;
+}
+
+.calendar-title {
+  text-align: center;
+  margin: 0 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.calendar-event {
+  border-radius: 5px;
+  opacity: 0.8;
+  color: white;
+  border: 0px;
+  display: block;
+}
+
+.calendar-event-room-a {
+  background-color: #ff4d4d;
+}
+
+.calendar-event-room-b {
+  background-color: #4d79ff;
+}
+
+.calendar-event-room-c {
+  background-color: #8a2be2; 
+}
+
+.calendar-event-room-d {
+  background-color: #ff69b4; 
+}
+
+.calendar-event-sauna {
+  background-color: #FA9A25; 
+}
+
+.calendar-event-laundry {
+  background-color: #66cc66; 
+}
+
+.calendar-toolbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.calendar-toolbar-label {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}

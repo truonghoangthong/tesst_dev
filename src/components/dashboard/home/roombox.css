@@ -1,11 +1,11 @@
 .db-box {
   background-color: #F2F2F2;
   border-radius: 10px;
-  width: 100%; /* Đảm bảo db-box chiếm hết không gian của container cha */
-  height: 150px;
+  width: 100%;
+  height: 120px;
   display: flex;
   justify-content: center;
-  align-items: center; /* Căn giữa nội dung theo chiều dọc */
+  align-items: center; 
   padding: 10px;
   box-sizing: border-box;
   transition: transform 0.1s ease;
@@ -15,9 +15,11 @@
   flex: 1;
   display: flex;
   justify-content: flex-start;
+  align-items: flex-start; 
   font-size: 32px;
   font-weight: bold;
-  padding-left: 5px;
+  padding-left: 10px; 
+  padding-top: 10px; 
   transition: transform 0.1s ease;
 }
 
@@ -26,6 +28,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding: 10px;
   padding-bottom: 5px;
   transition: transform 0.1s ease;
 }
@@ -42,6 +45,7 @@
 .db-box-row {
   display: flex;
   align-items: center;
+  gap: 15px;
 }
 
 .db-box-row span {
@@ -65,7 +69,6 @@
   color: #3776D4;
 }
 
-/* LED control styling */
 .led-control {
   display: flex;
   align-items: center;
@@ -73,6 +76,7 @@
   margin-top: 10px;
   padding-top: 5px;
   border-top: 1px solid #ddd;
+  gap: 10px; 
 }
 
 .tab-switch {
@@ -99,11 +103,9 @@
 }
 
 .led-status {
-  margin-left: 10px;
   font-weight: bold;
 }
 
-/* Responsive Design */
 @media (max-width: 767px) {
   .db-box {
     width: 70%;
