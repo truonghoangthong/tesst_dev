@@ -7,13 +7,14 @@ const HumidTempChart = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log(temp.length);
     if (humid.length > 0 && temp.length > 0 && weatherData.length > 0) {  
       setLoading(false);
     }
   }, [humid, temp, weatherData]); 
 
   if (loading) {
-    return <div>Loading chart data...</div>;
+    return <div>Loading...</div>;
   }
 
   // Filter data by specific hours (e.g., 1h, 2h, etc.)

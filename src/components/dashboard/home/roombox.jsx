@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Icon } from "@iconify/react";
-import './roombox.css';  
+import './roombox.css';
 
-const DashboardBox = ({ status, humid, temp, guest, additionalStyles = {} }) => {
+const DashboardBox = ({ humid, temp, additionalStyles = {} }) => {
+  const [ledOn, setLedOn] = useState(false);
+
+  const toggleLed = (isOn) => {
+    setLedOn(isOn);
+  };
+
   const statusStyles = {
     available: 'status-available',
     occupied: 'status-occupied',
@@ -17,16 +23,29 @@ const DashboardBox = ({ status, humid, temp, guest, additionalStyles = {} }) => 
       </div>
       <div className="db-box-right">
         <div className="db-box-row">
-          <span>Status:</span>
-          <span className={statusStyles[status] || 'status-default'}>{status}</span>
-        </div>
-        <div className="db-box-row">
           <Icon icon="material-symbols:humidity-percentage-rounded" className="db-box-icon" />
           <span>{humid !== null ? `${humid}%` : "--"}</span>
           <Icon icon="material-symbols:thermometer" className="db-box-icon" />
           <span>{temp !== null ? `${temp}°C` : "--"}</span>
         </div>
-        <span>Guest: {guest || '--'}</span>
+
+        <div className="led-control">
+          <div className="tab-switch">
+            <button
+              className={ledOn ? '' : 'active'}
+              onClick={() => toggleLed(false)}
+            >
+              OFF
+            </button>
+            <button
+              className={ledOn ? 'active' : ''}
+              onClick={() => toggleLed(true)}
+            >
+              ON
+            </button>
+          </div>
+          <span className="led-status">{ledOn ? 'LED ON' : 'LED OFF'}</span>
+        </div>
       </div>
     </div>
   );

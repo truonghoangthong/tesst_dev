@@ -9,29 +9,35 @@
   overflow: auto;
   z-index: 1;
 }
+
 .db-box-list {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between; /* Các db-box sẽ trải đều chiều rộng */
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Đảm bảo các db-box không xuống dòng */
   position: relative;
   width: 100%;
+  gap: 10px; /* Khoảng cách giữa các db-box */
 }
+
 .db-box {
   background-color: #F2F2F2;
-  border-radius:10px;
-  width:220px;
-  height: 100px;
+  border-radius: 10px;
+  flex: 1; /* Mỗi db-box sẽ chiếm một phần không gian đều nhau */
+  height: 150px; /* Giữ nguyên hoặc điều chỉnh tùy ý */
   display: flex;
   justify-content: center;
-  margin: 5px;
-  padding: 5px;
+  align-items: center; /* Căn giữa nội dung theo chiều dọc */
+  padding: 10px;
   box-sizing: border-box;
+  transition: transform 0.1s ease;
 }
+
 .db-box-info {
   flex-direction: column;
   display: none;
 }
+
 .calendar-toggle-buttons {
   margin-top: 10px;
   display: flex;
@@ -58,12 +64,15 @@
 .status-available {
   color: #00A75A;
 }
+
 .status-occupied {
   color: #9E1212;
 }
+
 .status-cleaning {
   color: #EA8B1E;
 }
+
 .status-booked {
   color: #3776D4;
 }
@@ -73,27 +82,29 @@
     left: 0;
     width: 100%;
   }
+
   .db-box-info {
     display: none;
   }
+
   .db-box-list {
-    flex-direction: column;
-    justify-content: center;
-    align-items: stretch;
-    order: 2; 
+    flex-wrap: wrap; /* Cho phép các db-box xuống dòng trên màn hình nhỏ */
   }
+
   .db-box {
-    width: 70%;
+    flex: 1 1 calc(50% - 10px); /* Hiển thị 2 db-box trên mỗi hàng */
     margin-bottom: 15px;
   }
+
   .db-box-left {
     font-size: 24px;
     transform: scale(1);
   }
+
   .db-box-right {
     transform: scale(1);
   }
-  
+
   .calendar-container {
     margin-top: 20px;
     order: 1; 
@@ -102,6 +113,7 @@
   .calendar-toggle-buttons {
     align-items: center;
   }
+
   .calendar-toggle-btn {
     padding: 8px 15px;
     font-size: 12px;
