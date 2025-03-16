@@ -1,5 +1,5 @@
 import React from "react";
-import Chart from "../home/chart";
+import HumidTempChart from "./chart";
 import { Icon } from "@iconify/react";
 import './reports.css';
 import '../../variables.css';
@@ -12,7 +12,7 @@ const Reports = () => {
         <Icon icon="material-symbols:chevron-right-rounded" width="24" height="24" />
         <span>Report</span>
       </div>
-      <Chart />
+      <HumidTempChart />
     </div>
   )
 }

@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import useDataStore from '../../../services/data';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import Skeleton from '@mui/material/Skeleton'; 
 
 const HumidTempChart = () => {
   const { humid, temp, weatherData } = useDataStore((state) => state.data);  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log(temp.length);
     if (humid.length > 0 && temp.length > 0 && weatherData.length > 0) {  
       setLoading(false);
     }
   }, [humid, temp, weatherData]); 
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <h3 style={{ textAlign: 'center', marginBottom: '20px' }}>
+          Humidity and Temperature Comparison (Indoor vs Outdoor)
+        </h3>
+        <Skeleton variant="rectangular" width="100%" height={400} animation="wave" />
+      </div>
+    );
   }
 
-  // Filter data by specific hours (e.g., 1h, 2h, etc.)
   const filterDataByHour = (hour) => {
     return humid.map((item, index) => {
       const itemTime = new Date(item.time);
