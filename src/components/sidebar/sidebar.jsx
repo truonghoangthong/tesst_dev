@@ -51,7 +51,9 @@ const Sidebar = ({ isAdmin, visible, closeSidebar }) => {
         </Link>
       ))}
 
-      {showLogoutPopup && <LogoutPopup />}
+      {showLogoutPopup && (
+        <LogoutPopup onClose={() => setShowLogoutPopup(false)} />
+      )}
     </div>
   );
 };

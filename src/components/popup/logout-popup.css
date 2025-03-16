@@ -1,24 +1,73 @@
 .logout-bg {
-  position: fixed; 
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); 
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
+  background-color: rgba(0, 0, 0, 0.6); /* Làm nền tối hơn */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Đảm bảo popup hiển thị trên tất cả các phần tử khác */
 }
 
 .logout-popup {
   background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  text-align: center; 
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ mềm hơn */
+  text-align: center;
+  max-width: 400px; /* Giới hạn chiều rộng của popup */
+  width: 90%; /* Đảm bảo popup không quá rộng trên màn hình nhỏ */
+}
+
+.logout-popup span {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333; /* Màu chữ tối hơn */
+  margin-bottom: 20px;
+  display: block;
+}
+
+.logout-popup p {
+  font-size: 14px;
+  color: #666; /* Màu chữ nhạt hơn cho thông báo loading/error */
+  margin: 10px 0;
 }
 
 .logout-popup button {
-  margin: 5px 8px 8px 0;
-  padding: 10px;
+  margin: 10px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-popup button:hover {
+  transform: translateY(-2px); /* Hiệu ứng nổi lên khi hover */
+}
+
+.logout-popup button:active {
+  transform: translateY(0); /* Hiệu ứng nhấn xuống khi click */
+}
+
+.logout-popup button:first-of-type {
+  background-color: #f0f0f0; /* Màu nền cho nút Cancel */
+  color: #333;
+}
+
+.logout-popup button:first-of-type:hover {
+  background-color: #e0e0e0; /* Màu hover cho nút Cancel */
+}
+
+.logout-popup button:last-of-type {
+  background-color: #ff4d4d; /* Màu nền cho nút Logout */
+  color: white;
+}
+
+.logout-popup button:last-of-type:hover {
+  background-color: #e60000; /* Màu hover cho nút Logout */
 }
