@@ -10,21 +10,12 @@ const Complaints = () => {
   const users = userStore((state) => state.users);
   const { complaints, setComplaints } = complaintsStore(); 
 
-  const statusOptions = ["Resolved", "Pending", "Cleaning"];
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
   const toggleDropdown = (index) => {
     setDropdownOpen(dropdownOpen === index ? null : index);
-  };
-
-  const updateStatus = (index, newStatus) => {
-    const updatedComplaints = complaints.map((complaint, i) =>
-      i === index ? { ...complaint, status: newStatus } : complaint
-    );
-    setComplaints(updatedComplaints);
-    setDropdownOpen(null);
   };
 
   const complaintsWithGuests = useMemo(() => {
@@ -85,7 +76,6 @@ const Complaints = () => {
             <th>Guest</th>
             <th>Date Submitted</th>
             <th>Details</th>
-            <th>Status</th>
             <th>Actions</th>
             <th>Note</th>
           </tr>
@@ -104,30 +94,6 @@ const Complaints = () => {
                 <span variant="link" onClick={() => handleDetailsClick(complaint.details)}>
                   {complaint.details}
                 </span>
-              </td>
-              <td>
-                <div className="dropdown-container">
-                  <div
-                    className={`status ${complaint.status.toLowerCase().replace(/\s+/g, "-")}`}
-                    onClick={() => toggleDropdown(index)}
-                  >
-                    {complaint.status}
-                    <Icon icon="material-symbols:arrow-drop-down" />
-                  </div>
-                  {dropdownOpen === index && (
-                    <div className="dropdown">
-                      {statusOptions.map((statusOption) => (
-                        <div
-                          key={statusOption}
-                          className="dropdown-item"
-                          onClick={() => updateStatus(index, statusOption)}
-                        >
-                          {statusOption}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
               </td>
               <td>
                 <span variant="link" onClick={() => handleActionClick(complaint.action)}>

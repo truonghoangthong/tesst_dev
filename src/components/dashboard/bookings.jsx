@@ -5,6 +5,7 @@ import "./../variables.css";
 import { bookingStore } from "../../state/bookingStore.js"; 
 import { userStore } from "../../state/user.js";
 import CardModal from "../card/cardModel.jsx";
+
 const Bookings = ({ type = "sauna" }) => {
   const users = userStore((state) => state.users);
   const { rooms, sauna, laundry, setRoomsBookings, setSaunaBookings, setLaundryBookings } = bookingStore();
@@ -16,7 +17,6 @@ const Bookings = ({ type = "sauna" }) => {
       ? setSaunaBookings
       : setLaundryBookings;
 
-  const statusOptions = ["Booked", "Pending confirmation", "Cleaning"];
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [modalContent, setModalContent] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -24,14 +24,6 @@ const Bookings = ({ type = "sauna" }) => {
 
   const toggleDropdown = (index) => {
     setDropdownOpen(dropdownOpen === index ? null : index);
-  };
-
-  const updateStatus = (index, newStatus) => {
-    const updatedBookings = bookings.map((booking, i) =>
-      i === index ? { ...booking, status: newStatus } : booking
-    );
-    setBookings(updatedBookings);
-    setDropdownOpen(null);
   };
 
   const bookingsWithGuests = useMemo(() => {
@@ -77,9 +69,9 @@ const Bookings = ({ type = "sauna" }) => {
     switch (activeType) {
       case "sauna":
       case "laundry":
-        return ["Booking No.", "Guest", "From", "To", "Status", "Actions", "Note"];
+        return ["Booking No.", "Guest", "From", "To", "Actions", "Note"];
       default:
-        return ["Booking No.", "Guest", "Check-in", "Check-out", "Status", "Actions", "Note"];
+        return ["Booking No.", "Guest", "Check-in", "Check-out", "Actions", "Note"];
     }
   };
 
@@ -136,30 +128,6 @@ const Bookings = ({ type = "sauna" }) => {
               </td>
               <td>{booking.from}</td>
               <td>{booking.to}</td>
-              <td>
-                <div className="dropdown-container">
-                  <div
-                    className={`status ${booking.status.toLowerCase().replace(/\s+/g, "-")}`}
-                    onClick={() => toggleDropdown(index)}
-                  >
-                    {booking.status}
-                    <Icon icon="material-symbols:arrow-drop-down" />
-                  </div>
-                  {dropdownOpen === index && (
-                    <div className="dropdown">
-                      {statusOptions.map((statusOption) => (
-                        <div
-                          key={statusOption}
-                          className="dropdown-item"
-                          onClick={() => updateStatus(index, statusOption)}
-                        >
-                          {statusOption}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </td>
               <td>
                 <span variant="link" onClick={() => handleActionClick(booking.action)}>
                   {booking.action}
