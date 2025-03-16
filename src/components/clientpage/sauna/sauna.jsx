@@ -34,22 +34,23 @@ const SaunaCalendar = () => {
   const user = useAuthStore((state) => state.user);
   const { addSaunaBooking, deleteSaunaBooking, fetchSaunaBookings, saunaBookings } = useSaunaBookingStore();
   const [popup, setPopup] = useState({
-      show: false,
-      title: "",
-      message: "",
-      status: "",
-    });
+    show: false,
+    title: "",
+    message: "",
+    status: "",
+  });
+
   const closePopup = () => {
     setPopup({ show: false, title: "", message: "", status: "" });
   };
+
   useEffect(() => {
     fetchSaunaBookings();
   }, [fetchSaunaBookings]);
 
   useEffect(() => {
     const updatedSlots = slots.map((slot) => {
-      const isBooked = saunaBookings.some((booking) => {
-
+      const booking = saunaBookings.find((booking) => {
         const startFrom = booking.bookingPeriod.startFrom;
         const endAt = booking.bookingPeriod.endAt;
 
@@ -62,23 +63,40 @@ const SaunaCalendar = () => {
         );
       });
 
-      return {
-        ...slot,
-        status: isBooked ? "booked" : "available",
-        title: isBooked ? "booked" : "available",
-      };
+      if (booking) {
+        return {
+          ...slot,
+          status: "booked",
+          title: booking.client.uid === user.uid ? "my-reservation" : "booked",
+        };
+      } else {
+        return slot;
+      }
     });
     setSlots(updatedSlots);
-  }, [saunaBookings]);
+  }, [saunaBookings, user.uid]);
 
   const handleSlotClick = async (event) => {
+    const currentTime = new Date(); 
+    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); 
+
+    if (event.start < oneHourBefore) {
+      setPopup({
+        show: true,
+        title: "Error",
+        message: "You cannot modify a slot that is within 1 hour of the current time.",
+        status: "error",
+      });
+      return; 
+    }
+
     const updatedSlots = slots.map((slot) => {
       if (slot.id === event.id) {
         const newStatus = slot.status === "available" ? "booked" : "available";
         return {
           ...slot,
           status: newStatus,
-          title: newStatus,
+          title: newStatus === "booked" ? "my-reservation" : "available",
         };
       }
       return slot;
@@ -98,7 +116,7 @@ const SaunaCalendar = () => {
           uid: user.uid,
         },
       };
-      await addSaunaBooking(newBooking); 
+      await addSaunaBooking(newBooking);
     } else {
       const bookingToDelete = saunaBookings.find((booking) => {
         const startFrom = booking.bookingPeriod.startFrom;
@@ -114,9 +132,7 @@ const SaunaCalendar = () => {
       });
 
       if (bookingToDelete) {
-        console.log("Booking id:", bookingToDelete.saunaBookingId);
-        console.log("Booking uid:", user.uid);
-        const result = await deleteSaunaBooking(bookingToDelete.saunaBookingId, user.uid); 
+        const result = await deleteSaunaBooking(bookingToDelete.saunaBookingId, user.uid);
         setPopup({
           show: true,
           title: result.Title,
@@ -134,12 +150,44 @@ const SaunaCalendar = () => {
   };
 
   const eventPropGetter = (event) => {
-    return {
-      className: event.status === "booked" ? "sauna-booked" : "",
-    };
+    const currentTime = new Date();
+    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); 
+    const isWithinOneHour = event.start < oneHourBefore;
+
+    if (isWithinOneHour) {
+      return {
+        className: "sauna-past",
+      };
+    } else if (event.title === "my-reservation") {
+      return {
+        className: "sauna-my-reservation",
+      };
+    } else if (event.status === "booked") {
+      return {
+        className: "sauna-booked",
+      };
+    } else {
+      return {
+        className: "sauna-available",
+      };
+    }
   };
 
-  const EventComponent = ({ event }) => <span>{event.title}</span>;
+  const EventComponent = ({ event }) => {
+    const currentTime = new Date();
+    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); // Tính thời gian 1 tiếng trước
+    const isWithinOneHour = event.start < oneHourBefore;
+
+    if (isWithinOneHour) {
+      return <span>Past</span>;
+    } else if (event.title === "my-reservation") {
+      return <span>Cancel</span>;
+    } else if (event.status === "booked") {
+      return <span>Booked</span>;
+    } else {
+      return <span>Available</span>;
+    }
+  };
 
   return (
     <div className="sauna-calendar">

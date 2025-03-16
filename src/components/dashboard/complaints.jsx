@@ -1,51 +1,18 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import "./rooms/rooms.css";
 import "./../variables.css";
-import { complaintsStore } from "../../state/complaintStore.js"; 
-import { userStore } from "../../state/user.js";
+import useFeedbackStore from "../../../../Backend/src/store/feedbackStore.js";
 import CardModal from "../card/cardModel.jsx";
 
 const Complaints = () => {
-  const users = userStore((state) => state.users);
-  const { complaints, setComplaints } = complaintsStore(); 
-
-  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const { feedbacks, fetchFeedbacks } = useFeedbackStore(); 
   const [modalContent, setModalContent] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const toggleDropdown = (index) => {
-    setDropdownOpen(dropdownOpen === index ? null : index);
-  };
-
-  const complaintsWithGuests = useMemo(() => {
-    return complaints.map((complaint) => {
-      const guest = users.find((user) => user.id === complaint.guestId);
-      return { ...complaint, guest };
-    });
-  }, [complaints, users]);
-
-  const handleGuestClick = (guest) => {
-    setModalContent(
-      <table className="info-table">
-        <tbody>
-          <tr>
-            <th>Name</th>
-            <td>{guest.name}</td>
-          </tr>
-          <tr>
-            <th>Email</th>
-            <td>{guest.email}</td>
-          </tr>
-          <tr>
-            <th>Phone</th>
-            <td>{guest.phone}</td>
-          </tr>
-        </tbody>
-      </table>
-    );
-    setModalOpen(true);
-  };
+  useEffect(() => {
+    fetchFeedbacks();
+  }, [fetchFeedbacks]);
 
   const handleDetailsClick = (details) => {
     setModalContent(`Details: ${details}`);
@@ -81,28 +48,28 @@ const Complaints = () => {
           </tr>
         </thead>
         <tbody>
-          {complaintsWithGuests.map((complaint, index) => (
-            <tr key={complaint.id}>
-              <td>{complaint.id}</td>
+          {feedbacks.map((feedback, index) => (
+            <tr key={feedback.feedbackId}>
+              <td>{feedback.feedbackId}</td>
               <td>
-                <span variant="link" onClick={() => handleGuestClick(complaint.guest)}>
-                  {complaint.guest ? complaint.guest.name : "No Guest"}
+                <span variant="link">
+                  {feedback.client?.fullName || "No Guest"}
                 </span>
               </td>
-              <td>{complaint.dateSubmitted}</td>
+              <td>{feedback.createdAt?.toDate().toLocaleString()}</td>
               <td>
-                <span variant="link" onClick={() => handleDetailsClick(complaint.details)}>
-                  {complaint.details}
-                </span>
-              </td>
-              <td>
-                <span variant="link" onClick={() => handleActionClick(complaint.action)}>
-                  {complaint.action}
+                <span variant="link" onClick={() => handleDetailsClick(feedback.complaint.complaintContent)}>
+                  {feedback.complaint.complaintContent}
                 </span>
               </td>
               <td>
-                <span variant="link" onClick={() => handleNoteClick(complaint.note)}>
-                  {complaint.note}
+                <span variant="link" onClick={() => handleActionClick(feedback.action)}>
+                  {feedback.action || "No Action"}
+                </span>
+              </td>
+              <td>
+                <span variant="link" onClick={() => handleNoteClick(feedback.note)}>
+                  {feedback.note || "No Note"}
                 </span>
               </td>
             </tr>

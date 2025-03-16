@@ -9,7 +9,7 @@ export const getTemp = (callback) => {
     try {
       const parsedData = JSON.parse(event.data); 
       const sortedData = parsedData.sort((a, b) => new Date(b.time) - new Date(a.time)); 
-      console.log('Sorted Temperature Data:', sortedData);
+      //console.log('Sorted Temperature Data:', sortedData);
 
       callback({ temp: sortedData });
 

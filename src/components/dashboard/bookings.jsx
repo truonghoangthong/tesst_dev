@@ -1,59 +1,27 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import "./rooms/rooms.css";
 import "./../variables.css";
-import { bookingStore } from "../../state/bookingStore.js"; 
-import { userStore } from "../../state/user.js";
+import useLaundryBookingStore from "../../../../Backend/src/store/laundryBookingStore.js";
+import useSaunaBookingStore from "../../../../Backend/src/store/saunaBookingStore.js";
 import CardModal from "../card/cardModel.jsx";
 
 const Bookings = ({ type = "sauna" }) => {
-  const users = userStore((state) => state.users);
-  const { rooms, sauna, laundry, setRoomsBookings, setSaunaBookings, setLaundryBookings } = bookingStore();
-  const bookings = type === "rooms" ? rooms : type === "sauna" ? sauna : laundry;
-  const setBookings =
-    type === "rooms"
-      ? setRoomsBookings
-      : type === "sauna"
-      ? setSaunaBookings
-      : setLaundryBookings;
-
-  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const { saunaBookings, fetchSaunaBookings } = useSaunaBookingStore(); 
+  const { laundryBookings, fetchLaundryBookings } = useLaundryBookingStore(); 
   const [modalContent, setModalContent] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [activeType, setActiveType] = useState(type); 
+  const [activeType, setActiveType] = useState(type);
 
-  const toggleDropdown = (index) => {
-    setDropdownOpen(dropdownOpen === index ? null : index);
-  };
+  useEffect(() => {
+    if (activeType === "sauna") {
+      fetchSaunaBookings();
+    } else if (activeType === "laundry") {
+      fetchLaundryBookings();
+    }
+  }, [activeType, fetchSaunaBookings, fetchLaundryBookings]);
 
-  const bookingsWithGuests = useMemo(() => {
-    return bookings.map((booking) => {
-      const guest = users.find((user) => user.id === booking.guestId);
-      return { ...booking, guest };
-    });
-  }, [bookings, users]);
-
-  const handleGuestClick = (guest) => {
-    setModalContent(
-      <table className="info-table">
-        <tbody>
-          <tr>
-            <th>Name</th>
-            <td>{guest.name}</td>
-          </tr>
-          <tr>
-            <th>Email</th>
-            <td>{guest.email}</td>
-          </tr>
-          <tr>
-            <th>Phone</th>
-            <td>{guest.phone}</td>
-          </tr>
-        </tbody>
-      </table>
-    );
-    setModalOpen(true);
-  };
+  const bookings = activeType === "sauna" ? saunaBookings : laundryBookings;
 
   const handleActionClick = (action) => {
     setModalContent(`Edit Action: ${action}`);
@@ -80,7 +48,7 @@ const Bookings = ({ type = "sauna" }) => {
       <div className="dir">
         <span>Dashboard</span>
         <Icon icon="material-symbols:chevron-right-rounded" width="24" height="24" />
-        <span>{activeType.charAt(0).toUpperCase() + activeType.slice(1)}</span>  
+        <span>{activeType.charAt(0).toUpperCase() + activeType.slice(1)}</span>
       </div>
 
       <div className="tab-dropdown-container">
@@ -102,7 +70,7 @@ const Bookings = ({ type = "sauna" }) => {
           <span
             key={tab}
             className={`tab-item ${activeType === tab ? "active" : ""}`}
-            onClick={() => setActiveType(tab)} 
+            onClick={() => setActiveType(tab)}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </span>
@@ -118,24 +86,24 @@ const Bookings = ({ type = "sauna" }) => {
           </tr>
         </thead>
         <tbody>
-          {bookingsWithGuests.map((booking, index) => (
-            <tr key={booking.id}>
-              <td>{booking.id}</td>
+          {bookings.map((booking, index) => (
+            <tr key={booking.saunaBookingId || booking.laundryBookingId}>
+              <td>{booking.saunaBookingId || booking.laundryBookingId}</td>
               <td>
-                <span variant="link" onClick={() => handleGuestClick(booking.guest)}>
-                  {booking.guest ? booking.guest.name : "No Guest"}
+                <span variant="link">
+                  {booking.client?.fullName || "No Guest"}
                 </span>
               </td>
-              <td>{booking.from}</td>
-              <td>{booking.to}</td>
+              <td>{booking.bookingPeriod?.startFrom?.toDate().toLocaleString()}</td>
+              <td>{booking.bookingPeriod?.endAt?.toDate().toLocaleString()}</td>
               <td>
                 <span variant="link" onClick={() => handleActionClick(booking.action)}>
-                  {booking.action}
+                  {booking.action || "No Action"}
                 </span>
               </td>
               <td>
                 <span variant="link" onClick={() => handleNoteClick(booking.note)}>
-                  {booking.note}
+                  {booking.note || "No Note"}
                 </span>
               </td>
             </tr>
