@@ -18,32 +18,49 @@
   padding: 5px;
   box-sizing: border-box;
   background-color: #f2f2f2;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
 .laundry-calendar .rbc-event.laundry-past {
-  background-color: transparent;
+  background-color: transparent; 
   color: #999;
   cursor: not-allowed;
   pointer-events: none;
 }
 
 .laundry-calendar .rbc-event.laundry-my-reservation {
-  background-color: #ffcccc;
+  background-color: #ffcccc; 
   color: #000;
   border: 1px solid #ffcccc;
+  cursor: pointer;
 }
 
 .laundry-calendar .rbc-event.laundry-booked {
-  background-color: #abdfff;
+  background-color: #abdfff; 
   color: #000;
   cursor: not-allowed;
   pointer-events: none;
 }
 
 .laundry-calendar .rbc-event.laundry-available {
-  background-color: #f2f2f2;
+  background-color: #f2f2f2; 
   color: #333;
+  cursor: pointer;
+}
+
+.laundry-calendar .rbc-event.laundry-past.laundry-my-reservation {
+  background-color: transparent; 
+  color: #000; 
+  cursor: not-allowed;
+  pointer-events: none;
+  border: none;
+}
+
+.laundry-calendar .rbc-event.laundry-past.laundry-booked {
+  background-color: transparent;
+  color: #999; 
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .laundry-calendar .rbc-header {
@@ -64,7 +81,7 @@
 .laundry-calendar .rbc-day {
   height: 100px;
   position: relative;
-}
+} 
 
 .laundry-calendar .rbc-event-label {
   display: none;

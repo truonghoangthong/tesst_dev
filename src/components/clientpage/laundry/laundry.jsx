@@ -94,18 +94,20 @@ const LaundryCalendar = () => {
 
   const handleSlotClick = async (event) => {
     const currentTime = new Date();
-    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000);
+    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000); // 2 giờ sau
 
-    if (event.start < oneHourBefore) {
+    // Kiểm tra nếu slot nằm trong khoảng từ trước thời điểm hiện tại đến 2 giờ sau
+    if (event.start < twoHoursAfter) {
       setPopup({
         show: true,
         title: "Error",
-        message: "You cannot modify a slot that is within 1 hour of the current time.",
+        message: "You cannot modify a slot that is within 2 hours of the current time.", // Thông báo lỗi
         status: "error",
       });
-      return;
+      return; // Dừng hàm nếu slot không thể thay đổi
     }
 
+    // Cập nhật trạng thái slot
     const updatedSlots = slots.map((slot) => {
       if (slot.id === event.id) {
         const newStatus = slot.status === "available" ? "booked" : "available";
@@ -119,9 +121,10 @@ const LaundryCalendar = () => {
     });
     setSlots(updatedSlots);
 
+    // Xử lý đặt chỗ hoặc hủy chỗ
     const clickedSlot = updatedSlots.find((slot) => slot.id === event.id);
-
     if (clickedSlot.status === "booked") {
+      // Đặt chỗ
       const newBooking = {
         bookingPeriod: {
           startFrom: clickedSlot.start,
@@ -138,6 +141,7 @@ const LaundryCalendar = () => {
       };
       await addLaundryBooking(newBooking);
     } else {
+      // Hủy chỗ
       const bookingToDelete = laundryBookings.find((booking) => {
         const startFrom = booking.bookingPeriod.startFrom;
         const endAt = booking.bookingPeriod.endAt;
@@ -207,41 +211,61 @@ const LaundryCalendar = () => {
 
   const eventPropGetter = (event) => {
     const currentTime = new Date();
-    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000);
-    const isWithinOneHour = event.start < oneHourBefore;
+    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000); //2 giờ sau
+    const isWithinTwoHours = event.start < twoHoursAfter;
 
-    if (isWithinOneHour) {
-      return {
-        className: "laundry-past",
-      };
-    } else if (event.title === "my-reservation") {
-      return {
-        className: "laundry-my-reservation",
-      };
-    } else if (event.status === "booked") {
-      return {
-        className: "laundry-booked",
-      };
+    if (isWithinTwoHours) {
+      if (event.title === "my-reservation") {
+        return {
+          className: "laundry-my-reservation laundry-past", 
+        };
+      } else if (event.status === "booked") {
+        return {
+          className: "laundry-booked laundry-past", 
+        };
+      } else {
+        return {
+          className: "laundry-past", 
+        };
+      }
     } else {
-      return {
-        className: "laundry-available",
-      };
+      if (event.title === "my-reservation") {
+        return {
+          className: "laundry-my-reservation",
+        };
+      } else if (event.status === "booked") {
+        return {
+          className: "laundry-booked",
+        };
+      } else {
+        return {
+          className: "laundry-available",
+        };
+      }
     }
   };
 
   const EventComponent = ({ event }) => {
     const currentTime = new Date();
-    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000);
-    const isWithinOneHour = event.start < oneHourBefore;
+    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000); //2 giờ sau
+    const isWithinTwoHours = event.start < twoHoursAfter;
 
-    if (isWithinOneHour) {
-      return <span>Past</span>;
-    } else if (event.title === "my-reservation") {
-      return <span>Cancel</span>;
-    } else if (event.status === "booked") {
-      return <span>Booked</span>;
+    if (isWithinTwoHours) {
+      if (event.title === "my-reservation") {
+        return <span>My Reservation</span>; 
+      } else if (event.status === "booked") {
+        return <span>Booked</span>; 
+      } else {
+        return <span>Past</span>; 
+      }
     } else {
-      return <span>Available</span>;
+      if (event.title === "my-reservation") {
+        return <span>Cancel</span>; 
+      } else if (event.status === "booked") {
+        return <span>Booked</span>; 
+      } else {
+        return <span>Available</span>; 
+      }
     }
   };
 
