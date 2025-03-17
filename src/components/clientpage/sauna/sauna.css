@@ -92,3 +92,45 @@
   justify-content: center;
   background-color: #f2f2f2;
 }
+
+.sauna-calendar .rbc-event.laundry-past {
+  background-color: transparent; 
+  color: #999;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.sauna-calendar .rbc-event.laundry-my-reservation {
+  background-color: #ffcccc; 
+  color: #000;
+  border: 1px solid #ffcccc;
+  cursor: pointer;
+}
+
+.sauna-calendar .rbc-event.laundry-booked {
+  background-color: #abdfff; 
+  color: #000;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.sauna-calendar .rbc-event.laundry-available {
+  background-color: #f2f2f2; 
+  color: #333;
+  cursor: pointer;
+}
+
+.sauna-calendar .rbc-event.laundry-past.laundry-my-reservation {
+  background-color: transparent; 
+  color: #000; 
+  cursor: not-allowed;
+  pointer-events: none;
+  border: none;
+}
+
+.sauna-calendar .rbc-event.laundry-past.laundry-booked {
+  background-color: transparent;
+  color: #999; 
+  cursor: not-allowed;
+  pointer-events: none;
+}

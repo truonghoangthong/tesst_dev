@@ -77,8 +77,8 @@ const SaunaCalendar = () => {
   }, [saunaBookings, user.uid]);
 
   const handleSlotClick = async (event) => {
-    const currentTime = new Date(); 
-    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); 
+    const currentTime = new Date();
+    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); // 1 giờ trước
 
     if (event.start < oneHourBefore) {
       setPopup({
@@ -87,7 +87,7 @@ const SaunaCalendar = () => {
         message: "You cannot modify a slot that is within 1 hour of the current time.",
         status: "error",
       });
-      return; 
+      return;
     }
 
     const updatedSlots = slots.map((slot) => {
@@ -177,41 +177,61 @@ const SaunaCalendar = () => {
 
   const eventPropGetter = (event) => {
     const currentTime = new Date();
-    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); 
+    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); // 1 giờ trước
     const isWithinOneHour = event.start < oneHourBefore;
 
     if (isWithinOneHour) {
-      return {
-        className: "sauna-past",
-      };
-    } else if (event.title === "my-reservation") {
-      return {
-        className: "sauna-my-reservation",
-      };
-    } else if (event.status === "booked") {
-      return {
-        className: "sauna-booked",
-      };
+      if (event.title === "my-reservation") {
+        return {
+          className: "sauna-my-reservation sauna-past",
+        };
+      } else if (event.status === "booked") {
+        return {
+          className: "sauna-booked sauna-past",
+        };
+      } else {
+        return {
+          className: "sauna-past",
+        };
+      }
     } else {
-      return {
-        className: "sauna-available",
-      };
+      if (event.title === "my-reservation") {
+        return {
+          className: "sauna-my-reservation",
+        };
+      } else if (event.status === "booked") {
+        return {
+          className: "sauna-booked",
+        };
+      } else {
+        return {
+          className: "sauna-available",
+        };
+      }
     }
   };
 
   const EventComponent = ({ event }) => {
     const currentTime = new Date();
-    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); //1hr before 
+    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); // 1 giờ trước
     const isWithinOneHour = event.start < oneHourBefore;
 
     if (isWithinOneHour) {
-      return <span>Past</span>;
-    } else if (event.title === "my-reservation") {
-      return <span>Cancel</span>;
-    } else if (event.status === "booked") {
-      return <span>Booked</span>;
+      if (event.title === "my-reservation") {
+        return <span>My Reservation</span>;
+      } else if (event.status === "booked") {
+        return <span>Booked</span>;
+      } else {
+        return <span>Past</span>;
+      }
     } else {
-      return <span>Available</span>;
+      if (event.title === "my-reservation") {
+        return <span>Cancel</span>;
+      } else if (event.status === "booked") {
+        return <span>Booked</span>;
+      } else {
+        return <span>Available</span>;
+      }
     }
   };
 

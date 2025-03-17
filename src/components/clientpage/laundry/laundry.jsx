@@ -96,18 +96,16 @@ const LaundryCalendar = () => {
     const currentTime = new Date();
     const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000); // 2 giờ sau
 
-    // Kiểm tra nếu slot nằm trong khoảng từ trước thời điểm hiện tại đến 2 giờ sau
     if (event.start < twoHoursAfter) {
       setPopup({
         show: true,
         title: "Error",
-        message: "You cannot modify a slot that is within 2 hours of the current time.", // Thông báo lỗi
+        message: "You cannot modify a slot that is within 2 hours of the current time.", 
         status: "error",
       });
-      return; // Dừng hàm nếu slot không thể thay đổi
+      return; 
     }
 
-    // Cập nhật trạng thái slot
     const updatedSlots = slots.map((slot) => {
       if (slot.id === event.id) {
         const newStatus = slot.status === "available" ? "booked" : "available";
@@ -121,10 +119,8 @@ const LaundryCalendar = () => {
     });
     setSlots(updatedSlots);
 
-    // Xử lý đặt chỗ hoặc hủy chỗ
     const clickedSlot = updatedSlots.find((slot) => slot.id === event.id);
     if (clickedSlot.status === "booked") {
-      // Đặt chỗ
       const newBooking = {
         bookingPeriod: {
           startFrom: clickedSlot.start,
