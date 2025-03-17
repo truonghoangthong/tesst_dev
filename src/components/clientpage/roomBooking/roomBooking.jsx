@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import './RoomBooking.css';
+import './roomBooking.css';
 import useRoomBookingStore from "../../../../../Backend/src/store/roomBookingStore";
 import useAuthStore from '../../../../../Backend/src/store/authStore';
-import { Timestamp } from "firebase/firestore"; 
+import { Timestamp } from "firebase/firestore";
 
 const RoomBooking = () => {
   const [newBooking, setNewBooking] = useState({
@@ -10,11 +10,19 @@ const RoomBooking = () => {
       startFrom: '',
       endAt: ''
     },
-    room: ''
+    room: '',
+    note: '' 
   });
 
   const { roomBookings, addRoomBooking, deleteRoomBooking, fetchRoomBookings } = useRoomBookingStore();
   const { user } = useAuthStore();
+
+  const roomOptions = [
+    { label: "A Lentäjän Poika 1", value: "A" },
+    { label: "B Lentäjän Poika 2", value: "B" },
+    { label: "C Henry Ford Cabin", value: "C" },
+    { label: "D Beach House", value: "D" },
+  ];
 
   useEffect(() => {
     if (user) {
@@ -35,7 +43,7 @@ const RoomBooking = () => {
     const bookingData = {
       ...newBooking,
       bookingPeriod: {
-        startFrom: Timestamp.fromDate(startFrom), 
+        startFrom: Timestamp.fromDate(startFrom),
         endAt: Timestamp.fromDate(endAt),
       },
       client: {
@@ -52,14 +60,22 @@ const RoomBooking = () => {
           startFrom: '',
           endAt: ''
         },
-        room: ''
+        room: '',
+        note: '' 
       });
     }
   };
 
-  const handleDeleteBooking = async (bookingId) => {
-    const response = await deleteRoomBooking(bookingId, user.uid);
-    alert(response.Message);
+  const handleDeleteBooking = async (bookingId, startFrom) => {
+    const currentTime = new Date(); 
+    const bookingStartTime = startFrom.toDate(); 
+
+    if (bookingStartTime > currentTime) {
+      const response = await deleteRoomBooking(bookingId, user.uid);
+      alert(response.Message);
+    } else {
+      alert("You can only delete upcoming bookings (bookings that have not started yet).");
+    }
   };
 
   const formatTimestamp = (timestamp) => {
@@ -70,9 +86,23 @@ const RoomBooking = () => {
 
   return (
     <div className="rooms-client">
-      <h2>Room Booking</h2>
-
       <form onSubmit={handleAddBooking}>
+        <h3>Room Booking</h3>
+        <div>
+          <label>Room:</label>
+          <select
+            value={newBooking.room}
+            onChange={(e) => setNewBooking({ ...newBooking, room: e.target.value })}
+            required
+          >
+            <option value="">Select a room</option>
+            {roomOptions.map((room) => (
+              <option key={room.value} value={room.value}>
+                {room.label}
+              </option>
+            ))}
+          </select>
+        </div>
         <div>
           <label>Start Date:</label>
           <input
@@ -94,28 +124,39 @@ const RoomBooking = () => {
           <small>Default time: 12:00 PM</small>
         </div>
         <div>
-          <label>Room:</label>
-          <input
-            type="text"
-            value={newBooking.room}
-            onChange={(e) => setNewBooking({ ...newBooking, room: e.target.value })}
-            required
+          <label>Note:</label>
+          <textarea
+            value={newBooking.note}
+            onChange={(e) => setNewBooking({ ...newBooking, note: e.target.value })}
+            rows={3}
+            placeholder="Add a note..."
           />
         </div>
         <button type="submit">Add Booking</button>
       </form>
 
-      <h3>Your Bookings</h3>
       <ul>
-        {userBookings.map((booking) => (
-          <li key={booking.bookingId}>
-            <p>Room: {booking.room}</p>
-            <p>Client: {booking.client.fullName}</p>
-            <p>Start: {formatTimestamp(booking.bookingPeriod.startFrom)}</p>
-            <p>End: {formatTimestamp(booking.bookingPeriod.endAt)}</p>
-            <button onClick={() => handleDeleteBooking(booking.bookingId)}>Delete</button>
-          </li>
-        ))}
+        <h3>Your Bookings</h3>
+        {userBookings.map((booking) => {
+          const isUpcoming = booking.bookingPeriod.startFrom.toMillis() > Date.now(); 
+
+          return (
+            <li key={booking.bookingId}>
+              <div className="booking-info">
+                <p>Room: {roomOptions.find((room) => room.value === booking.room)?.label || booking.room}</p>
+                <p>Client: {booking.client.fullName}</p>
+                <p>Start: {formatTimestamp(booking.bookingPeriod.startFrom)}</p>
+                <p>End: {formatTimestamp(booking.bookingPeriod.endAt)}</p>
+                {isUpcoming && (
+                  <button onClick={() => handleDeleteBooking(booking.bookingId, booking.bookingPeriod.startFrom)}>Delete</button>
+                )}
+              </div>
+              <div className="booking-note">
+                <p>Note: {booking.note || "No note"}</p>
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
