@@ -8,7 +8,7 @@ import useDataStore from '../../services/data';
 import WeatherDay from './weatherday';
 import getLowHighTempHumid from '../../services/get7days';
 import getWeatherIcon from '../../services/getWeatherIcon.jsX';
-import { Skeleton } from '@mui/material';
+import { Skeleton } from '@mui/material'; // Import Skeleton từ MUI
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import './tv.css';
 
@@ -26,7 +26,7 @@ ChartJS.register(
 
 const WeatherSection = ({ updateWeatherBackground }) => {
   const dailyStats = getLowHighTempHumid();
-  const { data, fetchWeatherData } = useDataStore();
+  const { data, fetchWeatherData, isLoading } = useDataStore(); // Giả sử `isLoading` được trả về từ `useDataStore`
   const [selectedTab, setSelectedTab] = useState(0);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
       return (dataTime - roundedTime) % (3 * 60 * 60 * 1000) === 0;
     });
 
-    return filteredData.slice(0, 9); 
+    return filteredData.slice(0, 9); // Lấy tối đa 9 mốc thời gian
   }, [filteredWeatherData]);
 
   const extendedFilteredData = useMemo(() => {
@@ -104,7 +104,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
   const { minY: humidityMinY, maxY: humidityMaxY } = calculateHumidityYAxisLimits();
 
   const limitedData = useMemo(() => {
-    return filteredDataEvery3Hours.slice(0, 9); 
+    return filteredDataEvery3Hours.slice(0, 9); // Lấy tối đa 9 mốc thời gian
   }, [filteredDataEvery3Hours]);
 
   const temperatureData = useMemo(() => ({
@@ -153,7 +153,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         ticks: {
           maxRotation: 45,
           minRotation: 30,
-          stepSize: 1, 
+          stepSize: 1,
           font: { size: 14, weight: 'bold' },
           color: 'white',
           callback: (value, index) => {
@@ -200,7 +200,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         ticks: {
           maxRotation: 45,
           minRotation: 30,
-          stepSize: 1, 
+          stepSize: 1,
           font: { size: 14, weight: 'bold' },
           color: 'white',
           callback: (value, index) => {
@@ -238,6 +238,49 @@ const WeatherSection = ({ updateWeatherBackground }) => {
   }
 
   const todaytime = getDayAndTime(latestWeather.time);
+
+  if (isLoading) {
+    return (
+      <div className="weather-section">
+        <div className="top-panel">
+          <Skeleton variant="circular" width={40} height={40} />
+          <Skeleton variant="text" width={100} height={40} />
+          <div className="top-panel-data">
+            <Skeleton variant="text" width={120} height={24} />
+            <Skeleton variant="text" width={120} height={24} />
+            <Skeleton variant="text" width={120} height={24} />
+          </div>
+          <div className="top-panel right">
+            <Skeleton variant="text" width={100} height={24} />
+            <div className="day-time">
+              <Skeleton variant="text" width={60} height={24} />
+              <Skeleton variant="text" width={60} height={24} />
+            </div>
+          </div>
+        </div>
+
+        <div className="bottom-panel">
+          <Tabs value={0}>
+            <Tab label={<Skeleton variant="text" width={100} height={24} />} />
+            <Tab label={<Skeleton variant="text" width={100} height={24} />} />
+          </Tabs>
+          <div className="chart-container">
+            <Skeleton variant="rectangular" width="100%" height={300} />
+          </div>
+        </div>
+
+        <div className="weather-summary">
+          {Array.from({ length: 7 }).map((_, index) => (
+            <div key={index} className="weather-day-card">
+              <Skeleton variant="text" width={60} height={24} />
+              <Skeleton variant="circular" width={40} height={40} />
+              <Skeleton variant="text" width={80} height={20} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="weather-section">
@@ -280,19 +323,15 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         </div>
       </div>
       <div className="weather-summary">
-        {dailyStats.length === 0 ? (
-          <p>Loading data...</p>
-        ) : (
-          dailyStats.map((stat, index) => (
-            <WeatherDay
-              key={index}
-              day={stat.shortDay}
-              weather={stat.weather}
-              tempHigh={stat.maxTemp}
-              tempLow={stat.minTemp}
-            />
-          ))
-        )}
+        {dailyStats.map((stat, index) => (
+          <WeatherDay
+            key={index}
+            day={stat.shortDay}
+            weather={stat.weather}
+            tempHigh={stat.maxTemp}
+            tempLow={stat.minTemp}
+          />
+        ))}
       </div>
     </div>
   );
