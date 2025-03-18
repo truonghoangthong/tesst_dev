@@ -5,6 +5,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import useRoomBookingStore from '../../../../../Backend/src/store/roomBookingStore';
 import useLaundryBookingStore from '../../../../../Backend/src/store/laundryBookingStore';
 import useSaunaBookingStore from '../../../../../Backend/src/store/saunaBookingStore';
+import CardModal from '../../card/cardModel';
 import './calendar.css';
 
 const localizer = momentLocalizer(moment);
@@ -15,6 +16,8 @@ const MyCalendar = ({ calendarType }) => {
   const { roomBookings, fetchRoomBookings } = useRoomBookingStore();
 
   const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchLaundryBookings();
@@ -39,7 +42,7 @@ const MyCalendar = ({ calendarType }) => {
       laundryBookings.forEach((booking) => {
         const startTime = moment(booking.bookingPeriod.startFrom.toDate()).format('HH:mm');
         formattedEvents.push({
-          title: `${startTime} Laundry`, 
+          title: `${startTime} Laundry`,
           start: booking.bookingPeriod.startFrom.toDate(),
           end: booking.bookingPeriod.endAt.toDate(),
           allDay: false,
@@ -50,7 +53,7 @@ const MyCalendar = ({ calendarType }) => {
       saunaBookings.forEach((booking) => {
         const startTime = moment(booking.bookingPeriod.startFrom.toDate()).format('HH:mm');
         formattedEvents.push({
-          title: `${startTime} Sauna`, 
+          title: `${startTime} Sauna`,
           start: booking.bookingPeriod.startFrom.toDate(),
           end: booking.bookingPeriod.endAt.toDate(),
           allDay: false,
@@ -77,6 +80,11 @@ const MyCalendar = ({ calendarType }) => {
     };
   };
 
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="calendar-container">
       <h2 className="calendar-title">
@@ -89,6 +97,21 @@ const MyCalendar = ({ calendarType }) => {
         endAccessor="end"
         style={{ height: 800, width: '100%' }}
         eventPropGetter={eventStyleGetter}
+        onSelectEvent={handleEventClick}
+      />
+      <CardModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        content={selectedEvent ? [
+          { 'Title': selectedEvent.title },
+          { 'Start': selectedEvent.start.toLocaleString() },
+          { 'End': selectedEvent.end.toLocaleString() },
+          { 'Room': selectedEvent.room }
+        ] : []}
+        onSave={(updatedContent) => {
+          // Xử lý lưu thông tin nếu cần
+          console.log('Updated Content:', updatedContent);
+        }}
       />
     </div>
   );
