@@ -1,0 +1,8 @@
+App(
+    appid="serial_rfid_control",
+    name="Serial RFID Control",
+    apptype=FlipperAppType.EXTERNAL,
+    targets=["f7"], 
+    entry_point="serial_rfid_control_main",
+    stack_size=2 * 1024,
+)
