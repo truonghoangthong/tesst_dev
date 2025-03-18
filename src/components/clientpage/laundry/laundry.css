@@ -114,3 +114,128 @@
 .laundry-calendar .rbc-day + .rbc-day {
   margin-left: 15px;
 }
+
+/* Mobile styles (phone mode) */
+@media (max-width: 768px) {
+  .laundry-calendar .booking-calendar-container {
+    padding: 10px;
+    height: auto;
+  }
+
+  .laundry-calendar .rbc-month-view {
+    min-height: auto;
+  }
+
+  .laundry-calendar .rbc-day {
+    height: 50px;
+  }
+
+  .laundry-calendar .rbc-header {
+    display: none;
+  }
+
+  .laundry-calendar .rbc-month-header {
+    display: none;
+  }
+
+  .laundry-calendar .rbc-time-header-gutter,
+  .laundry-calendar .rbc-time-gutter {
+    width: 50px;
+    min-width: 50px;
+    font-size: 12px;
+  }
+
+  .laundry-calendar .rbc-day + .rbc-day {
+    margin-left: 0;
+  }
+
+  .laundry-calendar .rbc-time-view {
+    display: block; /* Hiển thị time view trong chế độ mobile */
+  }
+
+  .laundry-calendar .rbc-date-cell {
+    display: none;
+  }
+
+  .laundry-calendar .rbc-toolbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .laundry-calendar .rbc-toolbar-label {
+    margin-bottom: 10px;
+  }
+
+  .laundry-calendar .rbc-toolbar button {
+    margin: 5px 0;
+  }
+
+  .laundry-calendar .react-datepicker-wrapper {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .laundry-calendar .react-datepicker__input-container {
+    width: 100%;
+  }
+
+  .laundry-calendar .react-datepicker__input-container input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  .laundry-calendar .rbc-calendar {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .laundry-calendar .rbc-time-content {
+    flex-grow: 1;
+  }
+
+  .laundry-calendar .rbc-time-gutter,
+  .laundry-calendar .rbc-time-header-gutter {
+    width: 40px;
+    min-width: 40px;
+  }
+
+  .laundry-calendar .rbc-time-header {
+    display: none;
+  }
+
+  .laundry-calendar .rbc-time-content {
+    overflow: visible;
+  }
+
+  .laundry-calendar .rbc-time-view .rbc-time-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .laundry-calendar .rbc-time-content > .rbc-time-gutter {
+    display: none;
+  }
+
+  .laundry-calendar .rbc-time-content > .rbc-time-content {
+    flex-grow: 1;
+  }
+
+  .laundry-calendar .rbc-time-content > .rbc-time-content > .rbc-day-slot {
+    width: 100%;
+  }
+
+  .laundry-calendar .rbc-time-content > .rbc-time-content > .rbc-day-slot .rbc-events-container {
+    margin: 0;
+  }
+
+  .laundry-calendar .rbc-time-content > .rbc-time-content > .rbc-day-slot .rbc-event {
+    margin: 0;
+    width: 100%;
+    height: 40px;
+    border-radius: 4px;
+  }
+}

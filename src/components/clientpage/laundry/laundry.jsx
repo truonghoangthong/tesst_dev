@@ -6,6 +6,8 @@ import "./laundry.css";
 import useAuthStore from '../../../../../Backend/src/store/authStore';
 import useLaundryBookingStore from '../../../../../Backend/src/store/laundryBookingStore';
 import Popup from "../../popup/popup";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const localizer = momentLocalizer(moment);
 
@@ -42,6 +44,7 @@ const generateSlots = (startOfWeek) => {
 
 const LaundryCalendar = () => {
   const [slots, setSlots] = useState(generateSlots(moment().startOf("week")));
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const user = useAuthStore((state) => state.user);
   const { addLaundryBooking, deleteLaundryBooking, fetchLaundryBookings, laundryBookings } = useLaundryBookingStore();
   const [popup, setPopup] = useState({
@@ -265,16 +268,34 @@ const LaundryCalendar = () => {
     }
   };
 
+  const isMobile = window.innerWidth <= 768; // Chế độ mobile cho màn hình nhỏ hơn hoặc bằng 768px
+
   return (
     <div className="laundry-calendar">
       <div className="booking-calendar-container">
+        {isMobile && (
+          <div style={{ marginBottom: "10px" }}>
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              dateFormat="dd/MM/yyyy"
+            />
+          </div>
+        )}
         <Calendar
           localizer={localizer}
-          events={slots}
+          events={slots.filter((slot) => {
+            if (isMobile) {
+              // Hiển thị tất cả các slot trong ngày được chọn
+              return moment(slot.start).isSame(selectedDate, 'day');
+            } else {
+              return true; // Hiển thị tất cả các slot trong desktop mode
+            }
+          })}
           startAccessor="start"
           endAccessor="end"
-          defaultView="week"
-          views={["week"]}
+          defaultView={isMobile ? "day" : "week"}
+          views={isMobile ? ["day"] : ["week", "day"]} // Thêm "day" vào views
           step={60}
           timeslots={1}
           min={new Date(0, 0, 0, 8, 0, 0)}
