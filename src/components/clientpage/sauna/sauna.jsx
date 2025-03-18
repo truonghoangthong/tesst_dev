@@ -78,13 +78,13 @@ const SaunaCalendar = () => {
 
   const handleSlotClick = async (event) => {
     const currentTime = new Date();
-    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); // 1 giờ trước
+    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000); // 2 giờ sau
 
-    if (event.start < oneHourBefore) {
+    if (event.start < twoHoursAfter) {
       setPopup({
         show: true,
         title: "Error",
-        message: "You cannot modify a slot that is within 1 hour of the current time.",
+        message: "You cannot modify a slot that is within 2 hours of the current time.",
         status: "error",
       });
       return;
@@ -177,10 +177,10 @@ const SaunaCalendar = () => {
 
   const eventPropGetter = (event) => {
     const currentTime = new Date();
-    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); // 1 giờ trước
-    const isWithinOneHour = event.start < oneHourBefore;
+    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000); // 2 giờ sau
+    const isWithinTwoHours = event.start < twoHoursAfter;
 
-    if (isWithinOneHour) {
+    if (isWithinTwoHours) {
       if (event.title === "my-reservation") {
         return {
           className: "sauna-my-reservation sauna-past",
@@ -213,10 +213,10 @@ const SaunaCalendar = () => {
 
   const EventComponent = ({ event }) => {
     const currentTime = new Date();
-    const oneHourBefore = new Date(currentTime.getTime() - 60 * 60 * 1000); // 1 giờ trước
-    const isWithinOneHour = event.start < oneHourBefore;
+    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000); // 2 giờ sau
+    const isWithinTwoHours = event.start < twoHoursAfter;
 
-    if (isWithinOneHour) {
+    if (isWithinTwoHours) {
       if (event.title === "my-reservation") {
         return <span>My Reservation</span>;
       } else if (event.status === "booked") {
