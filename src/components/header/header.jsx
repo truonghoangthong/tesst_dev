@@ -28,6 +28,7 @@ const Header = ({ isAdmin }) => {
   }, []);
 
   const guestOptions = [
+    { name: "Events", path: "events" }, 
     { name: "Complaint", path: "complaint" },
     { name: "Sauna", path: "sauna" },
     { name: "Laundry", path: "laundry" },

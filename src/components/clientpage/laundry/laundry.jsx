@@ -140,7 +140,6 @@ const LaundryCalendar = () => {
       };
       await addLaundryBooking(newBooking);
     } else {
-      // Hủy chỗ
       const bookingToDelete = laundryBookings.find((booking) => {
         const startFrom = booking.bookingPeriod.startFrom;
         const endAt = booking.bookingPeriod.endAt;
@@ -268,7 +267,7 @@ const LaundryCalendar = () => {
     }
   };
 
-  const isMobile = window.innerWidth <= 768; // Chế độ mobile cho màn hình nhỏ hơn hoặc bằng 768px
+  const isMobile = window.innerWidth <= 768; 
 
   return (
     <div className="laundry-calendar">
@@ -286,16 +285,15 @@ const LaundryCalendar = () => {
           localizer={localizer}
           events={slots.filter((slot) => {
             if (isMobile) {
-              // Hiển thị tất cả các slot trong ngày được chọn
               return moment(slot.start).isSame(selectedDate, 'day');
             } else {
-              return true; // Hiển thị tất cả các slot trong desktop mode
+              return true; 
             }
           })}
           startAccessor="start"
           endAccessor="end"
           defaultView={isMobile ? "day" : "week"}
-          views={isMobile ? ["day"] : ["week", "day"]} // Thêm "day" vào views
+          views={isMobile ? ["day"] : ["week", "day"]}
           step={60}
           timeslots={1}
           min={new Date(0, 0, 0, 8, 0, 0)}

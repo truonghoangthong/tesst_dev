@@ -15,6 +15,7 @@ const Sidebar = ({ isAdmin, visible, closeSidebar }) => {
     { name: "Rooms", icon: "material-symbols:key-vertical-outline", path: "/admin/rooms" },
     { name: "Bookings", icon: "ic:outline-list-alt", path: "/admin/bookings" },
     { name: "Complaints", icon: "material-symbols:person-alert-outline-rounded", path: "/admin/complaints" },
+    { name: "Events", icon: "mdi:calendar", path: "/admin/events" }, 
     { name: "Admin", icon: "mdi:person-circle-outline", path: "/admin/info" },
     { name: "Logout", icon: "mdi:logout" },
   ];

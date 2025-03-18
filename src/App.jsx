@@ -52,6 +52,7 @@ const ProtectedRoutes = ({ user }) => {
               <Route path="/admin/bookings" element={<Bookings />} />
               <Route path="/admin/info" element={<Info />} />
               <Route path="/admin/complaints" element={<Complaints />} />
+              <Route path="/admin/events" element={<span>Events</span>} />
             </>
           ) : (
             <>
@@ -60,6 +61,7 @@ const ProtectedRoutes = ({ user }) => {
               <Route path="/client/info" element={<Info />} />
               <Route path="/client/complaint" element={<ClientComplaint />} />
               <Route path="/client/rooms" element={<RoomBooking/>} />
+              <Route path="/client/events" element={<span>Events</span>} />
             </>
           )}
         </Routes>
