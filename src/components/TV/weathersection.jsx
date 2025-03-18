@@ -21,7 +21,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ChartDataLabels 
+  ChartDataLabels
 );
 
 const WeatherSection = ({ updateWeatherBackground }) => {
@@ -42,10 +42,10 @@ const WeatherSection = ({ updateWeatherBackground }) => {
   };
 
   const filteredWeatherData = useMemo(() => {
-    const currentDate = new Date().toDateString(); 
+    const currentDate = new Date().toDateString();
     const nextDay = new Date();
-    nextDay.setDate(nextDay.getDate() + 1);  
-    const nextDayString = nextDay.toDateString(); 
+    nextDay.setDate(nextDay.getDate() + 1);
+    const nextDayString = nextDay.toDateString();
     return weatherData.filter((dataItem) => {
       const dataTime = new Date(dataItem.time);
       const dataDateString = dataTime.toDateString();
@@ -55,11 +55,13 @@ const WeatherSection = ({ updateWeatherBackground }) => {
 
   const filteredDataEvery3Hours = useMemo(() => {
     const currentTime = roundToNearestHour();
-    return filteredWeatherData.filter((dataItem) => {
+    const filteredData = filteredWeatherData.filter((dataItem) => {
       const dataTime = new Date(dataItem.time).getTime();
       const roundedTime = currentTime.getTime();
       return (dataTime - roundedTime) % (3 * 60 * 60 * 1000) === 0;
     });
+
+    return filteredData.slice(0, 9); 
   }, [filteredWeatherData]);
 
   const extendedFilteredData = useMemo(() => {
@@ -74,40 +76,27 @@ const WeatherSection = ({ updateWeatherBackground }) => {
   }, [filteredDataEvery3Hours, filteredWeatherData]);
 
   const labelsWithInterval = useMemo(() => {
-    return extendedFilteredData.map((dataItem) => {
+    return filteredDataEvery3Hours.map((dataItem) => {
       const date = new Date(dataItem.time);
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
     });
-  }, [extendedFilteredData]);
-
-  const calculateTemperatureRange = useCallback(() => {
-    const temperatureValues = extendedFilteredData.map((dataItem) => dataItem.temperature);
-    const maxTemp = Math.max(...temperatureValues);
-    const minTemp = Math.min(...temperatureValues);
-    return Math.abs(maxTemp - minTemp);
-  }, [extendedFilteredData]);
-
-  const calculateHumidityRange = useCallback(() => {
-    const humidityValues = extendedFilteredData.map((dataItem) => dataItem.humidity);
-    const maxHumidity = Math.max(...humidityValues);
-    const minHumidity = Math.min(...humidityValues);
-    return Math.abs(maxHumidity - minHumidity);
-  }, [extendedFilteredData]);
+  }, [filteredDataEvery3Hours]);
 
   const calculateTemperatureYAxisLimits = useCallback(() => {
-    const range = calculateTemperatureRange();
-    const currentTemperature = extendedFilteredData[0]?.temperature || 0;
-    const minY = currentTemperature - (range / 2);
-    const maxY = currentTemperature + (range / 2);
+    const temperatureValues = extendedFilteredData.map((dataItem) => dataItem.temperature);
+    const maxTemperature = Math.max(...temperatureValues);
+    const minTemperature = Math.min(...temperatureValues);
+    const minY = Math.max(minTemperature - 3, -30);
+    const maxY = Math.min(maxTemperature + 3, 40);
     return { minY, maxY };
-  }, [extendedFilteredData, calculateTemperatureRange]);
+  }, [extendedFilteredData]);
 
   const calculateHumidityYAxisLimits = useCallback(() => {
     const humidityValues = extendedFilteredData.map((dataItem) => dataItem.humidity);
     const maxHumidity = Math.max(...humidityValues);
     const minHumidity = Math.min(...humidityValues);
-    const minY = Math.max(minHumidity - 3, 0);  
-    const maxY = Math.min(maxHumidity + 3, 100);  
+    const minY = Math.max(minHumidity - 3, 0);
+    const maxY = Math.min(maxHumidity + 3, 100);
     return { minY, maxY };
   }, [extendedFilteredData]);
 
@@ -115,8 +104,8 @@ const WeatherSection = ({ updateWeatherBackground }) => {
   const { minY: humidityMinY, maxY: humidityMaxY } = calculateHumidityYAxisLimits();
 
   const limitedData = useMemo(() => {
-    return extendedFilteredData.slice(0, 15);  
-  }, [extendedFilteredData]);
+    return filteredDataEvery3Hours.slice(0, 9); 
+  }, [filteredDataEvery3Hours]);
 
   const temperatureData = useMemo(() => ({
     labels: labelsWithInterval,
@@ -130,7 +119,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
       tension: 0.4,
     }],
   }), [labelsWithInterval, limitedData]);
-  
+
   const humidityData = useMemo(() => ({
     labels: labelsWithInterval,
     datasets: [{
@@ -162,9 +151,9 @@ const WeatherSection = ({ updateWeatherBackground }) => {
       x: {
         display: true,
         ticks: {
-          maxRotation: 45, 
+          maxRotation: 45,
           minRotation: 30,
-          stepSize: 3,
+          stepSize: 1, 
           font: { size: 14, weight: 'bold' },
           color: 'white',
           callback: (value, index) => {
@@ -211,7 +200,7 @@ const WeatherSection = ({ updateWeatherBackground }) => {
         ticks: {
           maxRotation: 45,
           minRotation: 30,
-          stepSize: 3,
+          stepSize: 1, 
           font: { size: 14, weight: 'bold' },
           color: 'white',
           callback: (value, index) => {
