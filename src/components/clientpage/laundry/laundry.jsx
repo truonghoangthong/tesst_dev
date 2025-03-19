@@ -11,7 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const localizer = momentLocalizer(moment);
 
-const generateSlots = (startOfWeek) => {
+const generateWeeklySlots = (startOfWeek) => {
   const slots = [];
   const startDate = moment(startOfWeek).startOf("week");
   const endDate = moment(startDate).endOf("week");
@@ -42,9 +42,38 @@ const generateSlots = (startOfWeek) => {
   return slots;
 };
 
+const generateDailySlots = (selectedDate) => {
+  const slots = [];
+  const startOfDay = moment(selectedDate).startOf("day");
+
+  for (let hour = 8; hour <= 21; hour++) {
+    const slotTime = moment(startOfDay).set({ hour, minute: 0, second: 0 });
+    slots.push(
+      {
+        id: `${startOfDay.format("YYYY-MM-DD")}-${hour}-washer`,
+        title: "available",
+        start: slotTime.toDate(),
+        end: moment(slotTime).add(1, "hour").toDate(),
+        status: "available",
+        type: "washer",
+      },
+      {
+        id: `${startOfDay.format("YYYY-MM-DD")}-${hour}-dryer`,
+        title: "available",
+        start: slotTime.toDate(),
+        end: moment(slotTime).add(1, "hour").toDate(),
+        status: "available",
+        type: "dryer",
+      }
+    );
+  }
+  return slots;
+};
+
 const LaundryCalendar = () => {
-  const [slots, setSlots] = useState(generateSlots(moment().startOf("week")));
+  const [slots, setSlots] = useState(generateWeeklySlots(moment().startOf("week")));
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const user = useAuthStore((state) => state.user);
   const { addLaundryBooking, deleteLaundryBooking, fetchLaundryBookings, laundryBookings } = useLaundryBookingStore();
   const [popup, setPopup] = useState({
@@ -54,59 +83,44 @@ const LaundryCalendar = () => {
     status: "",
   });
 
-  const closePopup = () => {
-    setPopup({ show: false, title: "", message: "", status: "" });
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     fetchLaundryBookings();
   }, [fetchLaundryBookings]);
 
   useEffect(() => {
-    const updatedSlots = slots.map((slot) => {
-      const booking = laundryBookings.find((booking) => {
-        const startFrom = booking.bookingPeriod.startFrom;
-        const endAt = booking.bookingPeriod.endAt;
+    if (isMobile) {
+      const newSlots = generateDailySlots(selectedDate);
+      setSlots(newSlots);
+    } else {
+      const startOfWeek = moment(selectedDate).startOf("week");
+      const newSlots = generateWeeklySlots(startOfWeek);
+      setSlots(newSlots);
+    }
+  }, [selectedDate, isMobile]);
 
-        const startFromDate = startFrom?.toDate ? startFrom.toDate() : startFrom;
-        const endAtDate = endAt?.toDate ? endAt.toDate() : endAt;
-
-        const facilities = booking.facilities || {};
-        const isWasherBooked = slot.type === "washer" && facilities.isWashingMachine;
-        const isDryerBooked = slot.type === "dryer" && facilities.isDryer;
-
-        return (
-          startFromDate.getTime() === slot.start.getTime() &&
-          endAtDate.getTime() === slot.end.getTime() &&
-          (isWasherBooked || isDryerBooked)
-        );
-      });
-
-      if (booking) {
-        return {
-          ...slot,
-          status: "booked",
-          title: booking.client.uid === user.uid ? "my-reservation" : "booked",
-        };
-      } else {
-        return slot;
-      }
-    });
-    setSlots(updatedSlots);
-  }, [laundryBookings, user.uid]);
+  const validSlots = slots.filter(slot => slot && slot.title);
 
   const handleSlotClick = async (event) => {
     const currentTime = new Date();
-    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000); // 2 giờ sau
+    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000);
 
     if (event.start < twoHoursAfter) {
       setPopup({
         show: true,
         title: "Error",
-        message: "You cannot modify a slot that is within 2 hours of the current time.", 
+        message: "You cannot modify a slot that is within 2 hours of the current time.",
         status: "error",
       });
-      return; 
+      return;
     }
 
     const updatedSlots = slots.map((slot) => {
@@ -159,71 +173,45 @@ const LaundryCalendar = () => {
       });
 
       if (bookingToDelete) {
-        const result = await deleteLaundryBooking(bookingToDelete.laundryBookingId, user.uid);
-        setPopup({
-          show: true,
-          title: result.Title,
-          message: result.Message,
-          status: result.Status,
-        });
+        await deleteLaundryBooking(bookingToDelete.laundryBookingId, user.uid);
       }
     }
   };
 
   const handleNavigate = (newDate) => {
-    const startOfWeek = moment(newDate).startOf("week");
-    const newSlots = generateSlots(startOfWeek);
+    setSelectedDate(newDate);
 
-    const updatedSlots = newSlots.map((slot) => {
-      const booking = laundryBookings.find((booking) => {
-        const startFrom = booking.bookingPeriod.startFrom;
-        const endAt = booking.bookingPeriod.endAt;
-
-        const startFromDate = startFrom?.toDate ? startFrom.toDate() : startFrom;
-        const endAtDate = endAt?.toDate ? endAt.toDate() : endAt;
-
-        const facilities = booking.facilities || {};
-        const isWasherBooked = slot.type === "washer" && facilities.isWashingMachine;
-        const isDryerBooked = slot.type === "dryer" && facilities.isDryer;
-
-        return (
-          startFromDate.getTime() === slot.start.getTime() &&
-          endAtDate.getTime() === slot.end.getTime() &&
-          (isWasherBooked || isDryerBooked)
-        );
-      });
-
-      if (booking) {
-        return {
-          ...slot,
-          status: "booked",
-          title: booking.client.uid === user.uid ? "my-reservation" : "booked",
-        };
-      } else {
-        return slot;
-      }
-    });
-
-    setSlots(updatedSlots);
+    if (isMobile) {
+      const newSlots = generateDailySlots(newDate);
+      setSlots(newSlots);
+    } else {
+      const startOfWeek = moment(newDate).startOf("week");
+      const newSlots = generateWeeklySlots(startOfWeek);
+      setSlots(newSlots);
+    }
   };
 
   const eventPropGetter = (event) => {
+    if (!event || !event.title) {
+      return {};
+    }
+
     const currentTime = new Date();
-    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000); //2 giờ sau
+    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000);
     const isWithinTwoHours = event.start < twoHoursAfter;
 
     if (isWithinTwoHours) {
       if (event.title === "my-reservation") {
         return {
-          className: "laundry-my-reservation laundry-past", 
+          className: "laundry-my-reservation laundry-past",
         };
       } else if (event.status === "booked") {
         return {
-          className: "laundry-booked laundry-past", 
+          className: "laundry-booked laundry-past",
         };
       } else {
         return {
-          className: "laundry-past", 
+          className: "laundry-past",
         };
       }
     } else {
@@ -244,30 +232,32 @@ const LaundryCalendar = () => {
   };
 
   const EventComponent = ({ event }) => {
+    if (!event || !event.title) {
+      return null;
+    }
+
     const currentTime = new Date();
-    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000); //2 giờ sau
+    const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000);
     const isWithinTwoHours = event.start < twoHoursAfter;
 
     if (isWithinTwoHours) {
       if (event.title === "my-reservation") {
-        return <span>My Reservation</span>; 
+        return <span>My Reservation</span>;
       } else if (event.status === "booked") {
-        return <span>Booked</span>; 
+        return <span>Booked</span>;
       } else {
-        return <span>Past</span>; 
+        return <span>Past</span>;
       }
     } else {
       if (event.title === "my-reservation") {
-        return <span>Cancel</span>; 
+        return <span>Cancel</span>;
       } else if (event.status === "booked") {
-        return <span>Booked</span>; 
+        return <span>Booked</span>;
       } else {
-        return <span>Available</span>; 
+        return <span>Available</span>;
       }
     }
   };
-
-  const isMobile = window.innerWidth <= 768; 
 
   return (
     <div className="laundry-calendar">
@@ -276,20 +266,18 @@ const LaundryCalendar = () => {
           <div style={{ marginBottom: "10px" }}>
             <DatePicker
               selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
+              onChange={(date) => {
+                setSelectedDate(date);
+                const newSlots = generateDailySlots(date);
+                setSlots(newSlots);
+              }}
               dateFormat="dd/MM/yyyy"
             />
           </div>
         )}
         <Calendar
           localizer={localizer}
-          events={slots.filter((slot) => {
-            if (isMobile) {
-              return moment(slot.start).isSame(selectedDate, 'day');
-            } else {
-              return true; 
-            }
-          })}
+          events={validSlots}
           startAccessor="start"
           endAccessor="end"
           defaultView={isMobile ? "day" : "week"}
@@ -311,7 +299,7 @@ const LaundryCalendar = () => {
           title={popup.title}
           message={popup.message}
           status={popup.status}
-          onClose={closePopup}
+          onClose={() => setPopup({ show: false, title: "", message: "", status: "" })}
         />
       )}
     </div>
