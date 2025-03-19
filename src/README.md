@@ -83,7 +83,7 @@ This API provides endpoints for recording and retrieving environmental data, inc
 
 ### 6. **Get led status**
 - **Method:** `GET`
-- **Description:** Either turn the LED on or off remotely. Replace `<status>` with either `on` or `off`.
+- **Description:** Either turn the LED on or off remotely. Replace `<status>` with either `on` or `off`. Using SSE method
 - **Response Example:**  
      ```json
      {
@@ -147,7 +147,7 @@ File uploaded successfully: https://storage.cloud.google.com/your-bucket-name/fr
      Success (200): Returns the image file.
      ```
      
-### 11. **Weather forecast**
+### 10. **Weather forecast**
 - **Method:** `GET`
 - **Description:** This API provides a 7-day weather forecast with hourly intervals based on the specified city name.
 - **Query Parameters:**
@@ -178,7 +178,25 @@ File uploaded successfully: https://storage.cloud.google.com/your-bucket-name/fr
      }
      ```
 
-### 10. **Get logs Records**
+### 11. **Update relay status**
+- **Method:** `GET`
+- **Description:** Either turn the relay on or off remotely. Replace `<status>` with either `on` or `off`.
+- **Response Example:**  
+     ```send
+     Relay status on
+     ```
+
+### 12. **Get relay status**
+- **Method:** `GET`
+- **Description:** Either turn the relay on or off remotely. Replace `<status>` with either `on` or `off`. Using SSE method
+- **Response Example:**  
+     ```json
+     {
+         "status": "on"
+     }
+     ```
+
+### 13. **Get logs Records**
 - **Method:** `GET`
 - **Description:** Get logs Records.
 - **Response Example:**  
