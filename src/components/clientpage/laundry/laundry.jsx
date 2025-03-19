@@ -70,6 +70,38 @@ const generateDailySlots = (selectedDate) => {
   return slots;
 };
 
+const updateSlotStatus = (slots, laundryBookings, user) => {
+  return slots.map((slot) => {
+    const booking = laundryBookings.find((booking) => {
+      const startFrom = booking.bookingPeriod.startFrom;
+      const endAt = booking.bookingPeriod.endAt;
+
+      const startFromDate = startFrom?.toDate ? startFrom.toDate() : startFrom;
+      const endAtDate = endAt?.toDate ? endAt.toDate() : endAt;
+
+      const facilities = booking.facilities || {};
+      const isWasherBooking = slot.type === "washer" && facilities.isWashingMachine;
+      const isDryerBooking = slot.type === "dryer" && facilities.isDryer;
+
+      return (
+        startFromDate.getTime() === slot.start.getTime() &&
+        endAtDate.getTime() === slot.end.getTime() &&
+        (isWasherBooking || isDryerBooking)
+      );
+    });
+
+    if (booking) {
+      return {
+        ...slot,
+        status: "booked",
+        title: booking.client.uid === user.uid ? "my-reservation" : "booked",
+      };
+    } else {
+      return slot;
+    }
+  });
+};
+
 const LaundryCalendar = () => {
   const [slots, setSlots] = useState(generateWeeklySlots(moment().startOf("week")));
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -97,17 +129,17 @@ const LaundryCalendar = () => {
   }, [fetchLaundryBookings]);
 
   useEffect(() => {
+    let newSlots;
     if (isMobile) {
-      const newSlots = generateDailySlots(selectedDate);
-      setSlots(newSlots);
+      newSlots = generateDailySlots(selectedDate);
     } else {
       const startOfWeek = moment(selectedDate).startOf("week");
-      const newSlots = generateWeeklySlots(startOfWeek);
-      setSlots(newSlots);
+      newSlots = generateWeeklySlots(startOfWeek);
     }
-  }, [selectedDate, isMobile]);
 
-  const validSlots = slots.filter(slot => slot && slot.title);
+    const updatedSlots = updateSlotStatus(newSlots, laundryBookings, user);
+    setSlots(updatedSlots);
+  }, [selectedDate, isMobile, laundryBookings, user]);
 
   const handleSlotClick = async (event) => {
     const currentTime = new Date();
@@ -181,14 +213,16 @@ const LaundryCalendar = () => {
   const handleNavigate = (newDate) => {
     setSelectedDate(newDate);
 
+    let newSlots;
     if (isMobile) {
-      const newSlots = generateDailySlots(newDate);
-      setSlots(newSlots);
+      newSlots = generateDailySlots(newDate);
     } else {
       const startOfWeek = moment(newDate).startOf("week");
-      const newSlots = generateWeeklySlots(startOfWeek);
-      setSlots(newSlots);
+      newSlots = generateWeeklySlots(startOfWeek);
     }
+
+    const updatedSlots = updateSlotStatus(newSlots, laundryBookings, user);
+    setSlots(updatedSlots);
   };
 
   const eventPropGetter = (event) => {
@@ -269,7 +303,8 @@ const LaundryCalendar = () => {
               onChange={(date) => {
                 setSelectedDate(date);
                 const newSlots = generateDailySlots(date);
-                setSlots(newSlots);
+                const updatedSlots = updateSlotStatus(newSlots, laundryBookings, user);
+                setSlots(updatedSlots);
               }}
               dateFormat="dd/MM/yyyy"
             />
@@ -277,7 +312,7 @@ const LaundryCalendar = () => {
         )}
         <Calendar
           localizer={localizer}
-          events={validSlots}
+          events={slots}
           startAccessor="start"
           endAccessor="end"
           defaultView={isMobile ? "day" : "week"}
