@@ -19,7 +19,6 @@
   font-size: 32px;
   font-weight: bold;
   padding-left: 10px; 
-  padding-top: 10px; 
   transition: transform 0.1s ease;
 }
 
@@ -53,32 +52,21 @@
   margin-right: 10px;
 }
 
-.status-available {
-  color: #00A75A;
-}
-
-.status-occupied {
-  color: #9E1212;
-}
-
-.status-cleaning {
-  color: #EA8B1E;
-}
-
-.status-booked {
-  color: #3776D4;
-}
-
-.led-control {
+.led-control,
+.relay-control {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 10px;
-  padding-top: 5px;
+  margin-top: 8px;
+  padding-top: 2px;
   border-top: 1px solid #ddd;
   gap: 10px; 
 }
-
+.relay-control {
+  margin-top: 0;
+  padding-top: 0;
+  border: none;
+}
 .tab-switch {
   display: flex;
   border-radius: 20px;
@@ -88,12 +76,13 @@
 
 .tab-switch button {
   border: none;
-  padding: 8px 16px;
+  padding: 6px 12px; 
   border-radius: 20px;
   cursor: pointer;
   background-color: transparent;
   color: #333;
   font-weight: bold;
+  font-size: 12px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -102,8 +91,10 @@
   color: white;
 }
 
-.led-status {
+.led-status,
+.relay-status {
   font-weight: bold;
+  font-size: 12px; 
 }
 
 @media (max-width: 767px) {

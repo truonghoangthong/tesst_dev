@@ -34,24 +34,28 @@ const Home = () => {
         </div>
 
         <DashboardBox
+          room="A"
           status="Available"
           humid={latesthumid}
           temp={latesttemp}
           guest="--"
         />
         <DashboardBox
+          room="B"
           status="Occupied"
           humid={latesthumid}
           temp={latesttemp}
           guest="--"
         />
         <DashboardBox
+          room="C"
           status="Cleaning"
           humid={latesthumid}
           temp={latesttemp}
           guest="--"
         />
         <DashboardBox
+          room="D"
           status="Booked"
           humid={latesthumid}
           temp={latesttemp}
