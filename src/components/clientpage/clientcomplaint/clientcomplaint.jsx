@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './clientcomplaint.css';
 import useAuthStore from "../../../../../Backend/src/store/authStore";
 import useFeedbackStore from '../../../../../Backend/src/store/feedbackStore';
+import Popup from '../../popup/popup';
 
 const ClientComplaint = () => {
   const user = useAuthStore((state) => state.user);
-  const { addFeedback } = useFeedbackStore(); 
+  const { addFeedback } = useFeedbackStore();
 
   const [formData, setFormData] = useState({
     uid: user.uid,
@@ -13,6 +14,11 @@ const ClientComplaint = () => {
     complaintTitle: '',
     complaintContent: ''
   });
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupTitle, setPopupTitle] = useState('');
+  const [popupMessage, setPopupMessage] = useState('');
+  const [popupStatus, setPopupStatus] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,7 +42,11 @@ const ClientComplaint = () => {
     const result = await addFeedback(newFeedback);
 
     if (result.Status === 'success') {
-      alert(result.Message);
+      setPopupTitle('Success');
+      setPopupMessage(result.Message);
+      setPopupStatus('success');
+      setShowPopup(true);
+
       setFormData({
         uid: user.uid,
         fullName: user.fullName,
@@ -44,8 +54,15 @@ const ClientComplaint = () => {
         complaintContent: ''
       });
     } else {
-      alert(`Error: ${result.Message}`);
+      setPopupTitle('Error');
+      setPopupMessage(`Error: ${result.Message}`);
+      setPopupStatus('error');
+      setShowPopup(true);
     }
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
   };
 
   return (
@@ -135,6 +152,15 @@ const ClientComplaint = () => {
           Submit
         </button>
       </form>
+
+      {showPopup && (
+        <Popup
+          title={popupTitle}
+          message={popupMessage}
+          status={popupStatus}
+          onClose={closePopup}
+        />
+      )}
     </div>
   );
 };
