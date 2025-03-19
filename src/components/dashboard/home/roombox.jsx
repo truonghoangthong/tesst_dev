@@ -1,17 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon } from "@iconify/react";
 import './roombox.css';
+import { updateLedStatus } from '../../../services/led.js';
+import { updateRelayStatus } from '../../../services/relay.js'; 
+import useDataStore from '../../../services/data.js';
 
 const DashboardBox = ({ room, humid, temp, additionalStyles = {} }) => {
-  const [ledOn, setLedOn] = useState(false);
-  const [relayOn, setRelayOn] = useState(false);
+  const { data, fetchLedStatus, fetchRelayStatus } = useDataStore();
 
-  const toggleLed = (isOn) => {
-    setLedOn(isOn);
+  const [ledOn, setLedOn] = useState(data.ledStatus === 'on');
+  const [relayOn, setRelayOn] = useState(data.relayStatus === 'on');
+
+  useEffect(() => {
+    setLedOn(data.ledStatus === 'on');
+    setRelayOn(data.relayStatus === 'on');
+  }, [data.ledStatus, data.relayStatus]);
+
+  const toggleLed = async (isOn) => {
+    try {
+      const status = isOn ? 'on' : 'off';
+      console.log('Updating LED status to:', status); 
+      const response = await updateLedStatus(status);
+      console.log('API response:', response);
+      setLedOn(isOn);
+      fetchLedStatus(); 
+    } catch (error) {
+      console.error('Error toggling LED:', error);
+    }
   };
 
-  const toggleRelay = (isOn) => {
-    setRelayOn(isOn);
+  const toggleRelay = async (isOn) => {
+    try {
+      const status = isOn ? 'on' : 'off';
+      await updateRelayStatus(status);
+      setRelayOn(isOn);
+      fetchRelayStatus(); 
+    } catch (error) {
+      console.error('Error toggling Relay:', error);
+    }
   };
 
   return (
