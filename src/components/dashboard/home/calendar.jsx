@@ -36,6 +36,7 @@ const MyCalendar = ({ calendarType }) => {
           end: booking.bookingPeriod.endAt.toDate(),
           allDay: false,
           room: booking.room,
+          guest: booking.client.fullName, 
         });
       });
     } else if (calendarType === 'facilities') {
@@ -47,6 +48,7 @@ const MyCalendar = ({ calendarType }) => {
           end: booking.bookingPeriod.endAt.toDate(),
           allDay: false,
           room: 'Laundry',
+          guest: booking.client.fullName, 
         });
       });
 
@@ -58,6 +60,7 @@ const MyCalendar = ({ calendarType }) => {
           end: booking.bookingPeriod.endAt.toDate(),
           allDay: false,
           room: 'Sauna',
+          guest: booking.client.fullName, 
         });
       });
     }
@@ -106,12 +109,9 @@ const MyCalendar = ({ calendarType }) => {
           { 'Title': selectedEvent.title },
           { 'Start': selectedEvent.start.toLocaleString() },
           { 'End': selectedEvent.end.toLocaleString() },
-          { 'Room': selectedEvent.room }
+          { 'Room': selectedEvent.room },
+          { 'Guest': selectedEvent.guest } 
         ] : []}
-        onSave={(updatedContent) => {
-          // Xử lý lưu thông tin nếu cần
-          console.log('Updated Content:', updatedContent);
-        }}
       />
     </div>
   );
