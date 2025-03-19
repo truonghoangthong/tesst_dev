@@ -214,12 +214,17 @@ const Info = () => {
             {user.isAdmin && (
               <div className="form-group">
                 <label htmlFor="profileImage">Profile Image</label>
-                <input
-                  type="file"
-                  id="profileImage"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
+                <div className="file-input-container">
+                  <input
+                    type="file"
+                    id="profileImage"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                  <label htmlFor="profileImage" className="file-input-label">
+                    Choose File
+                  </label>
+                </div>
               </div>
             )}
           </form>
