@@ -72,20 +72,17 @@ const ProtectedRoutes = ({ user }) => {
   );
 };
 
-
 const App = () => {
   const { user } = useAuthStore();
   const isLoginPage = location.pathname === "/login";
-  const { fetchHumidityStream, fetchTemperatureStream, startWeatherDataInterval, fetchLedStatus, fetchRelayStatus} = useDataStore();
+  const { fetchHumidityStream, fetchTemperatureStream, startWeatherDataInterval } = useDataStore();
 
   useEffect(() => {
     fetchHumidityStream();
     fetchTemperatureStream();
     startWeatherDataInterval();
-    fetchLedStatus();
-    fetchRelayStatus();
+  }, [fetchHumidityStream, fetchTemperatureStream, startWeatherDataInterval]);
 
-  }, [fetchHumidityStream, fetchTemperatureStream, startWeatherDataInterval, fetchLedStatus, fetchRelayStatus]);
   return (
     <Router>
       <ScrollToTop />

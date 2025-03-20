@@ -1,4 +1,17 @@
-import axios from 'axios'; 
+import axios from 'axios';
+
+let closeSSE = null;
+
+export const startSSE = (callback) => {
+  closeSSE = getLedStatus(callback);
+};
+
+export const stopSSE = () => {
+  if (closeSSE) {
+    closeSSE();  // Đóng kết nối SSE
+    closeSSE = null;
+  }
+};
 
 export const getLedStatus = (callback) => {
   const eventSource = new EventSource('http://8.215.20.85/sse/get-led-status');
@@ -10,9 +23,8 @@ export const getLedStatus = (callback) => {
   eventSource.onmessage = (event) => {
     try {
       const parsedData = JSON.parse(event.data);
-      console.log('Received LED status:', parsedData);
       callback({ ledStatus: parsedData.status });
-      
+      console.log('Received LED status:', parsedData);
     } catch (e) {
       console.error('Failed to parse LED status data:', e);
       callback({ ledStatus: null });
@@ -31,25 +43,19 @@ export const getLedStatus = (callback) => {
   };
 };
 
-export const updateLedStatus = async (status) => {
+export const updateLedWithSSEHandling = async (status) => {
+  stopSSE(); // Đóng SSE trước khi update
+
   try {
-    console.log('Updating LED status to:', status);
-    const response = await fetch(`http://8.215.20.85/api/v1/update-led-status?status=${status}`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
+    const response = await axios.get('http://8.215.20.85/api/v1/update-led-status', {
+      params: { status },
+      timeout: 5000
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.text(); 
-    console.log('API response:', data); 
-    return data;
-  } catch (error) {
-    console.error('Error updating LED status:', error);
-    throw error;
+    console.log('API response:', response.data);
+    return response.data;
+  } finally {
+    setTimeout(() => {
+      startSSE((data) => console.log('SSE restarted:', data));
+    }, 1000); // Đợi 1 giây trước khi mở lại SSE
   }
 };
