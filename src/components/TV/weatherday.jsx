@@ -7,7 +7,6 @@ const WeatherDay = ({ day, weather, tempHigh, tempLow, isLoading }) => {
   const weatherType = weather ? weather.split(',')[0].trim() : '';
   const icon = weatherType ? getWeatherIcon(weatherType) : null;
 
-  console.log('WeatherDay Props:', { day, weather, tempHigh, tempLow, weatherType });
 
   if (isLoading) {
     return (

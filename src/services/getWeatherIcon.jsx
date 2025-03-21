@@ -3,18 +3,18 @@ import '../components/TV/tv.css';
 
 const getWeatherIcon = (weather) => {
   const iconMap = {
-    Clear: 'twemoji:sunny',
+    Clear: 'twemoji:sun-behind-cloud',
     Cloudy: 'twemoji:cloud',
-    'Mostly clear': 'twemoji:sunny',
-    'Partly cloudy': 'twemoji:cloud',
-    'Light rain': 'twemoji:cloud-with-rain',
+    'Mostly Clear': 'twemoji:sun-behind-cloud',
+    'Partly Cloudy': 'twemoji:cloud',
+    'Light Rain': 'twemoji:cloud-with-rain',
     Rain: 'twemoji:cloud-with-rain',
     Thunderstorm: 'twemoji:cloud-with-lightning',
-    'Light snow': 'twemoji:snowflake',
+    'Light Snow': 'twemoji:snowflake',
     Flurries: 'twemoji:snowflake',
   };
 
-  return <Icon icon={iconMap[weather] || 'twemoji:sunny'} className="weather-icon" />;
+  return <Icon icon={iconMap[weather] || 'twemoji:sun-behind-cloud'} className="weather-icon" />;
 };
 
 export default getWeatherIcon;

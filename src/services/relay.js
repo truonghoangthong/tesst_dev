@@ -8,7 +8,7 @@ export const startSSE = (callback) => {
 
 export const stopSSE = () => {
   if (closeSSE) {
-    closeSSE();  // Đóng kết nối SSE
+    closeSSE();  
     closeSSE = null;
   }
 };
@@ -44,7 +44,7 @@ export const getRelayStatus = (callback) => {
 };
 
 export const updateRelayWithSSEHandling = async (status) => {
-  stopSSE(); // Đóng SSE trước khi update
+  stopSSE();
 
   try {
     const response = await axios.get('http://8.215.20.85/api/v1/update-relay-status', {
@@ -56,6 +56,6 @@ export const updateRelayWithSSEHandling = async (status) => {
   } finally {
     setTimeout(() => {
       startSSE((data) => console.log('SSE restarted:', data));
-    }, 1000); // Đợi 1 giây trước khi mở lại SSE
+    }, 1000);
   }
 };

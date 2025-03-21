@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from "@iconify/react";
 import './roombox.css';
-import { updateLedWithSSEHandling } from '../../../services/led.js'; // Sử dụng hàm mới
-import { updateRelayWithSSEHandling } from '../../../services/relay.js'; // Sử dụng hàm mới
+import { updateLedWithSSEHandling } from '../../../services/led.js'; 
+import { updateRelayWithSSEHandling } from '../../../services/relay.js'; 
 import useDataStore from '../../../services/data.js';
 
 const DashboardBox = ({ room, humid, temp, additionalStyles = {} }) => {
@@ -19,24 +19,24 @@ const DashboardBox = ({ room, humid, temp, additionalStyles = {} }) => {
   const toggleLed = async (isOn) => {
     try {
       const status = isOn ? 'on' : 'off';
-      setLedOn(isOn); // Cập nhật trạng thái ngay lập tức
-      const response = await updateLedWithSSEHandling(status); // Sử dụng hàm mới
+      setLedOn(isOn); 
+      const response = await updateLedWithSSEHandling(status); 
       console.log('API response:', response);
     } catch (error) {
       console.error('Error toggling LED:', error);
-      setLedOn(!isOn); // Khôi phục trạng thái nếu có lỗi
+      setLedOn(!isOn);
     }
   };
 
   const toggleRelay = async (isOn) => {
     try {
       const status = isOn ? 'on' : 'off';
-      setRelayOn(isOn); // Cập nhật trạng thái ngay lập tức
-      const response = await updateRelayWithSSEHandling(status); // Sử dụng hàm mới
+      setRelayOn(isOn); 
+      const response = await updateRelayWithSSEHandling(status); 
       console.log('API response:', response);
     } catch (error) {
       console.error('Error toggling Relay:', error);
-      setRelayOn(!isOn); // Khôi phục trạng thái nếu có lỗi
+      setRelayOn(!isOn);
     }
   };
 

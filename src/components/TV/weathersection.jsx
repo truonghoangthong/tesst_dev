@@ -6,9 +6,8 @@ import Tab from '@mui/material/Tab';
 import { getDayAndTime } from '../../services/getDayandTime';
 import useDataStore from '../../services/data';
 import WeatherDay from './weatherday';
-import getLowHighTempHumid from '../../services/get7days';
 import getWeatherIcon from '../../services/getWeatherIcon.jsX';
-import { Skeleton } from '@mui/material'; // Import Skeleton từ MUI
+import { Skeleton } from '@mui/material';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import './tv.css';
 
@@ -25,8 +24,7 @@ ChartJS.register(
 );
 
 const WeatherSection = ({ updateWeatherBackground }) => {
-  const dailyStats = getLowHighTempHumid();
-  const { data, fetchWeatherData, isLoading } = useDataStore(); // Giả sử `isLoading` được trả về từ `useDataStore`
+  const { data, fetchWeatherData, isLoading } = useDataStore();
   const [selectedTab, setSelectedTab] = useState(0);
 
   useEffect(() => {
@@ -34,6 +32,36 @@ const WeatherSection = ({ updateWeatherBackground }) => {
   }, [fetchWeatherData]);
 
   const weatherData = useMemo(() => data.weatherData || [], [data.weatherData]);
+
+  // Hàm tính toán nhiệt độ cao nhất và thấp nhất cho mỗi ngày
+  const getDailyStats = useMemo(() => {
+    const dailyStats = [];
+
+    weatherData.forEach((dataItem) => {
+      const dayDate = new Date(dataItem.time).toDateString();
+      let dayStats = dailyStats.find((stat) => stat.date === dayDate);
+
+      if (!dayStats) {
+        dayStats = {
+          date: dayDate,
+          minTemp: Infinity,
+          maxTemp: -Infinity,
+          weather: dataItem.weather,
+          shortDay: getDayAndTime(dayDate).shortDay,
+        };
+        dailyStats.push(dayStats);
+      }
+
+      dayStats.minTemp = Math.min(dayStats.minTemp, dataItem.temperature);
+      dayStats.maxTemp = Math.max(dayStats.maxTemp, dataItem.temperature);
+    });
+
+    return dailyStats;
+  }, [weatherData]);
+
+  const dailyStats = getDailyStats;
+
+  // Các hàm và logic khác trong WeatherSection...
 
   const roundToNearestHour = () => {
     const currentTime = new Date();

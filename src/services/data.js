@@ -96,45 +96,7 @@ const useDataStore = create((set, get) => ({
       clearInterval(get().weatherIntervalId);
       set({ weatherIntervalId: null });
     }
-  },
-  resetData: () => {
-    set({
-      data: {
-        humid: [],
-        temp: [],
-        weatherData: [],
-        ledStatus: 'off',
-        relayStatus: 'off'
-      },
-      weatherIntervalId: null
-    });
   }
 }));
-
-// Tạo các selectors để tối ưu hiệu suất
-export const useHumidData = () => useDataStore(
-  (state) => state.data.humid,
-  shallow
-);
-
-export const useTempData = () => useDataStore(
-  (state) => state.data.temp,
-  shallow
-);
-
-export const useWeatherData = () => useDataStore(
-  (state) => state.data.weatherData,
-  shallow
-);
-
-export const useLedStatus = () => useDataStore(
-  (state) => state.data.ledStatus,
-  shallow
-);
-
-export const useRelayStatus = () => useDataStore(
-  (state) => state.data.relayStatus,
-  shallow
-);
 
 export default useDataStore;
