@@ -33,7 +33,6 @@ const WeatherSection = ({ updateWeatherBackground }) => {
 
   const weatherData = useMemo(() => data.weatherData || [], [data.weatherData]);
 
-  // Hàm tính toán nhiệt độ cao nhất và thấp nhất cho mỗi ngày
   const getDailyStats = useMemo(() => {
     const dailyStats = [];
 
@@ -60,8 +59,6 @@ const WeatherSection = ({ updateWeatherBackground }) => {
   }, [weatherData]);
 
   const dailyStats = getDailyStats;
-
-  // Các hàm và logic khác trong WeatherSection...
 
   const roundToNearestHour = () => {
     const currentTime = new Date();

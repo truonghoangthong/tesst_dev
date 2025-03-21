@@ -1,12 +1,11 @@
 import React from 'react';
 import getWeatherIcon from '../../services/getWeatherIcon.jsX';
-import { Skeleton } from '@mui/material'; 
+import { Skeleton } from '@mui/material';
 import './weatherday.css';
 
 const WeatherDay = ({ day, weather, tempHigh, tempLow, isLoading }) => {
   const weatherType = weather ? weather.split(',')[0].trim() : '';
   const icon = weatherType ? getWeatherIcon(weatherType) : null;
-
 
   if (isLoading) {
     return (
