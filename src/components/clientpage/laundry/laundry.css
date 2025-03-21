@@ -115,7 +115,6 @@
   margin-left: 15px;
 }
 
-/* Mobile styles (phone mode) */
 @media (max-width: 768px) {
   .laundry-calendar .booking-calendar-container {
     padding: 10px;
@@ -150,7 +149,7 @@
   }
 
   .laundry-calendar .rbc-time-view {
-    display: block; /* Hiển thị time view trong chế độ mobile */
+    display: block; 
   }
 
   .laundry-calendar .rbc-date-cell {

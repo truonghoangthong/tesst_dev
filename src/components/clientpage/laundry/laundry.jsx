@@ -274,23 +274,28 @@ const LaundryCalendar = () => {
     const twoHoursAfter = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000);
     const isWithinTwoHours = event.start < twoHoursAfter;
 
-    if (isWithinTwoHours) {
-      if (event.title === "my-reservation") {
-        return <span>My Reservation</span>;
-      } else if (event.status === "booked") {
-        return <span>Booked</span>;
-      } else {
-        return <span>Past</span>;
-      }
-    } else {
-      if (event.title === "my-reservation") {
-        return <span>Cancel</span>;
-      } else if (event.status === "booked") {
-        return <span>Booked</span>;
-      } else {
-        return <span>Available</span>;
-      }
-    }
+    const slotTypeLabel = event.type === "washer" ? "Washer" : "Dryer";
+
+    return (
+      <div className="event-content">
+        <div className="slot-type-label">{slotTypeLabel}</div>
+        {isWithinTwoHours ? (
+          event.title === "my-reservation" ? (
+            <div>My Reservation</div>
+          ) : event.status === "booked" ? (
+            <div>Booked</div>
+          ) : (
+            <div>Past</div>
+          )
+        ) : event.title === "my-reservation" ? (
+          <div>Cancel</div>
+        ) : event.status === "booked" ? (
+          <div>Booked</div>
+        ) : (
+          <div>Available</div>
+        )}
+      </div>
+    );
   };
 
   return (
