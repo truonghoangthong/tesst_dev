@@ -58,7 +58,7 @@ const useAdminEditProfile = () => {
   };
 
   /**
-   * Funtion to upload image to Google Cloud
+   * Funtion to update data in the Firestore
    * @param {Object} inputs - A object contains user updated information
    * @param {string} inputs.fullName - User's full name
    * @param {string} inputs.phoneNum - User's phone number
