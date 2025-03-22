@@ -19,6 +19,7 @@ import ClientEvents from "./components/clientpage/events/events";
 import AdminEvents from "./components/dashboard/adminEvents/adminEvents";
 import useDataStore from "./services/data";
 import useAuthStore from "../../Backend/src/store/authStore";
+import Chatbot from "./components/clientpage/chatbot/chatbot";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -70,6 +71,7 @@ const ProtectedRoutes = ({ user }) => {
       </div>
 
       {!isLoginPage && <Footer isAdmin={isAdmin}/>}
+      {!isAdmin && <Chatbot />} 
     </div>
   );
 };
