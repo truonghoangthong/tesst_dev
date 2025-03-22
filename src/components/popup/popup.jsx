@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import "./Popup.css";
+import "./popup.css";
+
 const Popup = ({ title, message, status, onClose }) => {
   useEffect(() => {
     const timeout = setTimeout(() => {

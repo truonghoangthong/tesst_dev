@@ -77,13 +77,14 @@ const ProtectedRoutes = ({ user }) => {
 const App = () => {
   const { user } = useAuthStore();
   const isLoginPage = location.pathname === "/login";
-  const { fetchHumidityStream, fetchTemperatureStream, startWeatherDataInterval } = useDataStore();
+  const { fetchHumidityStream, fetchTemperatureStream, fetchWeatherData, startWeatherDataInterval } = useDataStore();
 
   useEffect(() => {
     fetchHumidityStream();
     fetchTemperatureStream();
+    fetchWeatherData();
     startWeatherDataInterval();
-  }, [fetchHumidityStream, fetchTemperatureStream, startWeatherDataInterval]);
+  }, [fetchHumidityStream, fetchTemperatureStream, fetchWeatherData, startWeatherDataInterval]);
 
   return (
     <Router>

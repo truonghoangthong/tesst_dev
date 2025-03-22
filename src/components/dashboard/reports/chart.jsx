@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import useDataStore from '../../../services/data';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import Skeleton from '@mui/material/Skeleton'; 
+import Skeleton from '@mui/material/Skeleton';
 
 const HumidTempChart = () => {
-  const { humid, temp, weatherData } = useDataStore((state) => state.data);  
+  const { humid, temp, weatherData } = useDataStore((state) => state.data);
   const [loading, setLoading] = useState(true);
+  
+  console.log("Data from useDataStore:", { humid, temp, weatherData });
 
   useEffect(() => {
-    if (humid.length > 0 && temp.length > 0 && weatherData.length > 0) {  
+    if (humid.length > 0 && temp.length > 0 && weatherData.length > 0) {
       setLoading(false);
     }
-  }, [humid, temp, weatherData]); 
+  }, [humid, temp, weatherData]);
 
   if (loading) {
     return (
@@ -25,7 +27,7 @@ const HumidTempChart = () => {
   }
 
   const filterDataByHour = (hour) => {
-    return humid.map((item, index) => {
+    const filtered = humid.map((item, index) => {
       const itemTime = new Date(item.time);
       if (itemTime.getHours() === hour) {
         const matchingWeather = weatherData.find(weather => {
@@ -34,15 +36,18 @@ const HumidTempChart = () => {
         });
 
         return {
-          time: itemTime,  
-          humidityIndoor: item.humidity,  
-          temperatureIndoor: temp[index]?.temperature || null,  
-          humidityOutdoor: matchingWeather?.humidity || null,  
-          temperatureOutdoor: matchingWeather?.temperature || null,  
+          time: itemTime,
+          humidityIndoor: item.humidity,
+          temperatureIndoor: temp[index]?.temperature || null,
+          humidityOutdoor: matchingWeather?.humidity || null,
+          temperatureOutdoor: matchingWeather?.temperature || null,
         };
       }
       return null;
-    }).filter(item => item !== null);  
+    }).filter(item => item !== null);
+
+    console.log(`Filtered data for hour ${hour}:`, filtered);
+    return filtered;
   };
 
   const selectedHours = [1, 2, 3]; 
@@ -52,15 +57,21 @@ const HumidTempChart = () => {
     filteredData = filteredData.concat(filterDataByHour(hour));
   });
 
+  console.log("Filtered Data:", filteredData);
+
   filteredData.sort((a, b) => a.time - b.time);
+  console.log("Sorted Data:", filteredData);
 
   const chartData = filteredData.map(item => ({
-    time: item.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+    time: item.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     humidityIndoor: item.humidityIndoor,
     temperatureIndoor: item.temperatureIndoor,
     humidityOutdoor: item.humidityOutdoor,
     temperatureOutdoor: item.temperatureOutdoor,
   }));
+
+  // Log dữ liệu cuối cùng trước khi truyền vào biểu đồ
+  console.log("Final Chart Data:", chartData);
 
   return (
     <div>

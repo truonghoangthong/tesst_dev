@@ -24,12 +24,8 @@ ChartJS.register(
 );
 
 const WeatherSection = ({ updateWeatherBackground }) => {
-  const { data, fetchWeatherData, isLoading } = useDataStore();
+  const { data, isLoading } = useDataStore();
   const [selectedTab, setSelectedTab] = useState(0);
-
-  useEffect(() => {
-    fetchWeatherData();
-  }, [fetchWeatherData]);
 
   const weatherData = useMemo(() => data.weatherData || [], [data.weatherData]);
 

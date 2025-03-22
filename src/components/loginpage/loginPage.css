@@ -80,3 +80,8 @@
   text-decoration: underline;
 }
 
+@media (max-width: 550px) {
+  .slideshow {
+    display: none;
+  }
+}
