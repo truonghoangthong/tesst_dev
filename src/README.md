@@ -91,7 +91,7 @@ This API provides endpoints for recording and retrieving environmental data, inc
      }
      ```
      
-### 7. **Upload image**
+### 7. **Upload admin's avatar**
 - **Method:** `POST` 
 - **Description:** API for uploading images and automatically renaming files using a `uid`. **Automatically deletes old files with the same UID** before uploading a new one. Supported formats: JPEG, PNG, GIF, WEBP.
 ## Request Details  
@@ -195,8 +195,30 @@ File uploaded successfully: https://storage.cloud.google.com/your-bucket-name/fr
          "status": "on"
      }
      ```
+### 13. **Upload event images**
+- **Method:** `POST` 
+- **Description:** API for uploading images And the file name should be based on the local file name. ** Supported formats: JPEG, PNG, GIF, WEBP.
+## Request Details  
+### **Headers**  
+| Key | Value | Required |  
+|-----|-------|----------|  
+| `Content-Type` | `multipart/form-data` | Yes |  
 
-### 13. **Get logs Records**
+### **Body (Form Data)**  
+| Field | Type | Description | Required |  
+|-------|------|-------------|----------|  
+| `image` | File | Image file to upload | Yes |  
+
+### **Constraints**  
+- File must be sent via the `image` field
+  
+## Response Examples  
+### **Success (200 OK)**  
+```plaintext  
+File uploaded successfully: https://storage.googleapis.com/your-bucket-name/imageEvent/snowing.jpg  
+```
+
+### 14. **Get logs Records**
 - **Method:** `GET`
 - **Description:** Get logs Records.
 - **Response Example:**  
