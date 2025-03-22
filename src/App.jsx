@@ -16,6 +16,7 @@ import TvView from "./components/TV/tv";
 import RoomBooking from "./components/clientpage/roomBooking/roomBooking";
 import LaundryCalendar from "./components/clientpage/laundry/laundry";
 import ClientEvents from "./components/clientpage/events/events";
+import AdminEvents from "./components/dashboard/adminEvents/adminEvents";
 import useDataStore from "./services/data";
 import useAuthStore from "../../Backend/src/store/authStore";
 
@@ -53,7 +54,7 @@ const ProtectedRoutes = ({ user }) => {
               <Route path="/admin/bookings" element={<Bookings />} />
               <Route path="/admin/info" element={<Info />} />
               <Route path="/admin/complaints" element={<Complaints />} />
-              <Route path="/admin/events" element={<span>Events</span>} />
+              <Route path="/admin/events" element={<AdminEvents/>} />
             </>
           ) : (
             <>
