@@ -15,6 +15,7 @@ import ClientComplaint from "./components/clientpage/clientcomplaint/clientcompl
 import TvView from "./components/TV/tv";
 import RoomBooking from "./components/clientpage/roomBooking/roomBooking";
 import LaundryCalendar from "./components/clientpage/laundry/laundry";
+import ClientEvents from "./components/clientpage/events/events";
 import useDataStore from "./services/data";
 import useAuthStore from "../../Backend/src/store/authStore";
 
@@ -61,7 +62,7 @@ const ProtectedRoutes = ({ user }) => {
               <Route path="/client/info" element={<Info />} />
               <Route path="/client/complaint" element={<ClientComplaint />} />
               <Route path="/client/rooms" element={<RoomBooking/>} />
-              <Route path="/client/events" element={<span>Events</span>} />
+              <Route path="/client/events" element={<ClientEvents />} />
             </>
           )}
         </Routes>
