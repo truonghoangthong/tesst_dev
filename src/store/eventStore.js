@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { collection, doc, setDoc, query, where } from "firebase/firestore";
+import { collection, doc, setDoc, deleteDoc } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import { getDocs } from "firebase/firestore";
 
