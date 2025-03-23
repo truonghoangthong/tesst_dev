@@ -1,6 +1,0 @@
-[build]
-  command = "npm run build"  # Lệnh để build frontend
-  publish = "Frontend/build"  # Thư mục chứa kết quả build của frontend (đối với React, Vue, v.v.)
-
-[functions]
-  directory = "Backend/functions"  # Thư mục chứa các API functions
