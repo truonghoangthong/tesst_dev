@@ -1,25 +1,22 @@
 services:
+  # Frontend service
   - type: web
-    name: Frontend
+    name: frontend
     env: node
     buildCommand: cd frontend && npm install && npm run build
     startCommand: cd frontend && npm run start
     plan: free
     branch: main
-    regions: ["oregon"]
     envVars:
       - key: NODE_ENV
         value: production
-    staticPublishPath: Frontend/build
+    staticPublishPath: frontend/build
 
+  # Backend functions service (chỉ chạy một số functions trong backend)
   - type: web
-    name: Backend
+    name: backend-functions
     env: node
     buildCommand: cd backend && npm install
-    startCommand: cd backend && npm start
+    startCommand: cd backend && npm run start
     plan: free
     branch: main
-    regions: ["oregon"]
-    envVars:
-      - key: NODE_ENV
-        value: production
