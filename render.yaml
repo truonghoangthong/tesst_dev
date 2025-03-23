@@ -1,24 +1,20 @@
 services:
-  # Frontend service
-  - type: web
-    name: frontend
+  # Frontend service (STATIC SITE)
+  - type: static
+    name: Frontend
     env: node
-    buildCommand: cd frontend && npm install && npm run build
-    startCommand: cd frontend && npm run start
+    buildCommand: cd Frontend && npm install && npm run build
+    staticPublishPath: build  # <--- CHỈ TRỎ TRỰC TIẾP VÀO THƯ MỤC BUILD
     plan: free
     branch: main
     envVars:
       - key: NODE_ENV
         value: production
-    # Chỉ cần xác định staticPublishPath nếu dịch vụ là static (chẳng hạn React, Vue)
-    staticPublishPath: frontend/build
 
-  # Backend functions service (chỉ chạy một số functions trong backend)
-  - type: web
-    name: backend-functions
+  # Backend functions service (SERVERLESS FUNCTIONS)
+  - type: functions
+    name: Backend-functions
     env: node
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && npm run start
+    buildCommand: cd Backend && npm install
     plan: free
     branch: main
-    # Không cần staticPublishPath vì đây là backend API functions
