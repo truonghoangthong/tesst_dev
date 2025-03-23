@@ -5,8 +5,6 @@ const getWeatherData = async (callback) => {
     const response = await axios.get('http://8.215.20.85/info/weather?city=hyrynsalmi');
     const weatherDataArray = response.data.newContent;
 
-    console.log('Weather data array received:', weatherDataArray);
-
     if (Array.isArray(weatherDataArray) && weatherDataArray.length > 0) {
       callback({
         weatherData: weatherDataArray, 

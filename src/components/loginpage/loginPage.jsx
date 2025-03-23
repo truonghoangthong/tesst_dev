@@ -150,7 +150,7 @@ const LoginPage = () => {
             ) : (
               <>
                 <input
-                  type="text"
+                  type="email"
                   name="email"
                   placeholder="Email"
                   value={isSignUp ? signUpData.email : formData.email}
@@ -163,6 +163,14 @@ const LoginPage = () => {
                   placeholder="Password"
                   value={isSignUp ? signUpData.password : formData.password}
                   onChange={handleChange}
+                  pattern="^
+                            (?=.*[a-z])
+                            (?=.*[A-Z])(?=.*\d)
+                            (?=.*[@$!%*?&])
+                            [A-Za-z\d@$!%*?&]
+                            {8,}
+                          $"
+                  title="Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
                   required
                 />
                 {isSignUp && (
@@ -176,7 +184,7 @@ const LoginPage = () => {
                       required
                     />
                     <input
-                      type="text"
+                      type="number"
                       name="phoneNum"
                       placeholder="Phone Number"
                       value={signUpData.phoneNum}

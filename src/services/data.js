@@ -4,7 +4,6 @@ import { getTemp } from './temp';
 import getWeatherData from './weather';
 import { getLedStatus } from './led';
 import { getRelayStatus } from './relay';
-import { shallow } from 'zustand/shallow';
 
 const useDataStore = create((set, get) => ({
   data: {
@@ -49,7 +48,6 @@ const useDataStore = create((set, get) => ({
               weatherData: data.weatherData,
             },
           }));
-          console.log('Weather data successfully set in the store:', data.weatherData);
         } else {
           console.log('Invalid weather data received:', data);
         }
