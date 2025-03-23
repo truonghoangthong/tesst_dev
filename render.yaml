@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: Frontend
+    env: node
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npm run start
+    plan: free
+    branch: main
+    regions: ["oregon"]
+    envVars:
+      - key: NODE_ENV
+        value: production
+    staticPublishPath: Frontend/build
+
+  - type: web
+    name: Backend
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    plan: free
+    branch: main
+    regions: ["oregon"]
+    envVars:
+      - key: NODE_ENV
+        value: production
