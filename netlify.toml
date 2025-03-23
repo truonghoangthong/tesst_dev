@@ -1,0 +1,8 @@
+[build]
+  base = "/total/frontend"
+  command = "npm install && npm run build"
+  publish = "frontend/build"
+
+[functions]
+  directory = "backend/"
+

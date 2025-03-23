@@ -1,7 +1,0 @@
-[build]
-base = "Frontend"  # Chạy build trong thư mục frontend
-command = "npm install && npm run build"
-publish = "Frontend/build"  # Thư mục chứa file đã build
-
-[functions]
-directory = "Backend/functions"  # API functions từ backend
