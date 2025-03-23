@@ -1,16 +1,17 @@
 services:
   # Frontend (Static Site - React)
-  - type: static
+  - type: web  # Sửa từ "static" → "web"
     name: my-react-frontend
     env: node
     buildCommand: cd frontend && npm install && npm run build
-    outputDirectory: frontend/build  # Đường dẫn đến thư mục build
+    staticDir: frontend/build  # Thêm trường này để chỉ định thư mục tĩnh
+    plan: free
     branch: main
     envVars:
       - key: NODE_ENV
         value: production
 
-  # Backend (Web Service - Node.js/Express hoặc serverless functions)
+  # Backend (Web Service - Node.js/Express)
   - type: web
     name: my-backend-api
     env: node
@@ -20,4 +21,4 @@ services:
     branch: main
     envVars:
       - key: PORT
-        value: 10000  # Render tự gán port, nhưng bạn cần khai báo trong code
+        value: 10000  # Render tự gán port, nhưng cần khai báo trong code
