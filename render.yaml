@@ -1,20 +1,23 @@
 services:
-  # Frontend service (STATIC SITE)
+  # Frontend (Static Site - React)
   - type: static
-    name: Frontend
+    name: my-react-frontend
     env: node
-    buildCommand: cd Frontend && npm install && npm run build
-    staticPublishPath: build  # <--- CHỈ TRỎ TRỰC TIẾP VÀO THƯ MỤC BUILD
-    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    outputDirectory: frontend/build  # Đường dẫn đến thư mục build
     branch: main
     envVars:
       - key: NODE_ENV
         value: production
 
-  # Backend functions service (SERVERLESS FUNCTIONS)
-  - type: functions
-    name: Backend-functions
+  # Backend (Web Service - Node.js/Express hoặc serverless functions)
+  - type: web
+    name: my-backend-api
     env: node
-    buildCommand: cd Backend && npm install
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start  # Ví dụ: "node server.js"
     plan: free
     branch: main
+    envVars:
+      - key: PORT
+        value: 10000  # Render tự gán port, nhưng bạn cần khai báo trong code
