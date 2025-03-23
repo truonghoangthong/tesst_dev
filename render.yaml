@@ -10,6 +10,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+    # Chỉ cần xác định staticPublishPath nếu dịch vụ là static (chẳng hạn React, Vue)
     staticPublishPath: frontend/build
 
   # Backend functions service (chỉ chạy một số functions trong backend)
@@ -20,3 +21,4 @@ services:
     startCommand: cd backend && npm run start
     plan: free
     branch: main
+    # Không cần staticPublishPath vì đây là backend API functions
