@@ -3,7 +3,7 @@ import { collection, doc, setDoc, query, where } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import { getDocs } from "firebase/firestore";
 
-const useEventStore = create((set) => ({
+const useEventStore = create((set, get) => ({
   // Map data from the array
   events: [],
 
