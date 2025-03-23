@@ -104,7 +104,7 @@ const useEventStore = create((set) => ({
         throw new Error("Event not found");
       }
 
-      if (event.eventImageLink) {
+      if (event) {
         const filenameWithExtension = event.eventImageLink.split("/").pop();
         const filenameWithoutExtension = filenameWithExtension.replace(
           /\.[^/.]+$/,
