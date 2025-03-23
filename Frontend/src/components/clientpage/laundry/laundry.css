@@ -1,0 +1,240 @@
+.laundry-calendar .booking-calendar-container {
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.laundry-calendar .rbc-event {
+  border-radius: 10px;
+  border: none;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px;
+  box-sizing: border-box;
+  background-color: #f2f2f2;
+  margin-bottom: 10px;
+}
+
+.laundry-calendar .rbc-event.laundry-past {
+  background-color: transparent; 
+  color: #999;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.laundry-calendar .rbc-event.laundry-my-reservation {
+  background-color: #ffcccc; 
+  color: #000;
+  border: 1px solid #ffcccc;
+  cursor: pointer;
+}
+
+.laundry-calendar .rbc-event.laundry-booked {
+  background-color: #abdfff; 
+  color: #000;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.laundry-calendar .rbc-event.laundry-available {
+  background-color: #f2f2f2; 
+  color: #333;
+  cursor: pointer;
+}
+
+.laundry-calendar .rbc-event.laundry-past.laundry-my-reservation {
+  background-color: transparent; 
+  color: #000; 
+  cursor: not-allowed;
+  pointer-events: none;
+  border: none;
+}
+
+.laundry-calendar .rbc-event.laundry-past.laundry-booked {
+  background-color: transparent;
+  color: #999; 
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.laundry-calendar .rbc-header {
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.laundry-calendar .rbc-month-view {
+  min-height: 100vh;
+}
+
+.laundry-calendar .rbc-month-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.laundry-calendar .rbc-day {
+  height: 100px;
+  position: relative;
+} 
+
+.laundry-calendar .rbc-event-label {
+  display: none;
+}
+
+.laundry-calendar .rbc-events-container {
+  margin: 0;
+}
+
+.laundry-calendar .rbc-time-header-gutter,
+.laundry-calendar .rbc-time-gutter {
+  width: 80px;
+  min-width: 80px;
+}
+
+.laundry-calendar .rbc-time-header-gutter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2f2f2;
+}
+
+.laundry-calendar .rbc-time-gutter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2f2f2;
+}
+
+.laundry-calendar .rbc-day + .rbc-day {
+  margin-left: 15px;
+}
+
+@media (max-width: 768px) {
+  .laundry-calendar .booking-calendar-container {
+    padding: 10px;
+    height: auto;
+  }
+
+  .laundry-calendar .rbc-month-view {
+    min-height: auto;
+  }
+
+  .laundry-calendar .rbc-day {
+    height: 50px;
+  }
+
+  .laundry-calendar .rbc-header {
+    display: none;
+  }
+
+  .laundry-calendar .rbc-month-header {
+    display: none;
+  }
+
+  .laundry-calendar .rbc-time-header-gutter,
+  .laundry-calendar .rbc-time-gutter {
+    width: 50px;
+    min-width: 50px;
+    font-size: 12px;
+  }
+
+  .laundry-calendar .rbc-day + .rbc-day {
+    margin-left: 0;
+  }
+
+  .laundry-calendar .rbc-time-view {
+    display: block; 
+  }
+
+  .laundry-calendar .rbc-date-cell {
+    display: none;
+  }
+
+  .laundry-calendar .rbc-toolbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .laundry-calendar .rbc-toolbar-label {
+    margin-bottom: 10px;
+  }
+
+  .laundry-calendar .rbc-toolbar button {
+    margin: 5px 0;
+  }
+
+  .laundry-calendar .react-datepicker-wrapper {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .laundry-calendar .react-datepicker__input-container {
+    width: 100%;
+  }
+
+  .laundry-calendar .react-datepicker__input-container input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  .laundry-calendar .rbc-calendar {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .laundry-calendar .rbc-time-content {
+    flex-grow: 1;
+  }
+
+  .laundry-calendar .rbc-time-gutter,
+  .laundry-calendar .rbc-time-header-gutter {
+    width: 40px;
+    min-width: 40px;
+  }
+
+  .laundry-calendar .rbc-time-header {
+    display: none;
+  }
+
+  .laundry-calendar .rbc-time-content {
+    overflow: visible;
+  }
+
+  .laundry-calendar .rbc-time-view .rbc-time-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .laundry-calendar .rbc-time-content > .rbc-time-gutter {
+    display: none;
+  }
+
+  .laundry-calendar .rbc-time-content > .rbc-time-content {
+    flex-grow: 1;
+  }
+
+  .laundry-calendar .rbc-time-content > .rbc-time-content > .rbc-day-slot {
+    width: 100%;
+  }
+
+  .laundry-calendar .rbc-time-content > .rbc-time-content > .rbc-day-slot .rbc-events-container {
+    margin: 0;
+  }
+
+  .laundry-calendar .rbc-time-content > .rbc-time-content > .rbc-day-slot .rbc-event {
+    margin: 0;
+    width: 100%;
+    height: 40px;
+    border-radius: 4px;
+  }
+}

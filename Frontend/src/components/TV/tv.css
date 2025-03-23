@@ -1,0 +1,250 @@
+.tv-app {
+  padding: 1.25rem;
+  width: 100vw;
+  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1.25rem;
+  position: relative;
+  box-sizing: border-box;
+  backdrop-filter: blur(0.625rem);
+  color: #fff;
+}
+
+.tv-app::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.tv-app.clear {
+  background: linear-gradient(
+    to bottom,
+    rgba(135, 206, 235, 0.8) 25%,
+    rgba(0, 191, 255, 0.8) 100%
+  );
+}
+
+.tv-app.cloudy {
+  background: linear-gradient(
+    to bottom,
+    rgba(96, 96, 96, 0.8) 25%,
+    rgba(240, 240, 240, 0.8) 100%
+  );
+}
+
+.tv-app.rainy {
+  background: linear-gradient(
+    to bottom,
+    rgb(12, 28, 77) 25%,
+    rgb(136, 158, 189) 100%
+  );
+}
+
+.tv-app.snowy {
+  background: linear-gradient(
+    to bottom,
+    rgb(125, 143, 160) 0%,
+    white 50%,
+    rgb(125, 143, 160) 100%
+  );
+}
+
+.tv-app.sunny {
+  background: linear-gradient(
+    to bottom,
+    rgba(135, 206, 235, 0.8) 25%,
+    rgba(255, 215, 0, 0.8) 100%
+  );
+}
+
+.left-panel,
+.right-panel {
+  z-index: 2;
+  padding: 0.9375rem;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.left-panel {
+  flex-grow: 2;
+}
+
+.right-panel {
+  flex-grow: 1;
+  display: flex;
+  gap: 0.9375rem;
+  max-height: 100%;
+  width: 30%;
+}
+
+.right-panel h2 {
+  color: #fff;
+  margin-top: 0;
+}
+
+.weather-section {
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 100%;
+}
+
+.weather-summary {
+  display: flex;
+  width: 100%;
+}
+
+.weather-icon {
+  width: 4.6875rem;
+  height: auto;
+}
+
+.top-panel {
+  display: flex;
+  align-items: center;
+  gap: 0.9375rem;
+}
+
+.top-panel h1 {
+  font-size: 3rem;
+}
+
+.top-panel-data,
+.top-panel .right {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+}
+
+.top-panel-data p {
+  margin: 0;
+}
+
+.top-panel .right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 0;
+}
+
+.bottom-panel {
+  width: 100%;
+}
+
+h2.date {
+  text-align: right;
+  margin: 0;
+}
+
+.day-time {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  text-align: right;
+}
+
+.day,
+.time {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.temperature {
+  font-size: 6rem;
+  font-weight: bold;
+}
+
+.temperature-unit {
+  font-size: 1.5rem;
+  margin-left: 0.25rem;
+}
+
+.events-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9375rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.MuiAccordion-root {
+  border-radius: 0.75rem;
+  background-color: #333;
+  color: white;
+  height: auto;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 0.625rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+
+.MuiAccordionSummary-root {
+  background-color: #444;
+  padding: 0.75rem 0.9375rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+  border-radius: 0.75rem;
+}
+
+.MuiAccordionSummary-root:hover {
+  background-color: transparent; 
+}
+
+.MuiAccordionDetails-root {
+  background-color: white;
+  padding: 0.9375rem;
+  height: auto;
+  color: #333;
+  font-size: 1.2rem;
+  font-family: 'Montserrat', sans-serif;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.MuiAccordionSummary-expandIcon {
+  color: #fff;
+}
+
+.MuiAccordion-root.Mui-expanded .MuiAccordionDetails-root {
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.MuiAccordionSummary-root .MuiTypography-root {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: black; 
+}
+
+.event-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.event-image {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  max-height: 12.5rem;
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 50rem;
+  margin: 0 auto;
+}

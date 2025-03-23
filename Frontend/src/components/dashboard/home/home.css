@@ -1,0 +1,124 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+  overflow: auto;
+  z-index: 1;
+}
+
+.db-box-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap; 
+  position: relative;
+  width: 100%;
+  gap: 20px; 
+}
+
+.db-box {
+  background-color: #F2F2F2;
+  border-radius: 10px;
+  flex: 1; 
+  height: 125px;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  padding: 10px;
+  box-sizing: border-box;
+  transition: transform 0.1s ease;
+}
+
+.db-box-info {
+  flex-direction: column;
+  display: none;
+}
+
+.calendar-toggle-buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-start; 
+  gap: 10px; 
+  width: 100%; 
+  padding-left: 5px;
+}
+
+.calendar-toggle-btn {
+  margin-right: 5px;
+  padding: 10px 20px; 
+  border: none;
+  background-color: #f0f0f0; 
+  color: black; 
+  font-size: 14px; 
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+.calendar-toggle-btn.active {
+  background-color: #4d79ff; 
+  color: white; 
+}
+
+.status-available {
+  color: #00A75A;
+}
+
+.status-occupied {
+  color: #9E1212;
+}
+
+.status-cleaning {
+  color: #EA8B1E;
+}
+
+.status-booked {
+  color: #3776D4;
+}
+
+@media (max-width: 767px) {
+  .home {
+    left: 0;
+    width: 100%;
+  }
+
+  .db-box-info {
+    display: none;
+  }
+
+  .db-box-list {
+    flex-wrap: wrap; 
+    order: 2; /* Đặt thứ tự của db-box-list thành 2 */
+  }
+
+  .db-box {
+    flex: 1 1 calc(50% - 10px); 
+    margin-bottom: 15px;
+  }
+
+  .db-box-left {
+    font-size: 24px;
+    transform: scale(1);
+  }
+
+  .db-box-right {
+    transform: scale(1);
+  }
+
+  .calendar-container {
+    margin-top: 20px;
+    order: 1; /* Đặt thứ tự của calendar-container thành 1 */
+  }
+
+  .calendar-toggle-buttons {
+    align-items: center;
+  }
+
+  .calendar-toggle-btn {
+    padding: 8px 15px;
+    font-size: 12px;
+  }
+}

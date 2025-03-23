@@ -1,0 +1,256 @@
+.info {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.info-details {
+  padding: 0 30px;
+}
+
+.info-form {
+  margin-right: 25px;
+  display: grid;
+  grid-template-columns: 1fr; 
+  grid-gap: 15px;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+.gradient-box {
+  height: 122px;
+  width: 100%;
+  background: linear-gradient(to right, #1c2228, #ABDFFF);
+}
+
+.name-box {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.name-column {
+  display: flex;
+  flex-direction: column;
+  margin-left: 40px;
+}
+
+.info-name {
+  font-size: 30px;
+}
+
+.info-email {
+  font-size: 25px;
+}
+
+.info-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px;
+  width: 100%;
+  padding-top: 30px;
+}
+
+.change-password-form {
+  background-color: #f2f2f2;
+  padding: 15px;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 1fr; 
+  grid-gap: 15px;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+  margin-right: 25px;
+  box-sizing: border-box;
+}
+
+.save-profile-button,
+.my-booking-button,
+.logout-button {
+  background-color: #ABDFFF; 
+  color: black; 
+  width: auto; 
+  padding: 12px 20px;
+  border-radius: 10px; 
+  font-size: 16px; 
+  margin-top: 20px; 
+  margin-right: 15px; 
+  display: inline-block; 
+  justify-self: center; 
+  cursor: pointer; 
+}
+
+.save-profile-button:hover,
+.my-booking-button:hover {
+  background-color: #9ccce7; 
+}
+
+.logout-button {
+  background-color: #FF6B6B; 
+  color: white; 
+}
+
+.logout-button:hover {
+  background-color: #FF3B3B;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.info input {
+  width: 100%; 
+  padding: 15px;
+  border: 1px solid black;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: white;
+  color: black;
+  box-sizing: border-box; 
+}
+
+.info-form input, .change-password-form input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.info-form input[type="email"] {
+  background-color: #e0e0e0; 
+  color: black; 
+  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 767px) {
+  .info-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .info-form, .change-password-form {
+    grid-template-columns: 1fr; 
+    width: 100%;
+  }
+
+  .change-password-form {
+    width: 100%; 
+  }
+
+  .save-profile-button, .change-password-button {
+    width: 100%; 
+    grid-column: span 1;
+  }
+
+  .save-profile-button {
+    justify-self: center; 
+    width: 100%; 
+  }
+
+  .change-password-button {
+    justify-self: center;
+    width: 100%; 
+  }
+
+  .save-profile-button,
+  .my-booking-button,
+  .logout-button {
+    width: 100%; 
+    margin-top: 10px; 
+  }
+}
+
+.change-password-button {
+  width: auto;
+  background-color: #FF6B6B;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  height: 40px;
+}
+
+.change-password-button:hover {
+  background-color: #FF3B3B;
+}
+
+.change-password-form .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.change-password-form label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.change-password-form input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.logout-button {
+  background-color: #FF6B6B;
+  color: white;
+}
+
+.file-input-container {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+.file-input-container input[type="file"] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-input-label {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #ABDFFF;
+  color: black;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.file-input-label:hover {
+  background-color: #9ccce7;
+}

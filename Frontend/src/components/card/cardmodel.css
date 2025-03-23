@@ -1,0 +1,78 @@
+.custom-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 90%;
+  max-width: 500px; 
+}
+
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.custom-card-content {
+  padding: 16px;
+}
+
+.custom-editable-section {
+  margin-bottom: 16px;
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-table tr {
+  border-bottom: 1px solid #eee; 
+}
+
+.info-table td {
+  padding: 8px 0; 
+}
+
+.info-key {
+  font-weight: bold; 
+  width: 40%; 
+  text-align: left; 
+}
+
+.info-value {
+  width: 60%; 
+  text-align: left; 
+}
+
+.custom-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px; 
+}
+
+.custom-button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.close-button {
+  background-color: #007bff;
+}
+
+.save-button {
+  background-color: green;
+}

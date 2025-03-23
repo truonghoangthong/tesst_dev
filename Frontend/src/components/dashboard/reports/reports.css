@@ -1,0 +1,9 @@
+.reports {
+  position: relative;
+  width: 100%;
+  height: auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  overflow: auto;
+  flex-direction: column;
+}

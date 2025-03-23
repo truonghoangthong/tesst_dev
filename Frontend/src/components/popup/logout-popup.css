@@ -1,0 +1,73 @@
+.logout-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
+}
+
+.logout-popup {
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
+  text-align: center;
+  max-width: 400px; 
+  width: 90%;
+}
+
+.logout-popup span {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333; 
+  margin-bottom: 20px;
+  display: block;
+}
+
+.logout-popup p {
+  font-size: 14px;
+  color: #666; 
+  margin: 10px 0;
+}
+
+.logout-popup button {
+  margin: 10px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-popup button:hover {
+  transform: translateY(-2px); 
+}
+
+.logout-popup button:active {
+  transform: translateY(0); 
+}
+
+.logout-popup button:first-of-type {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.logout-popup button:first-of-type:hover {
+  background-color: #e0e0e0; 
+}
+
+.logout-popup button:last-of-type {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.logout-popup button:last-of-type:hover {
+  background-color: #e60000; 
+}

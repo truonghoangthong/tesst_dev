@@ -1,0 +1,113 @@
+.db-box {
+  background-color: #F2F2F2;
+  border-radius: 10px;
+  width: 100%;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  padding: 10px;
+  box-sizing: border-box;
+  transition: transform 0.1s ease;
+}
+
+.db-box-left {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start; 
+  font-size: 32px;
+  font-weight: bold;
+  padding-left: 10px; 
+  transition: transform 0.1s ease;
+}
+
+.db-box-right {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  padding-bottom: 5px;
+  transition: transform 0.1s ease;
+}
+
+.db-box-right span {
+  margin-left: 5px;
+}
+
+.db-box-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.db-box-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.db-box-row span {
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.led-control,
+.relay-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 2px;
+  border-top: 1px solid #ddd;
+  gap: 10px; 
+}
+.relay-control {
+  margin-top: 0;
+  padding-top: 0;
+  border: none;
+}
+.tab-switch {
+  display: flex;
+  border-radius: 20px;
+  background-color: #f2f2f2;
+  padding: 5px;
+}
+
+.tab-switch button {
+  border: none;
+  padding: 6px 12px; 
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: transparent;
+  color: #333;
+  font-weight: bold;
+  font-size: 12px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tab-switch button.active {
+  background-color: #2196F3;
+  color: white;
+}
+
+.led-status,
+.relay-status {
+  font-weight: bold;
+  font-size: 12px; 
+}
+
+@media (max-width: 767px) {
+  .db-box {
+    width: 70%;
+    margin-bottom: 15px;
+  }
+
+  .db-box-left {
+    font-size: 24px;
+  }
+
+  .db-box-right {
+    transform: scale(1);
+  }
+}
