@@ -10,27 +10,33 @@ const eventsData = [
   {
     id: 1,
     title: 'Campfire Gathering at Sunset Ridge on 9 March',
-    content: 'Join us for a cozy evening by the campfire at Sunset Ridge Park. Nestled in the heart of the forest, this picturesque location offers the perfect setting to relax, enjoy great company, and create unforgettable memories.',
-    image: '/1_bonfire_800.jpg', // Correct image path
+    content: '<p>Join us for a cozy evening by the campfire at <strong>Sunset Ridge Park</strong>. Nestled in the heart of the forest, this picturesque location offers the perfect setting to relax, enjoy great company, and create unforgettable memories.</p>',
+    image: '/1_bonfire_800.jpg',
   },
   {
     id: 2,
     title: 'Art Exhibition on 22 March',
-    content: 'An art exhibition will be open from 2 PM to 6 PM on March 22nd.',
-    image: '', 
+    content: '<p>An art exhibition will be open from <em>2 PM to 6 PM</em> on March 22nd. Featuring works from local artists, this event is a must-visit for art enthusiasts.</p>',
+    image: '',
   },
   {
     id: 3,
     title: 'Outdoor Concert on 25 March',
-    content: 'An outdoor concert will be held on the evening of March 25th.',
-    image: 'https://example.com/concert.jpg', // Replace with actual image URL
+    content: '<p>An outdoor concert will be held on the evening of March 25th. Enjoy live music from top bands and artists under the stars.</p>',
+    image: 'https://example.com/concert.jpg',
+  },
+  {
+    id: 4,
+    title: 'Summer Camping Trip 2023',
+    content: '<p>Join us for a fun camping trip at <strong>XYZ National Park</strong>! We\'ll have BBQ, games, and more.</p>',
+    image: 'https://example.com/camping.jpg',
   },
 ];
 
 function EventsTabs() {
   return (
     <div className="events-tabs">
-      {eventsData.map(event => (
+      {eventsData.map((event) => (
         <Accordion key={event.id} disableGutters elevation={0} square>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -44,7 +50,10 @@ function EventsTabs() {
               {event.image && event.image !== '' ? (
                 <img src={event.image} alt={event.title} className="event-image" />
               ) : null}
-              <Typography>{event.content}</Typography>
+              <div
+                className="event-content"
+                dangerouslySetInnerHTML={{ __html: event.content }}
+              />
             </div>
           </AccordionDetails>
         </Accordion>

@@ -4,8 +4,8 @@
   height: 100vh;
   margin: 0 auto;
   display: flex;
-  justify-content: flex-start; 
-  align-items: flex-start; 
+  justify-content: flex-start;
+  align-items: flex-start;
   gap: 1.25rem;
   position: relative;
   box-sizing: border-box;
@@ -65,7 +65,8 @@
   );
 }
 
-.left-panel, .right-panel {
+.left-panel,
+.right-panel {
   z-index: 2;
   padding: 0.9375rem;
   border-radius: 0.75rem;
@@ -157,7 +158,8 @@ h2.date {
   text-align: right;
 }
 
-.day, .time {
+.day,
+.time {
   margin: 0;
   font-size: 1.2rem;
 }
@@ -199,7 +201,7 @@ h2.date {
 }
 
 .MuiAccordionSummary-root:hover {
-  background-color: #555;
+  background-color: transparent; 
 }
 
 .MuiAccordionDetails-root {
@@ -220,9 +222,11 @@ h2.date {
   border-radius: 0 0 0.75rem 0.75rem;
 }
 
-.MuiTypography-root {
-  font-size: 1.2rem;
+.MuiAccordionSummary-root .MuiTypography-root {
   font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: black; 
 }
 
 .event-details-content {
